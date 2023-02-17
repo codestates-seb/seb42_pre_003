@@ -1,0 +1,74 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
+}
+
+group = 'com.jmc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+configurations {
+	asciidoctorExtensions
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'com.google.code.gson:gson'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	// runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+//	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+asciidoctor {
+	configurations "asciidoctorExtensions"
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	println "asciidoctor output: ${asciidoctor.outputDir}"
+	from file("${asciidoctor.outputDir}")
+	into file("src/main/resources/static/docs")
+}
+
+build {
+	dependsOn bootJar
+}
+
+bootJar {
+	dependsOn copyDocument
+	from ("${asciidoctor.outputDir}") {
+		into 'src/main/resources/static/docs'
+	}
+}
