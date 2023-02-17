@@ -1,7 +1,6 @@
-package com.jmc.stackoverflowbe.member.entity;
+package com.jmc.stackoverflowbe.vote.entity;
 
 import com.jmc.stackoverflowbe.global.audit.Auditable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,10 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Member extends Auditable {
+public class Vote extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-    @Column
-    private String memberEmail;
+    private Long voteId;
 }
