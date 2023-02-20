@@ -1,19 +1,19 @@
 package com.jmc.stackoverflowbe.member.service;
 
 import com.jmc.stackoverflowbe.member.entity.Member;
-import com.jmc.stackoverflowbe.member.repository.MemberRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@Service
+
 public interface MemberService {
 
-    Member createMember();
+    Member createMember(Member member);
 
-    Member updateMember();
+    Member updateMember(Member member);
 
-    Member getMember();
+    Member getMember(Long id);
 
-    void deleteMember();
+    void deleteMember(Long id);
+
+    void verifyExistName(String Name);
+
+    Member findExistId(Long id);
 }
