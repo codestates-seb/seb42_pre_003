@@ -7,26 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class MemberService {
-    private final MemberRepository memberRepository;
+public interface MemberService {
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    Member createMember();
 
-    public Member createMember() {
-        return null;
-    }
+    Member updateMember();
 
-    public Member updateMember() {
-        return null;
-    }
+    Member getMember();
 
-    public Member getMember() {
-        return null;
-    }
-
-    public void deleteMember() {
-
-    }
+    void deleteMember();
 }

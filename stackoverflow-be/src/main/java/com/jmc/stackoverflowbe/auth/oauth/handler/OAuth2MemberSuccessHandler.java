@@ -1,3 +1,4 @@
+/*
 package com.jmc.stackoverflowbe.auth.oauth.handler;
 
 import java.io.IOException;
@@ -15,3 +16,4 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     }
 }
+*/

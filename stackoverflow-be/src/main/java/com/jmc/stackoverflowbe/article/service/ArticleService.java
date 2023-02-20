@@ -5,6 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class ArticleService {
+public interface ArticleService {
 
 }

@@ -1,3 +1,4 @@
+/*
 package com.jmc.stackoverflowbe.auth.oauth.handler;
 
 import java.io.IOException;
@@ -19,3 +20,4 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     }
 }
+*/
