@@ -1,0 +1,26 @@
+= StackOverFlow
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: API 목록
+:source-highlighter: prettify
+
+== 회원
+=== 회원 등록
+.curl-request
+include::{snippets}/Post-Member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Post-Member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Post-Member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Post-Member/response-headers.adoc[]
+
+=== 회원 수정
+
+=== 회원 상세 조회
+
+=== 회원 탈퇴

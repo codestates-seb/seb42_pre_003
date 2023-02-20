@@ -3,6 +3,8 @@ package com.jmc.stackoverflowbe.member.entity;
 import com.jmc.stackoverflowbe.global.audit.Auditable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,12 +19,18 @@ import lombok.Setter;
 @Setter
 public class Member extends Auditable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String email;
 
+    @Column
     private String name;
 
+    @Column
+    @Enumerated(value = EnumType.STRING)
     private MemberState state;
 
     @Builder
