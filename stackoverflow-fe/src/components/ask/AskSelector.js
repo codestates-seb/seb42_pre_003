@@ -1,22 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { SelectIcon } from './AskIcon';
+import { ArrowDownIcon, ArrowUpIcon } from './AskIcon';
 
 const SelectBox = styled.div`
 	border: 1px solid hsl(210, 8%, 75%);
 	border-radius: 0.188rem;
-	h5 {
-		display: flex;
-		padding: 0.65rem 0.7rem;
-		justify-content: space-between;
-		cursor: pointer;
-		strong {
-			font-size: 0.75rem;
-			font-weight: 600;
-			color: hsl(210, 8%, 45%);
-		}
-	}
-
 	ul {
 		border-top: 1px solid #e1e0e0;
 	}
@@ -24,6 +12,21 @@ const SelectBox = styled.div`
 		padding: 0.65rem 0.5rem;
 		font-size: 0.75rem;
 		text-align: center;
+	}
+`;
+
+const SelectHeader = styled.h5`
+	display: flex;
+	padding: 0.65rem 0.7rem;
+	justify-content: space-between;
+	cursor: pointer;
+	strong {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: hsl(210, 8%, 45%);
+	}
+	svg {
+		fill: hsl(210, 8%, 45%);
 	}
 `;
 
@@ -35,10 +38,10 @@ function AskSelector() {
 
 	return (
 		<SelectBox>
-			<h5 onClick={handleSelect}>
+			<SelectHeader onClick={handleSelect}>
 				<strong>Do any of these posts answer your question?</strong>
-				<SelectIcon />
-			</h5>
+				{active ? <ArrowUpIcon /> : <ArrowDownIcon />}
+			</SelectHeader>
 			{active ? (
 				<ul>
 					<li>No duplicate questions found.</li>

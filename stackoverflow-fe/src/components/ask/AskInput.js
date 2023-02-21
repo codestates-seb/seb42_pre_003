@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import AskEditor from './AskEditor';
 import AskSelector from './AskSelector';
 
+const BREAK_POINT_PC = 1100;
+
 const InputBox = styled.div`
 	width: 70%;
 	padding: 1.5rem;
@@ -11,10 +13,13 @@ const InputBox = styled.div`
 		font-size: 0.85rem;
 		font-weight: 700;
 	}
-	span {
+	.inputText {
 		display: block;
 		margin: 0.35rem 0;
 		font-size: 0.7rem;
+	}
+	@media only screen and (max-width: ${BREAK_POINT_PC}px) {
+		width: 100%;
 	}
 `;
 
@@ -43,7 +48,7 @@ const InputButton = styled.button`
 	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4); ;
 `;
 
-function AskInput({ type, label, text, values }) {
+function AskInput({ type, label, text, values, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
@@ -63,9 +68,9 @@ function AskInput({ type, label, text, values }) {
 	return (
 		<InputBox>
 			<h4>{label}</h4>
-			<span>{text}</span>
+			<span className='inputText'>{text}</span>
 			{textBoxHandler(type)}
-			<InputButton>
+			<InputButton type={type === 'selector' ? null : 'button'} {...rest}>
 				{type === 'selector' ? 'Review your question' : 'Next'}
 			</InputButton>
 		</InputBox>
