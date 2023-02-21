@@ -172,7 +172,7 @@ public class MemberControllerTest {
                     parameterWithName("member-id")
                         .description("회원 아이디")),
                 requestFields(
-                    attributes(key("title").value("Fields for user creation")),
+                    attributes(key("title").value("Fields for user revision")),
                     fieldWithPath("name")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(nameDescriptions))
@@ -223,7 +223,7 @@ public class MemberControllerTest {
                         .description("회원 아이디"),
                     fieldWithPath("data.email")
                         .type(JsonFieldType.STRING)
-                        .description("회원 이매알"),
+                        .description("회원 이매일"),
                     fieldWithPath("data.name")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
@@ -251,7 +251,7 @@ public class MemberControllerTest {
             ));
     }
 
-    @DisplayName("댓글 삭제")
+    @DisplayName("회원 삭제")
     @Test
     void deleteMember() throws Exception {
         doNothing().when(memberService).deleteMember(member.getId());
