@@ -45,28 +45,34 @@ const NoticeBox = styled.div`
 	}
 `;
 
-function AskNotice() {
+function AskNotice({ review }) {
 	return (
 		<NoticeBox>
-			<h4>Writing a good question</h4>
-			<p>
-				You’re ready to ask a programming-related question and this form will
-				help guide you through the process.
-				<br />
-				Looking to ask a non-programming question? See the topics here to find a
-				relevant site.
-			</p>
-			<strong>Steps</strong>
-			<ul>
-				<li>Summarize your problem in a one-line title.</li>
-				<li>Describe your problem in more detail.</li>
-				<li>Describe what you tried and what you expected to happen.</li>
-				<li>
-					Add “tags” which help surface your question to members of the
-					community.
-				</li>
-				<li>Review your question and post it to the site.</li>
-			</ul>
+			{review ? (
+				<p>Please do a final review of your question and then post.</p>
+			) : (
+				<>
+					<h4>Writing a good question</h4>
+					<p>
+						You’re ready to ask a programming-related question and this form
+						will help guide you through the process.
+						<br />
+						Looking to ask a non-programming question? See the topics here to
+						find a relevant site.
+					</p>
+					<strong>Steps</strong>
+					<ul>
+						<li>Summarize your problem in a one-line title.</li>
+						<li>Describe your problem in more detail.</li>
+						<li>Describe what you tried and what you expected to happen.</li>
+						<li>
+							Add “tags” which help surface your question to members of the
+							community.
+						</li>
+						<li>Review your question and post it to the site.</li>
+					</ul>
+				</>
+			)}
 		</NoticeBox>
 	);
 }

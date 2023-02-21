@@ -22,22 +22,25 @@ function AskBox({
 	values,
 	guideTitle,
 	guideDes,
+	review,
 	...rest
 }) {
 	const getAble = localStorage.getItem('able');
 	const able = JSON.parse(getAble);
+	const base = able[name] || able[name] === undefined ? true : false;
 
 	return (
-		<AskBoxWrap able={able[name]}>
+		<AskBoxWrap able={base}>
 			<AskInput
 				type={type}
 				label={inputLabel}
 				text={inputText}
 				values={values}
-				able={able[name]}
+				able={base}
+				review={review}
 				{...rest}
 			/>
-			<AskGuide able={able[name]} title={guideTitle} description={guideDes} />
+			<AskGuide able={base} title={guideTitle} description={guideDes} />
 		</AskBoxWrap>
 	);
 }

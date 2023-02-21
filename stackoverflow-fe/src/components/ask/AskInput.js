@@ -50,7 +50,7 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
-function AskInput({ able, type, label, text, values, ...rest }) {
+function AskInput({ able, type, label, text, values, review, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
@@ -73,13 +73,11 @@ function AskInput({ able, type, label, text, values, ...rest }) {
 			<h4>{label}</h4>
 			<span className='inputText'>{text}</span>
 			{textBoxHandler(type)}
-			<InputButton
-				type={type === 'selector' ? null : 'button'}
-				disabled={!able}
-				{...rest}
-			>
-				{type === 'selector' ? 'Review your question' : 'Next'}
-			</InputButton>
+			{!review ? (
+				<InputButton type='button' disabled={!able} {...rest}>
+					{type === 'selector' ? 'Review your question' : 'Next'}
+				</InputButton>
+			) : null}
 		</InputBox>
 	);
 }
