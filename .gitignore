@@ -28,6 +28,7 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+generated/
 stackoverflow-be/!**/src/main/**/build/
 stackoverflow-be/!**/src/test/**/build/
 
