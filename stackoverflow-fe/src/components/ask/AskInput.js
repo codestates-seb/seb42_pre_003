@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import AskEditor from './AskEditor';
+import AskSelector from './AskSelector';
 
 const InputBox = styled.div`
 	margin-top: 0.65rem;
@@ -11,6 +12,8 @@ const InputBox = styled.div`
 		font-weight: 700;
 	}
 	span {
+		display: block;
+		margin: 0.35rem 0;
 		font-size: 0.7rem;
 	}
 `;
@@ -19,7 +22,6 @@ const Input = styled.input`
 	display: block;
 	width: 100%;
 	height: 1.5rem;
-	margin-top: 0.35rem;
 	padding: 0.6em 0.7em;
 	font-size: 0.6rem;
 	border: 1px solid #babfc4;
@@ -42,20 +44,30 @@ const InputButton = styled.button`
 `;
 
 function AskInput({ type, label, text, values }) {
+	const textBoxHandler = (type) => {
+		switch (type) {
+			case 'editor':
+				return <AskEditor values={values} />;
+			case 'selector':
+				return <AskSelector />;
+			default:
+				return (
+					<Input
+						{...values}
+						placeholder='e.g. Is there an R function for finding the index of an element in a vector?'
+					/>
+				);
+		}
+	};
+
 	return (
 		<InputBox>
 			<h4>{label}</h4>
 			<span>{text}</span>
-			{type === 'editor' ? (
-				<AskEditor />
-			) : (
-				<Input
-					{...values}
-					placeholder='e.g. Is there an R function for finding the index of an element in a vector?'
-				/>
-			)}
-
-			<InputButton>Next</InputButton>
+			{textBoxHandler(type)}
+			<InputButton>
+				{type === 'selector' ? 'Review your question' : 'Next'}
+			</InputButton>
 		</InputBox>
 	);
 }

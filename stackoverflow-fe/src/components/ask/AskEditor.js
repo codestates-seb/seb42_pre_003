@@ -1,18 +1,12 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useState } from 'react';
 
-function AskEditor() {
-	const [content, setCon] = useState('');
-	const handleChange = (con) => {
-		setCon(con);
-	};
-
+function AskEditor({ values }) {
 	return (
 		<div>
-			<ReactQuill onChange={handleChange} />
+			<ReactQuill {...values} />
 
-			<div dangerouslySetInnerHTML={{ __html: content }} />
+			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>
 	);
 }

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import AskInput from '../components/ask/AskInput';
 import useAskInput from '../util/askUtil/useAskInput';
+import useAskEditor from '../util/askUtil/useAskEditor';
 import AskNotice from '../components/ask/AskNotice';
 
 const AskWrap = styled.form`
@@ -20,8 +21,8 @@ const AskWrap = styled.form`
 
 function AskQuestion() {
 	const [titleValue, titleBind, titleReset] = useAskInput('');
-	const [detailValue, detailBind, detailReset] = useAskInput('');
-	const [tryValue, tryBind, tryReset] = useAskInput('');
+	const [detailValue, detailBind, detailReset] = useAskEditor('');
+	const [tryValue, tryBind, tryReset] = useAskEditor('');
 	const [tagValue, tagBind, tagReset] = useAskInput('');
 	const [reviewValue, reviewBind, reviewReset] = useAskInput('');
 
@@ -81,6 +82,7 @@ function AskQuestion() {
 				values={tagBind}
 			/>
 			<AskInput
+				type={'selector'}
 				label={
 					'Review questions already on Stack Overflow to see if your question is a duplicate.'
 				}
