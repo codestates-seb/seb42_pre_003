@@ -12,12 +12,16 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
@@ -127,6 +131,9 @@ public class MemberControllerTest {
             .andDo(document("Patch-Member",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("member-id")
+                        .description("회원 아이디")),
                 requestFields(
                     attributes(key("title").value("Fields for user creation")),
                     fieldWithPath("name")
@@ -135,5 +142,63 @@ public class MemberControllerTest {
                         .optional()
                         .description("회원 이름"))
                 ));
+    }
+
+    @DisplayName("회원 조회")
+    @Test
+    void getMember() throws Exception {
+        MemberDto.Response response = MemberDto.Response.builder()
+            .id(member.getId())
+            .email(member.getEmail())
+            .name(member.getName())
+            .state(member.getState())
+            .isMine(false)
+            .build();
+
+        given(memberService.getMember(Mockito.anyLong())).willReturn(member);
+        given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
+
+        ResultActions actions = mockMvc.perform(
+            get(BASE_URL + "/{member-id}", member.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        actions
+            .andExpect(status().isOk())
+            .andDo(document("Get-Member",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("member-id")
+                        .description("회원 아이디")),
+                responseFields(
+                    fieldWithPath("data")
+                        .type(JsonFieldType.OBJECT)
+                        .description("조회 데이터"),
+                    fieldWithPath("data.id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("회원 아이디"),
+                    fieldWithPath("data.email")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 이매알"),
+                    fieldWithPath("data.name")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 이름"),
+                    fieldWithPath("data.state")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 상태"),
+                    fieldWithPath("data.isMine")
+                        .type(JsonFieldType.BOOLEAN)
+                        .description("본인 확인"),
+                    fieldWithPath("data.createdAt")
+                        .type(JsonFieldType.NULL)
+                        .description("가입일"),
+                    fieldWithPath("data.modifiedAt")
+                        .type(JsonFieldType.NULL)
+                        .description("최근 수정일"),
+                    fieldWithPath("data.lastLoginTime")
+                        .type(JsonFieldType.NULL)
+                        .description("마지막 접속일"))
+            ));
     }
 }

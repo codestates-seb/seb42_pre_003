@@ -29,6 +29,9 @@ include::{snippets}/Patch-Member/curl-request.adoc[]
 .http-request
 include::{snippets}/Patch-Member/http-request.adoc[]
 
+.request-path-parameters
+include::{snippets}/Patch-Member/path-parameters.adoc[]
+
 .request-fields
 include::{snippets}/Patch-Member/request-fields.adoc[]
 
@@ -37,5 +40,18 @@ include::{snippets}/Patch-Member/http-response.adoc[]
 
 
 === 회원 상세 조회
+include::{snippets}/Get-Member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-Member/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Get-Member/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-Member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/Get-Member/response-fields.adoc[]
 
 === 회원 탈퇴

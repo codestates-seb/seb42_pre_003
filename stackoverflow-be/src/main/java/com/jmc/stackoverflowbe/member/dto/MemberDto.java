@@ -39,13 +39,15 @@ public class MemberDto {
     @NoArgsConstructor
     public static class Response extends Auditable {
 
+        private Long id;
         private String email;
         private String name;
         private Boolean isMine;
         private MemberState state;
 
         @Builder
-        public Response(String email, String name, boolean isMine, MemberState state) {
+        public Response(Long id, String email, String name, Boolean isMine, MemberState state) {
+            this.id = id;
             this.email = email;
             this.name = name;
             this.isMine = isMine;
