@@ -29,7 +29,7 @@ public class QA extends Auditable {
     private String qaContent;
 
     @Column
-    private QaGroup group;
+    private QaGroup qaGroup;
 
     @Column
     private StateGroup state;
@@ -37,25 +37,31 @@ public class QA extends Auditable {
     @Column
     private Long votes;
 
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    @Column
+    private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "ARTICLE_ID")
-    private Article article;
+    @Column
+    private Long articleId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "ARTICLE_ID")
+//    private Article article;
+
 
     @Builder
-    public QA(Long id, String qaContent, QaGroup group, StateGroup state, Long votes,
-        Member member,
-        Article article) {
+    public QA(Long id, String qaContent, QaGroup qaGroup, StateGroup state, Long votes, Long memberId,
+        Long articleId) {
         this.id = id;
         this.qaContent = qaContent;
-        this.group = group;
+        this.qaGroup = qaGroup;
         this.state = state;
         this.votes = votes;
-        this.member = member;
-        this.article = article;
+        this.memberId = memberId;
+        this.articleId = articleId;
     }
 
     public static enum QaGroup{

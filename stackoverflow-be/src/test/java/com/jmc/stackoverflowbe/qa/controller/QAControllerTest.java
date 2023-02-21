@@ -58,11 +58,11 @@ public class QAControllerTest {
     QA qa = QA.builder()
         .id(1L)
         .qaContent("testing content")
-        .group(QaGroup.QUESTION)
+        .qaGroup(QaGroup.QUESTION)
         .state(StateGroup.ACTIVE)
         .votes(0L)
-        .member(new Member())
-        .article(new Article())
+        .memberId(0L)
+        .articleId(0L)
         .build();
 
     @Autowired
@@ -156,7 +156,7 @@ public class QAControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    attributes(key("title").value("Fields for qa modify")),
+                    attributes(key("title").value("Fields for qa revision")),
                     fieldWithPath("qaId")
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value("질답 식별자"))

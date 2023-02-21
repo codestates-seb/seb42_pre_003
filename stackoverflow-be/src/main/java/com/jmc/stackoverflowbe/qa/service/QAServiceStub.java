@@ -5,7 +5,9 @@ import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.qa.entity.QA;
 import com.jmc.stackoverflowbe.qa.entity.QA.QaGroup;
 import com.jmc.stackoverflowbe.qa.entity.QA.StateGroup;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QAServiceStub implements QAService{
     @Override
     public QA createQA(QA qa){return null;}
@@ -18,11 +20,11 @@ public class QAServiceStub implements QAService{
         return QA.builder()
             .id(id)
             .qaContent("test content")
-            .group(QaGroup.QUESTION)
+            .qaGroup(QaGroup.QUESTION)
             .state(StateGroup.ACTIVE)
             .votes(0L)
-            .member(member)
-            .article(article)
+            .memberId(0L)
+            .articleId(0L)
             .build();
     }
     @Override
