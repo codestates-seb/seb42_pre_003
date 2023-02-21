@@ -4,7 +4,6 @@ import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
-import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
 import com.jmc.stackoverflowbe.member.service.MemberService;
 import java.net.URI;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/members")
@@ -31,7 +29,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
-        memberService.createMember(mapper.PostDtoToMember(post));
+        memberService.createMember(mapper.postDtoToMember(post));
         URI location = UriCreator.createURI("/members", 1L);
 
         return ResponseEntity.created(location).build();
@@ -41,16 +39,17 @@ public class MemberController {
     public ResponseEntity patchMember(
         @PathVariable("member-id") long memberId,
         @RequestBody MemberDto.Patch patch) {
-        memberService.updateMember(mapper.PatchDtoToMember(patch));
+        memberService.updateMember(mapper.patchDtoToMember(patch));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") long memberId) {
         Member member = memberService.getMember(memberId);
-
-        return new ResponseEntity(new SingleResponseDto<>(
-            mapper.memberToResponseDto(member)),
+        MemberDto.Response response = mapper.memberToResponseDto(member);
+        response.setIsMine(false);
+        return new ResponseEntity(
+            new SingleResponseDto<>(response),
             HttpStatus.OK);
     }
 
