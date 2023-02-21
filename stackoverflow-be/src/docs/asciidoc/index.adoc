@@ -24,3 +24,16 @@ include::{snippets}/Post-Member/response-headers.adoc[]
 === 회원 상세 조회
 
 === 회원 탈퇴
+== 질답
+=== 질답 등록
+.curl-request
+include::{snippets}/Post-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Post-QA/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Post-QA/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Post-QA/http-response.adoc[]
