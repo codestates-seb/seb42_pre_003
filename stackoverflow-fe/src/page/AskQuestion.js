@@ -48,6 +48,10 @@ function AskQuestion() {
 		review: false,
 	});
 
+	if (!localStorage.getItem('able')) {
+		localStorage.setItem('able', JSON.stringify(status));
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -75,24 +79,18 @@ function AskQuestion() {
 
 	const handleDisable = (item) => {
 		let obj = { ...status };
-		Object.entries(obj).map(([key, value]) => {
-			if (key === item) {
-				return (value = true);
-			} else {
-				return value;
-			}
-		});
-		setStatus({ ...obj });
-	};
+		obj[item] = true;
 
-	console.log(status);
+		setStatus({ ...obj });
+		localStorage.setItem('able', JSON.stringify(obj));
+	};
 
 	return (
 		<AskWrap onSubmit={handleSubmit}>
 			<h3>Ask a public question</h3>
 			<AskNotice />
 			<AskBox
-				status={'title'}
+				name={'title'}
 				values={titleBind}
 				onClick={() => handleDisable('detail')}
 				inputLabel={'Title'}
@@ -104,7 +102,7 @@ function AskQuestion() {
 				You might find that you have a better idea of your title after writing out the rest of the question.`}
 			/>
 			<AskBox
-				status={'detail'}
+				name={'detail'}
 				type={'editor'}
 				values={detailBind}
 				onClick={() => handleDisable('try')}
@@ -116,7 +114,7 @@ function AskQuestion() {
 				guideDes={`Explain how you encountered the problem you’re trying to solve, and any difficulties that have prevented you from solving it yourself.`}
 			/>
 			<AskBox
-				status={'try'}
+				name={'try'}
 				type={'editor'}
 				values={tryBind}
 				onClick={() => handleDisable('tag')}
@@ -130,7 +128,7 @@ function AskQuestion() {
 				Please make sure to post code and errors as text directly to the question (and not as images), and format them appropriately.`}
 			/>
 			<AskBox
-				status={'tag'}
+				name={'tag'}
 				values={tagBind}
 				onClick={() => handleDisable('review')}
 				inputLabel={'Tags'}
@@ -143,6 +141,7 @@ function AskQuestion() {
 				Learn more about tagging`}
 			/>
 			<AskBox
+				name={'review'}
 				type={'selector'}
 				values={'review'}
 				titleBind={reviewBind}

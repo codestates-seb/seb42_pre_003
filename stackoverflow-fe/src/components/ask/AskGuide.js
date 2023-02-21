@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const BREAK_POINT_PC = 1100;
 
 const GuideBox = styled.div`
+	display: ${(props) => (props.able ? 'none' : 'block')};
 	width: 30%;
 	margin-left: 0.85rem;
 	border: 1px solid hsl(210, 8%, 85%);
@@ -41,9 +42,9 @@ const GuideCon = styled.div`
 	}
 `;
 
-function AskGuide({ title, description, type }) {
+function AskGuide({ able, title, description, type }) {
 	return (
-		<GuideBox>
+		<GuideBox able={!able}>
 			<strong>{title}</strong>
 			<GuideCon>
 				{type === 'selector' ? <BellIcon /> : <WriteIcon />}

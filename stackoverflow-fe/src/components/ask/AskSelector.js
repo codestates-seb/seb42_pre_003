@@ -19,7 +19,7 @@ const SelectHeader = styled.h5`
 	display: flex;
 	padding: 0.65rem 0.7rem;
 	justify-content: space-between;
-	cursor: pointer;
+	cursor: ${(props) => (props.able ? 'not-allowed' : 'initial')};
 	strong {
 		font-size: 0.75rem;
 		font-weight: 600;
@@ -30,7 +30,7 @@ const SelectHeader = styled.h5`
 	}
 `;
 
-function AskSelector() {
+function AskSelector({ able }) {
 	const [active, setActive] = useState(false);
 	const handleSelect = () => {
 		setActive(!active);
@@ -38,7 +38,7 @@ function AskSelector() {
 
 	return (
 		<SelectBox>
-			<SelectHeader onClick={handleSelect}>
+			<SelectHeader able={!able} onClick={!able ? null : handleSelect}>
 				<strong>Do any of these posts answer your question?</strong>
 				{active ? <ArrowUpIcon /> : <ArrowDownIcon />}
 			</SelectHeader>

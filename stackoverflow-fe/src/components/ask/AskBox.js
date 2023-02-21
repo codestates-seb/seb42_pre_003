@@ -8,12 +8,14 @@ const AskBoxWrap = styled.div`
 	display: flex;
 	margin-top: 0.65rem;
 	align-items: flex-start;
+	opacity: ${(props) => (props.able ? 1 : 0.3)};
 	@media only screen and (max-width: ${BREAK_POINT_PC}px) {
 		flex-direction: column;
 	}
 `;
 
 function AskBox({
+	name,
 	type,
 	inputLabel,
 	inputText,
@@ -22,16 +24,20 @@ function AskBox({
 	guideDes,
 	...rest
 }) {
+	const getAble = localStorage.getItem('able');
+	const able = JSON.parse(getAble);
+
 	return (
-		<AskBoxWrap>
+		<AskBoxWrap able={able[name]}>
 			<AskInput
 				type={type}
 				label={inputLabel}
 				text={inputText}
 				values={values}
+				able={able[name]}
 				{...rest}
 			/>
-			<AskGuide title={guideTitle} description={guideDes} />
+			<AskGuide able={able[name]} title={guideTitle} description={guideDes} />
 		</AskBoxWrap>
 	);
 }

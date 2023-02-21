@@ -9,6 +9,7 @@ const InputBox = styled.div`
 	padding: 1.5rem;
 	border: 1px solid #e3e6e8;
 	border-radius: 0.188rem;
+	cursor: ${(props) => (props.able ? 'initial' : 'not-allowed')};
 	h4 {
 		font-size: 0.85rem;
 		font-weight: 700;
@@ -45,19 +46,21 @@ const InputButton = styled.button`
 	font-weight: 500;
 	border-radius: 0.188rem;
 	background: hsl(206, 100%, 52%);
-	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4); ;
+	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
+	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
-function AskInput({ type, label, text, values, ...rest }) {
+function AskInput({ able, type, label, text, values, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
-				return <AskEditor values={values} />;
+				return <AskEditor able={able} values={values} />;
 			case 'selector':
-				return <AskSelector />;
+				return <AskSelector able={able} />;
 			default:
 				return (
 					<Input
+						disabled={!able}
 						{...values}
 						placeholder='e.g. Is there an R function for finding the index of an element in a vector?'
 					/>
@@ -66,11 +69,15 @@ function AskInput({ type, label, text, values, ...rest }) {
 	};
 
 	return (
-		<InputBox>
+		<InputBox able={able}>
 			<h4>{label}</h4>
 			<span className='inputText'>{text}</span>
 			{textBoxHandler(type)}
-			<InputButton type={type === 'selector' ? null : 'button'} {...rest}>
+			<InputButton
+				type={type === 'selector' ? null : 'button'}
+				disabled={!able}
+				{...rest}
+			>
 				{type === 'selector' ? 'Review your question' : 'Next'}
 			</InputButton>
 		</InputBox>

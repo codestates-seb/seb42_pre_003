@@ -1,10 +1,10 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function AskEditor({ values }) {
+function AskEditor({ able, values }) {
 	return (
 		<div>
-			<ReactQuill {...values} />
+			<ReactQuill readOnly={!able} {...values} />
 
 			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>
