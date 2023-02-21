@@ -3,6 +3,7 @@ package com.jmc.stackoverflowbe.member.controller;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -18,10 +19,10 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
@@ -200,5 +201,24 @@ public class MemberControllerTest {
                         .type(JsonFieldType.NULL)
                         .description("마지막 접속일"))
             ));
+    }
+
+    @DisplayName("댓글 삭제")
+    @Test
+    void deleteMember() throws Exception {
+        doNothing().when(memberService).deleteMember(member.getId());
+
+        ResultActions actions = mockMvc.perform(
+            delete(BASE_URL + "/{member-id}", member.getId())
+                .accept(MediaType.APPLICATION_JSON));
+
+        actions
+            .andExpect(status().isNoContent())
+            .andExpect(jsonPath("$.data").doesNotExist())
+            .andDo(document("Delete-Member",
+                pathParameters(
+                    parameterWithName("member-id").description("회원 아이디")
+                ))
+            );
     }
 }
