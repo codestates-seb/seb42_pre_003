@@ -29,7 +29,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
-        memberService.createMember(mapper.PostDtoToMember(post));
+        memberService.createMember(mapper.postDtoToMember(post));
         URI location = UriCreator.createURI("/members", 1L);
 
         return ResponseEntity.created(location).build();
@@ -39,7 +39,7 @@ public class MemberController {
     public ResponseEntity patchMember(
         @PathVariable("member-id") long memberId,
         @RequestBody MemberDto.Patch patch) {
-        memberService.updateMember(mapper.PatchDtoToMember(patch));
+        memberService.updateMember(mapper.patchDtoToMember(patch));
         return ResponseEntity.ok().build();
     }
 

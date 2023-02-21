@@ -98,7 +98,7 @@ public class MemberControllerTest {
     void postMemberTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
+        given(mapper.postDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
 
         ResultActions actions = mockMvc.perform(
@@ -145,7 +145,7 @@ public class MemberControllerTest {
         member.setName(patch.getName());
         member.setLocation(patch.getLocation());
 
-        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
+        given(mapper.postDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
 
         ResultActions actions = mockMvc.perform(
