@@ -55,3 +55,13 @@ include::{snippets}/Get-Member/http-response.adoc[]
 include::{snippets}/Get-Member/response-fields.adoc[]
 
 === 회원 탈퇴
+include::{snippets}/Delete-Member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Delete-Member/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Delete-Member/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Delete-Member/http-response.adoc[]
