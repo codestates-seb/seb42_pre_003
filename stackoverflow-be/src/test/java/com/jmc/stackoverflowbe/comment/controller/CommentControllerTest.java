@@ -57,21 +57,29 @@ public class CommentControllerTest {
     private final Comment comment = Comment.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
 
     private final CommentDto.Post post = CommentDto.Post.builder()
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .qaId(1L)
         .build();
 
     private final CommentDto.Patch patch = CommentDto.Patch.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .qaId(1L)
         .build();
 
     private final CommentDto.Response response = CommentDto.Response.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
 
@@ -107,6 +115,10 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Post.class);
         List<String> contentDescriptions = postQuestionConstraints
             .descriptionsForProperty("commentContent");
+        List<String> memberIdDescriptions = postQuestionConstraints
+            .descriptionsForProperty("memberId");
+        List<String> qaIdDescriptions = postQuestionConstraints
+            .descriptionsForProperty("qaId");
 
         actions
             .andExpect(status().isCreated())
@@ -119,7 +131,15 @@ public class CommentControllerTest {
                     fieldWithPath("commentContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
-                        .description("댓글 내용")),
+                        .description("댓글 내용"),
+                    fieldWithPath("memberId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(memberIdDescriptions))
+                        .description("회원 식별자"),
+                    fieldWithPath("qaId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(qaIdDescriptions))
+                        .description("질답 식별자")),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
@@ -147,6 +167,10 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Patch.class);
         List<String> contentDescriptions = patchQuestionConstraints
             .descriptionsForProperty("commentContent");
+        List<String> memberIdDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("memberId");
+        List<String> qaIdDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("qaId");
 
         actions
             .andExpect(status().isOk())
@@ -162,8 +186,15 @@ public class CommentControllerTest {
                     fieldWithPath("commentContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
-                        .description("댓글 내용")
-                        .optional()))
+                        .description("댓글 내용"),
+                    fieldWithPath("memberId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(memberIdDescriptions))
+                        .description("회원 식별자"),
+                    fieldWithPath("qaId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(qaIdDescriptions))
+                        .description("질답 식별자")))
             );
     }
 
@@ -184,6 +215,8 @@ public class CommentControllerTest {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.data.commentId").exists())
             .andExpect(jsonPath("$.data.commentContent").exists())
+            .andExpect(jsonPath("$.data.memberId").exists())
+            .andExpect(jsonPath("$.data.qaId").exists())
             .andExpect(jsonPath("$.data.commentState").exists())
             .andDo(document("Get-Comment",
                 preprocessResponse(prettyPrint()),
@@ -200,6 +233,12 @@ public class CommentControllerTest {
                     fieldWithPath("data.commentContent")
                         .type(JsonFieldType.STRING)
                         .description("댓글 내용"),
+                    fieldWithPath("data.memberId")
+                        .type(JsonFieldType.NUMBER)
+                        .description("회원 식별자"),
+                    fieldWithPath("data.qaId")
+                        .type(JsonFieldType.NUMBER)
+                        .description("질답 식별자"),
                     fieldWithPath("data.commentState")
                         .type(JsonFieldType.STRING)
                         .description("댓글 상태"),
