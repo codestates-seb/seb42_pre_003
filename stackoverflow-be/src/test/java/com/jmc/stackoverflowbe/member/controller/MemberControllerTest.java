@@ -223,7 +223,7 @@ public class MemberControllerTest {
                         .description("회원 아이디"),
                     fieldWithPath("data.email")
                         .type(JsonFieldType.STRING)
-                        .description("회원 이매일"),
+                        .description("회원 이메일"),
                     fieldWithPath("data.name")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
