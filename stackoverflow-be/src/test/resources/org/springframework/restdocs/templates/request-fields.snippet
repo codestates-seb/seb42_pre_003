@@ -1,12 +1,15 @@
+//request-fileds.snippet
+//.{{title}}
+
 |===
-|Field|Type|Mandatory|Description|Constraints
+|필드 명|타입|제약 조건|필수 여부|설명
 
 {{#fields}}
-|{{#tableCellContent}}`+{{path}}+`{{/tableCellContent}}
-|{{#tableCellContent}}`+{{type}}+`{{/tableCellContent}}
-|{{#tableCellContent}}{{^optional}}true{{/optional}}{{/tableCellContent}}
-|{{#tableCellContent}}{{description}}{{/tableCellContent}}
-|{{#tableCellContent}}{{#constraints}}{{.}} {{/constraints}}{{/tableCellContent}}
-{{/fields}}
+|{{path}}
+|{{type}}
+|{{constraints}}
+|{{^optional}}true{{/optional}}
+|{{description}}
 
+{{/fields}}
 |===

@@ -1,24 +1,88 @@
 package com.jmc.stackoverflowbe.comment.dto;
 
+import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
+import java.sql.Timestamp;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class CommentDto {
+
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post {
 
+        @NotBlank
+        private String commentContent;
+
+        @Positive
+        private Long memberId;
+
+        @Positive
+        private Long qaId;
+
+        @Builder
+        public Post(String commentContent, Long memberId, Long qaId) {
+            this.commentContent = commentContent;
+            this.memberId = memberId;
+            this.qaId = qaId;
+        }
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Patch {
 
+        @Positive
+        private Long commentId;
+
+        @NotBlank
+        private String commentContent;
+
+        @Positive
+        private Long memberId;
+
+        @Positive
+        private Long qaId;
+
+        @Builder
+        public Patch(Long commentId, String commentContent, Long memberId, Long qaId) {
+            this.commentId = commentId;
+            this.commentContent = commentContent;
+            this.memberId = memberId;
+            this.qaId = qaId;
+        }
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response {
 
+        private Long commentId;
+
+        private String commentContent;
+
+        private Long memberId;
+
+        private Long qaId;
+
+        private CommentState commentState;
+
+        private Timestamp createdAt;
+
+        private Timestamp modifiedAt;
+
+        @Builder
+        public Response(Long commentId, String commentContent, Long memberId, Long qaId,
+            CommentState commentState) {
+            this.commentId = commentId;
+            this.commentContent = commentContent;
+            this.memberId = memberId;
+            this.qaId = qaId;
+            this.commentState = commentState;
+        }
     }
 }
