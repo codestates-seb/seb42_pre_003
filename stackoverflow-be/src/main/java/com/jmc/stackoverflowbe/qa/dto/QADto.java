@@ -32,10 +32,12 @@ public class QADto {
     @NoArgsConstructor
     public static class Patch {
 
+        private Long qaId;
         private String qaContent;
         private Integer votes;
-
-        public Patch(String qaContent, Integer votes) {
+        @Builder
+        public Patch(Long qaId, String qaContent, Integer votes) {
+            this.qaId = qaId;
             this.qaContent = qaContent;
             this.votes = votes;
         }
@@ -45,19 +47,34 @@ public class QADto {
     @NoArgsConstructor
     public static class Response extends Auditable {
 
-        private Article article;
-        private Member member;
+        private Long id;
+        //private Article article;
+        //private Member member;
+        private Long articleId;
+        private Long memberId;
         private String qaContent;
         private Integer votes;
         private QaGroup group;
         private StateGroup state;
 
+//        @Builder
+//        public Response(Long id, Article article, Member member, String qaContent, Integer votes,
+//            QaGroup group, StateGroup state) {
+//            this.id = id;
+//            this.article = article;
+//            this.member = member;
+//            this.qaContent = qaContent;
+//            this.votes = votes;
+//            this.group = group;
+//            this.state = state;
+//        }
+
         @Builder
-        public Response(Article article, Member member, String qaContent, Integer votes,
-            QaGroup group,
-            StateGroup state) {
-            this.article = article;
-            this.member = member;
+        public Response(Long id, Long articleId, Long memberId, String qaContent, Integer votes,
+            QaGroup group, StateGroup state) {
+            this.id = id;
+            this.articleId = articleId;
+            this.memberId = memberId;
             this.qaContent = qaContent;
             this.votes = votes;
             this.group = group;

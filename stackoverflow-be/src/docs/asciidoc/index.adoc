@@ -36,4 +36,43 @@ include::{snippets}/Post-QA/http-request.adoc[]
 include::{snippets}/Post-QA/request-fields.adoc[]
 
 .http-response
-include::{snippets}/Post-QA/http-response.adoc[]
+include::{snippets}/Patch-QA/http-response.adoc[]
+=== 질답 수정
+.curl-request
+include::{snippets}/Patch-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Patch-QA/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Patch-QA/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Patch-QA/http-response.adoc[]
+=== 질답 조회
+.curl-request
+include::{snippets}/Get-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-QA/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Get-QA/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-QA/http-response.adoc[]
+
+.response-fields
+include::{snippets}/Get-QA/response-fields.adoc[]
+=== 질답 삭제
+.curl-request
+include::{snippets}/Delete-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Delete-QA/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Delete-QA/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Delete-QA/http-response.adoc[]
