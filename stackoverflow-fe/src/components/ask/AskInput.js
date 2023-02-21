@@ -3,7 +3,7 @@ import AskEditor from './AskEditor';
 import AskSelector from './AskSelector';
 
 const InputBox = styled.div`
-	margin-top: 0.65rem;
+	width: 70%;
 	padding: 1.5rem;
 	border: 1px solid #e3e6e8;
 	border-radius: 0.188rem;

@@ -1,24 +1,29 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { SelectIcon } from './AskIcon';
 
 const SelectBox = styled.div`
 	border: 1px solid hsl(210, 8%, 75%);
 	border-radius: 0.188rem;
-	strong {
-		display: block;
+	h5 {
+		display: flex;
 		padding: 0.65rem 0.7rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		color: hsl(210, 8%, 45%);
+		justify-content: space-between;
 		cursor: pointer;
+		strong {
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: hsl(210, 8%, 45%);
+		}
 	}
+
 	ul {
 		border-top: 1px solid #e1e0e0;
 	}
 	li {
 		padding: 0.65rem 0.5rem;
 		font-size: 0.75rem;
-		text-align: ${(props) => (props.none ? 'center' : 'left')};
+		text-align: center;
 	}
 `;
 
@@ -30,12 +35,13 @@ function AskSelector() {
 
 	return (
 		<SelectBox>
-			<strong onClick={handleSelect}>
-				Do any of these posts answer your question?
-			</strong>
+			<h5 onClick={handleSelect}>
+				<strong>Do any of these posts answer your question?</strong>
+				<SelectIcon />
+			</h5>
 			{active ? (
 				<ul>
-					<li none={'false'}>No duplicate questions found.</li>
+					<li>No duplicate questions found.</li>
 				</ul>
 			) : null}
 		</SelectBox>
