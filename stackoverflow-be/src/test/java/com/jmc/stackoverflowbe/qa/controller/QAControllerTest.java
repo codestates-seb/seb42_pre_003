@@ -237,10 +237,7 @@ public class QAControllerTest {
                         .description("질답 생성 시간"),
                     fieldWithPath("data.modifiedAt")
                         .type(JsonFieldType.NULL)
-                        .description("질답 수정 시간"),
-                    fieldWithPath("data.lastLoginTime")
-                        .type(JsonFieldType.NULL)
-                        .description("need to remove"))));
+                        .description("질답 수정 시간"))));
 
     }
 

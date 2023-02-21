@@ -5,6 +5,7 @@ import com.jmc.stackoverflowbe.global.audit.Auditable;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.qa.entity.QA.QaGroup;
 import com.jmc.stackoverflowbe.qa.entity.QA.StateGroup;
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class QADto {
 
     @Getter
     @NoArgsConstructor
-    public static class Response extends Auditable {
+    public static class Response {
 
         private Long id;
         //private Article article;
@@ -56,6 +57,10 @@ public class QADto {
         private Integer votes;
         private QaGroup group;
         private StateGroup state;
+
+        private Timestamp createdAt;
+
+        private Timestamp modifiedAt;
 
 //        @Builder
 //        public Response(Long id, Article article, Member member, String qaContent, Integer votes,
