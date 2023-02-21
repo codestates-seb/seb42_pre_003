@@ -3,7 +3,6 @@ package com.jmc.stackoverflowbe.member.mapper;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {

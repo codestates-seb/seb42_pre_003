@@ -4,7 +4,6 @@ import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
-import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
 import com.jmc.stackoverflowbe.member.service.MemberService;
 import java.net.URI;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/members")
