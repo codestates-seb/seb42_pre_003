@@ -28,6 +28,7 @@ import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
 import com.jmc.stackoverflowbe.member.service.MemberService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,6 +39,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -46,6 +48,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @AutoConfigureRestDocs
 @MockBean(JpaMetamodelMappingContext.class)
 public class MemberControllerTest {
+
     String BASE_URL = "/members";
 
     Member member = Member.builder()
@@ -53,6 +56,29 @@ public class MemberControllerTest {
         .email("hgd@gmail.com")
         .name("홍길동")
         .state(MemberState.ACTIVE)
+        .about("안녕하세요")
+        .location("서울")
+        .build();
+
+    MemberDto.Post post = MemberDto.Post.builder()
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .build();
+
+    MemberDto.Patch patch = MemberDto.Patch.builder()
+        .name("김코딩")
+        .about("안녕하세요")
+        .location("서울")
+        .build();
+
+    MemberDto.Response response = MemberDto.Response.builder()
+        .id(member.getId())
+        .email(member.getEmail())
+        .name(member.getName())
+        .state(member.getState())
+        .isMine(false)
+        .about("안녕하세요")
+        .location("서울")
         .build();
 
     @Autowired
@@ -66,17 +92,13 @@ public class MemberControllerTest {
 
     @Autowired
     Gson gson;
+
     @DisplayName("회원 생성")
     @Test
     void postMemberTest() throws Exception {
-        MemberDto.Post post = MemberDto.Post.builder()
-            .email("hgd@gmail.com")
-            .name("홍길동")
-            .build();
-
         String content = gson.toJson(post);
 
-        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(member);
+        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
 
         ResultActions actions = mockMvc.perform(
@@ -84,6 +106,13 @@ public class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
+
+        ConstraintDescriptions postQuestionConstraints =
+            new ConstraintDescriptions(MemberDto.Post.class);
+        List<String> emailDescriptions = postQuestionConstraints
+            .descriptionsForProperty("email");
+        List<String> nameDescriptions = postQuestionConstraints
+            .descriptionsForProperty("name");
 
         actions
             .andExpect(status().isCreated())
@@ -95,30 +124,28 @@ public class MemberControllerTest {
                     attributes(key("title").value("Fields for user creation")),
                     fieldWithPath("email")
                         .type(JsonFieldType.STRING)
-                        .attributes(key("constraints").value("이메일"))
+                        .attributes(key("constraints").value(emailDescriptions))
                         .description("회원 이메일"),
                     fieldWithPath("name")
                         .type(JsonFieldType.STRING)
-                        .attributes(key("constraints").value("이름"))
+                        .attributes(key("constraints").value(nameDescriptions))
                         .description("회원 이름")),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
-                )));
+                )
+            ));
     }
 
     @DisplayName("회원 수정")
     @Test
     void patchMember() throws Exception {
-        MemberDto.Patch patch = MemberDto.Patch.builder()
-            .name("김코딩")
-            .build();
-
         String content = gson.toJson(patch);
 
         member.setName(patch.getName());
+        member.setLocation(patch.getLocation());
 
-        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(member);
+        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
 
         ResultActions actions = mockMvc.perform(
@@ -126,6 +153,15 @@ public class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
+
+        ConstraintDescriptions patchQuestionConstraints =
+            new ConstraintDescriptions(MemberDto.Post.class);
+        List<String> nameDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("name");
+        List<String> locationDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("location");
+        List<String> aboutDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("about");
 
         actions
             .andExpect(status().isOk())
@@ -139,24 +175,27 @@ public class MemberControllerTest {
                     attributes(key("title").value("Fields for user creation")),
                     fieldWithPath("name")
                         .type(JsonFieldType.STRING)
-                        .attributes(key("constraints").value("이름"))
+                        .attributes(key("constraints").value(nameDescriptions))
                         .optional()
-                        .description("회원 이름"))
-                ));
+                        .description("회원 이름"),
+                    fieldWithPath("location")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value(locationDescriptions))
+                        .optional()
+                        .description("회원 활동 지역"),
+                    fieldWithPath("about")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value(aboutDescriptions))
+                        .optional()
+                        .description("회원 소개")
+                )
+            ));
     }
 
     @DisplayName("회원 조회")
     @Test
     void getMember() throws Exception {
-        MemberDto.Response response = MemberDto.Response.builder()
-            .id(member.getId())
-            .email(member.getEmail())
-            .name(member.getName())
-            .state(member.getState())
-            .isMine(false)
-            .build();
-
-        given(memberService.getMember(Mockito.anyLong())).willReturn(member);
+        given(memberService.getMember(Mockito.anyLong())).willReturn(new Member());
         given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
@@ -166,6 +205,9 @@ public class MemberControllerTest {
 
         actions
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.id").value(member.getId()))
+            .andExpect(jsonPath("$.data.location").value(member.getLocation()))
+            .andExpect(jsonPath("$.data.about").value(member.getAbout()))
             .andDo(document("Get-Member",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
@@ -185,6 +227,12 @@ public class MemberControllerTest {
                     fieldWithPath("data.name")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
+                    fieldWithPath("data.location")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 활동 지역"),
+                    fieldWithPath("data.about")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 소개"),
                     fieldWithPath("data.state")
                         .type(JsonFieldType.STRING)
                         .description("회원 상태"),
