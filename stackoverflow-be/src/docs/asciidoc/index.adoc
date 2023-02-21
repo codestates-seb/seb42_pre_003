@@ -17,9 +17,24 @@ include::{snippets}/Post-Member/http-request.adoc[]
 include::{snippets}/Post-Member/request-fields.adoc[]
 
 .http-response
+include::{snippets}/Post-Member/http-response.adoc[]
+
+.response-header
 include::{snippets}/Post-Member/response-headers.adoc[]
 
 === 회원 수정
+.curl-request
+include::{snippets}/Patch-Member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Patch-Member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Patch-Member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Patch-Member/http-response.adoc[]
+
 
 === 회원 상세 조회
 

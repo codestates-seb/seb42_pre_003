@@ -29,8 +29,10 @@ HELP.md
 build/
 !gradle/wrapper/gradle-wrapper.jar
 generated/
-stackoverflow-be/!**/src/main/**/build/
-stackoverflow-be/!**/src/test/**/build/
+stackoverflow-be/src/main/**/build/
+stackoverflow-be/src/test/**/build/
+stackoverflow-be/src/main/resources/static/docs/
+
 
 ### STS ###
 .apt_generated

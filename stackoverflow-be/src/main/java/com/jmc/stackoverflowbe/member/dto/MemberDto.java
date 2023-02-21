@@ -27,12 +27,10 @@ public class MemberDto {
     @NoArgsConstructor
     public static class Patch {
 
-        private String email;
         private String name;
 
         @Builder
-        public Patch(String email, String name) {
-            this.email = email;
+        public Patch(String name) {
             this.name = name;
         }
     }

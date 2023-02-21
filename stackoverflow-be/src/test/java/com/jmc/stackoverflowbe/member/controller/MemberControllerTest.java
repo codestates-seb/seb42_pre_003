@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -100,5 +100,40 @@ public class MemberControllerTest {
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
                 )));
+    }
+
+    @DisplayName("회원 수정")
+    @Test
+    void patchMember() throws Exception {
+        MemberDto.Patch patch = MemberDto.Patch.builder()
+            .name("김코딩")
+            .build();
+
+        String content = gson.toJson(patch);
+
+        member.setName(patch.getName());
+
+        given(mapper.PostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(member);
+        given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
+
+        ResultActions actions = mockMvc.perform(
+            patch(BASE_URL + "/{member-id}", member.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content));
+
+        actions
+            .andExpect(status().isOk())
+            .andDo(document("Patch-Member",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    attributes(key("title").value("Fields for user creation")),
+                    fieldWithPath("name")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("이름"))
+                        .optional()
+                        .description("회원 이름"))
+                ));
     }
 }
