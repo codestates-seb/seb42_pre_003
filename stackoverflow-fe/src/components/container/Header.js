@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import stacklogo from '../../img/stacklogo.png';
 import search from '../../img/search.png';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderWrap = styled.div`
 	top: 0;
@@ -98,6 +99,8 @@ const UserInfo = styled.div`
 const Header = () => {
 	const [isLogin, setIsLogin] = useState(false);
 
+	const navigate = useNavigate();
+
 	let username = '';
 	let id = '';
 
@@ -132,9 +135,7 @@ const Header = () => {
 					<HeaderWrap>
 						<OrangeBg />
 						<MenuHeader>
-							<Link to={'/'}>
-								<LogoImg src={stacklogo} />
-							</Link>
+							<LogoImg onClick={() => navigate('/')} src={stacklogo} />
 							<Menu>Products</Menu>
 							<SearchWrap>
 								<SearchBox placeholder='Search...' />
