@@ -67,6 +67,58 @@ include::{snippets}/Delete-Member/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/Delete-Member/http-response.adoc[]
+== 질답
+=== 질답 등록
+.curl-request
+include::{snippets}/Post-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Post-QA/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Post-QA/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Patch-QA/http-response.adoc[]
+=== 질답 수정
+.curl-request
+include::{snippets}/Patch-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Patch-QA/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Patch-QA/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Patch-QA/http-response.adoc[]
+=== 질답 조회
+.curl-request
+include::{snippets}/Get-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-QA/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Get-QA/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-QA/http-response.adoc[]
+
+.response-fields
+include::{snippets}/Get-QA/response-fields.adoc[]
+=== 질답 삭제
+.curl-request
+include::{snippets}/Delete-QA/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Delete-QA/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Delete-QA/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Delete-QA/http-response.adoc[]
 
 
 
@@ -84,12 +136,18 @@ include::{snippets}/Post-Comment/request-fields.adoc[]
 .http-response
 include::{snippets}/Post-Comment/http-response.adoc[]
 
+.response-header
+include::{snippets}/Post-Comment/response-headers.adoc[]
+
 === 댓글 수정
 .curl-request
 include::{snippets}/Patch-Comment/curl-request.adoc[]
 
 .http-request
 include::{snippets}/Patch-Comment/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Patch-Comment/path-parameters.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Comment/request-fields.adoc[]
@@ -104,14 +162,14 @@ include::{snippets}/Get-Comment/curl-request.adoc[]
 .http-request
 include::{snippets}/Get-Comment/http-request.adoc[]
 
-.path-parameters
+.request-path-parameters
 include::{snippets}/Get-Comment/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-Comment/http-response.adoc[]
 
 .response-fields
 include::{snippets}/Get-Comment/response-fields.adoc[]
-
-.response-body
-include::{snippets}/Get-Comment/response-body.adoc[]
 
 === 댓글 삭제
 .curl-request
@@ -120,7 +178,7 @@ include::{snippets}/Delete-Comment/curl-request.adoc[]
 .http-request
 include::{snippets}/Delete-Comment/http-request.adoc[]
 
-.path-parameters
+.request-path-parameters
 include::{snippets}/Delete-Comment/path-parameters.adoc[]
 
 .http-response

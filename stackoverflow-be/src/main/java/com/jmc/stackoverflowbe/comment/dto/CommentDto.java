@@ -19,15 +19,11 @@ public class CommentDto {
         private String commentContent;
 
         @Positive
-        private Long memberId;
-
-        @Positive
         private Long qaId;
 
         @Builder
-        public Post(String commentContent, Long memberId, Long qaId) {
+        public Post(String commentContent, Long qaId) {
             this.commentContent = commentContent;
-            this.memberId = memberId;
             this.qaId = qaId;
         }
     }
@@ -43,16 +39,12 @@ public class CommentDto {
         private String commentContent;
 
         @Positive
-        private Long memberId;
-
-        @Positive
         private Long qaId;
 
         @Builder
-        public Patch(Long commentId, String commentContent, Long memberId, Long qaId) {
+        public Patch(Long commentId, String commentContent, Long qaId) {
             this.commentId = commentId;
             this.commentContent = commentContent;
-            this.memberId = memberId;
             this.qaId = qaId;
         }
     }
@@ -65,8 +57,6 @@ public class CommentDto {
 
         private String commentContent;
 
-        private Long memberId;
-
         private Long qaId;
 
         private CommentState commentState;
@@ -76,11 +66,10 @@ public class CommentDto {
         private Timestamp modifiedAt;
 
         @Builder
-        public Response(Long commentId, String commentContent, Long memberId, Long qaId,
+        public Response(Long commentId, String commentContent, Long qaId,
             CommentState commentState) {
             this.commentId = commentId;
             this.commentContent = commentContent;
-            this.memberId = memberId;
             this.qaId = qaId;
             this.commentState = commentState;
         }
