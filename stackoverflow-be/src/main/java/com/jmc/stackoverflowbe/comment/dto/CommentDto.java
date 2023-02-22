@@ -57,6 +57,10 @@ public class CommentDto {
 
         private String commentContent;
 
+        private Long memberId;
+
+        private String memberName;
+
         private Long qaId;
 
         private CommentState commentState;
@@ -66,10 +70,12 @@ public class CommentDto {
         private Timestamp modifiedAt;
 
         @Builder
-        public Response(Long commentId, String commentContent, Long qaId,
-            CommentState commentState) {
+        public Response(Long commentId, String commentContent, Long memberId, String memberName,
+            Long qaId, CommentState commentState) {
             this.commentId = commentId;
             this.commentContent = commentContent;
+            this.memberId = memberId;
+            this.memberName = memberName;
             this.qaId = qaId;
             this.commentState = commentState;
         }

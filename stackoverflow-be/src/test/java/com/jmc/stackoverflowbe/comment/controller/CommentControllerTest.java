@@ -57,6 +57,8 @@ public class CommentControllerTest {
     private final Comment comment = Comment.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .memberName("kimcoding")
         .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
@@ -75,6 +77,8 @@ public class CommentControllerTest {
     private final CommentDto.Response response = CommentDto.Response.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .memberName("kimcoding")
         .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
@@ -202,6 +206,8 @@ public class CommentControllerTest {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.data.commentId").exists())
             .andExpect(jsonPath("$.data.commentContent").exists())
+            .andExpect(jsonPath("$.data.memberId").exists())
+            .andExpect(jsonPath("$.data.memberName").exists())
             .andExpect(jsonPath("$.data.qaId").exists())
             .andExpect(jsonPath("$.data.commentState").exists())
             .andDo(document("Get-Comment",
@@ -219,6 +225,12 @@ public class CommentControllerTest {
                     fieldWithPath("data.commentContent")
                         .type(JsonFieldType.STRING)
                         .description("댓글 내용"),
+                    fieldWithPath("data.memberId")
+                        .type(JsonFieldType.NUMBER)
+                        .description("회원 식별자"),
+                    fieldWithPath("data.memberName")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 이름"),
                     fieldWithPath("data.qaId")
                         .type(JsonFieldType.NUMBER)
                         .description("질답 식별자"),
