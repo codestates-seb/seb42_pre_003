@@ -29,7 +29,7 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity postComment(@RequestBody CommentDto.Post post) {
-        Comment comment = commentService.createComment(mapper.PostDtoToComment(post));
+        Comment comment = commentService.createComment(mapper.postDtoToComment(post));
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -39,7 +39,7 @@ public class CommentController {
     public ResponseEntity patchComment(
         @PathVariable("comment-id") long commentId,
         @RequestBody CommentDto.Patch patch) {
-        commentService.updateComment(mapper.PatchDtoToComment(patch));
+        commentService.updateComment(mapper.patchDtoToComment(patch));
 
         return ResponseEntity.ok().build();
     }
