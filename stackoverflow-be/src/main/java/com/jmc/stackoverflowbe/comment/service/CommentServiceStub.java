@@ -10,6 +10,8 @@ public class CommentServiceStub implements CommentService {
 
     private final CommentBuilder stubComment = Comment.builder()
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .memberName("kimcoding")
         .qaId(1L)
         .commentState(CommentState.ACTIVE);
 
