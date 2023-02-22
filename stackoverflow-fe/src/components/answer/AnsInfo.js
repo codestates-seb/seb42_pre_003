@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+const BREAK_POINT_MO = 576;
+
 const InfoWrap = styled.div`
 	display: flex;
 	padding-top: 0.3rem;
@@ -8,6 +10,10 @@ const InfoWrap = styled.div`
 	color: hsl(206, 100%, 40%);
 	font-weight: 600;
 	font-size: 0.6rem;
+	@media only screen and (max-width: ${BREAK_POINT_MO}px) {
+		flex-direction: column;
+		gap: 0.8rem;
+	}
 `;
 
 const InfoButton = styled.button`
@@ -24,6 +30,9 @@ const InfoUser = styled.div`
 	font-size: 0.6rem;
 	background: #d9e9f7;
 	border-radius: 0.188rem;
+	@media only screen and (max-width: ${BREAK_POINT_MO}px) {
+		margin-top: 0;
+	}
 `;
 
 const InfoAva = styled.div`
@@ -44,10 +53,10 @@ const InfoAva = styled.div`
 	}
 `;
 
-function AnsInfo() {
+function AnsInfo({ handlePage }) {
 	return (
 		<InfoWrap>
-			<InfoButton>Edit</InfoButton>
+			<InfoButton onClick={handlePage}>Edit</InfoButton>
 			<span>edited Feb 17 at 0:13</span>
 			<InfoUser>
 				<span>asked Feb 12 at 21:42</span>

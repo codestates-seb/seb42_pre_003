@@ -3,8 +3,14 @@ import AnsSide from './AnsSide';
 import AnsComment from './AnsComment';
 import AnsInfo from './AnsInfo';
 
+const BREAK_POINT_MO = 576;
+
 const ConWrap = styled.div`
 	display: flex;
+	margin-top: 1rem;
+	padding-bottom: 1rem;
+	border-bottom: ${(props) =>
+		props.type === 'question' ? null : '1px solid #e3e6e8'};
 `;
 
 const AnsBox = styled.div`
@@ -24,6 +30,9 @@ const AnsTag = styled.div`
 		gap: 0.4rem;
 		font-size: 0.55rem;
 		font-weight: 500;
+		@media only screen and (max-width: ${BREAK_POINT_MO}px) {
+			flex-wrap: wrap;
+		}
 		li {
 			padding: 0.25rem;
 			border-radius: 0.188rem;
@@ -33,10 +42,26 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon() {
+function AnsCon({
+	type,
+	comBind,
+	handleComment,
+	vote,
+	plusVote,
+	minusVote,
+	book,
+	handleBook,
+	handlePage,
+}) {
 	return (
-		<ConWrap>
-			<AnsSide />
+		<ConWrap type={type}>
+			<AnsSide
+				vote={vote}
+				plusVote={plusVote}
+				minusVote={minusVote}
+				handleBook={handleBook}
+				book={book}
+			/>
 			<AnsBox>
 				<p>
 					As for now, I'm using mongoose middleware to handle Mongoose specific
@@ -56,17 +81,19 @@ function AnsCon() {
 					mongoose middleware to handle Mongoose specific errors (validation,
 					cast, ....). I'm using the following code in all of my schemas:
 				</p>
-				<AnsTag>
-					<ul>
-						<li>javascript</li>
-						<li>node.js</li>
-						<li>mongodb</li>
-						<li>express</li>
-						<li>mongoose</li>
-					</ul>
-				</AnsTag>
-				<AnsInfo />
-				<AnsComment />
+				{type === 'question' ? (
+					<AnsTag>
+						<ul>
+							<li>javascript</li>
+							<li>node.js</li>
+							<li>mongodb</li>
+							<li>express</li>
+							<li>mongoose</li>
+						</ul>
+					</AnsTag>
+				) : null}
+				<AnsInfo handlePage={handlePage} />
+				<AnsComment comBind={comBind} handleComment={handleComment} />
 			</AnsBox>
 		</ConWrap>
 	);

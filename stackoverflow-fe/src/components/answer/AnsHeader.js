@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
+const BREAK_POINT_MO = 576;
+
 const HeaderWrap = styled.div`
-	margin-bottom: 1rem;
 	padding-bottom: 1rem;
 	border-bottom: 1px solid #e3e6e8;
 	h3 {
@@ -16,8 +17,12 @@ const HeaderInfo = styled.ul`
 	display: flex;
 	gap: 0.4rem;
 	font-size: 0.65rem;
+	@media only screen and (max-width: ${BREAK_POINT_MO}px) {
+		flex-direction: column;
+	}
 	li {
 		display: flex;
+
 		strong {
 			font-weight: 500;
 			color: #6a737c;

@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import AskInput from '../ask/AskInput';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -42,6 +44,7 @@ const CommentItem = styled.li`
 `;
 
 const CommentButton = styled.button`
+	margin-bottom: 0.5rem;
 	font-size: 0.65rem;
 	font-weight: 500;
 	line-height: 1.2;
@@ -49,7 +52,28 @@ const CommentButton = styled.button`
 	opacity: 0.6;
 `;
 
-function AnsComment() {
+const Comment = styled.div`
+	display: flex;
+	gap: 0.2rem;
+`;
+
+const AddButton = styled.button`
+	padding: 0.35rem 0.5rem;
+	color: #fff;
+	font-size: 0.6rem;
+	font-weight: 500;
+	border-radius: 0.188rem;
+	background: hsl(206, 100%, 52%);
+	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
+`;
+
+function AnsComment({ comBind, handleComment }) {
+	const [com, setCom] = useState(false);
+
+	const handleActive = () => {
+		setCom(!com);
+	};
+
 	return (
 		<CommentWrap>
 			<CommentBox>
@@ -66,7 +90,13 @@ function AnsComment() {
 					<em>Feb 17 at 0:14</em>
 				</CommentItem>
 			</CommentBox>
-			<CommentButton>Add a comment</CommentButton>
+			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
+			{com ? (
+				<Comment>
+					<AskInput able='true' values={comBind} />
+					<AddButton onClick={handleComment}>Enter</AddButton>
+				</Comment>
+			) : null}
 		</CommentWrap>
 	);
 }

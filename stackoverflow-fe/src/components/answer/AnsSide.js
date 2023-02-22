@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { CountUpIcon, CountDownIcon, BookMarkIcon } from './AnsIcon';
+import {
+	CountUpIcon,
+	CountDownIcon,
+	BookMarkIcon,
+	BookFullIcon,
+} from './AnsIcon';
 
 const SideWrap = styled.div`
 	display: flex;
@@ -10,14 +15,26 @@ const SideWrap = styled.div`
 	color: #6a737c;
 	svg {
 		fill: hsl(210, 8%, 75%);
+		cursor: pointer;
+	}
+	svg.iconBookmark {
+		fill: #00abbb;
 	}
 `;
 
-function AnsSide() {
+function AnsSide({ vote, plusVote, minusVote, book, handleBook }) {
 	return (
 		<SideWrap>
-			<CountUpIcon />2<CountDownIcon />
-			<BookMarkIcon />
+			<div onClick={plusVote}>
+				<CountUpIcon />
+			</div>
+			{vote}
+			<div onClick={minusVote}>
+				<CountDownIcon />
+			</div>
+			<div onClick={handleBook}>
+				{book ? <BookFullIcon /> : <BookMarkIcon />}
+			</div>
 		</SideWrap>
 	);
 }
