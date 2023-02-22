@@ -15,17 +15,15 @@ public class QADto {
     @Getter
     @NoArgsConstructor
     public static class Post {
-        private Article article;
-        private Member member;
+        private Long articleId;
+        private Long memberId;
         private String qaContent;
-        private Integer votes;
 
         @Builder
-        public Post(Article article, Member member, String qaContent, Integer votes) {
-            this.article = article;
-            this.member = member;
+        public Post(Long articleId, Long memberId, String qaContent) {
+            this.articleId = articleId;
+            this.memberId = memberId;
             this.qaContent = qaContent;
-            this.votes = votes;
         }
     }
 

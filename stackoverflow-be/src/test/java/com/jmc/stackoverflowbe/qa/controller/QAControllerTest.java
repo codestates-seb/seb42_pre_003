@@ -81,10 +81,9 @@ public class QAControllerTest {
     @Test
     void postQATest() throws Exception{
         QADto.Post post = QADto.Post.builder()
-            .article(new Article())
-            .member(new Member())
+            .articleId(0L)
+            .memberId(0L)
             .qaContent("post testing content")
-            .votes(0)
             .build();
 
         String content = gson.toJson(post);
@@ -107,22 +106,18 @@ public class QAControllerTest {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                     attributes(key("title").value("Fields for qa creation")),
-                    fieldWithPath("article")
-                        .type(JsonFieldType.OBJECT)
+                    fieldWithPath("articleId")
+                        .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value("글"))
                         .description("작성된 글"),
-                    fieldWithPath("member")
-                        .type(JsonFieldType.OBJECT)
+                    fieldWithPath("memberId")
+                        .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value("작성자"))
                         .description("질답 작성자"),
                     fieldWithPath("qaContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
-                        .description("질답 내용"),
-                    fieldWithPath("votes")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value("투표"))
-                        .description("받은 투표의 합계")),
+                        .description("질답 내용")),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
