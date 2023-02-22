@@ -1,6 +1,7 @@
 import GlobalStyle from './style/GlobalStyle';
 import Header from './components/container/Header';
 import Footer from './components/container/Footer';
+import Leftsidebar from './components/container/Leftsidebar';
 import Home from './page/Home';
 import Login from './page/Login';
 import SignUp from './page/SignUp';
@@ -17,6 +18,7 @@ function App() {
 				<GlobalStyle />
 				<div className='App'>
 					<Header />
+					<Leftsidebar />
 					<Routes>
 						<Route exact path='/login' element={<Login />} />
 						<Route path='/signUp' element={<SignUp />} />

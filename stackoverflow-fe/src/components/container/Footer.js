@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 const Background = styled.div`
 	background-color: #323232;
@@ -59,6 +60,15 @@ const Sfooterlogo = styled.img`
 `;
 
 const Footer = () => {
+	const location = useLocation().pathname;
+
+	if (
+		location === '/login' ||
+		location === '/signup' ||
+		location === '/questions/ask'
+	)
+		return null;
+
 	return (
 		<footer>
 			<Background>
