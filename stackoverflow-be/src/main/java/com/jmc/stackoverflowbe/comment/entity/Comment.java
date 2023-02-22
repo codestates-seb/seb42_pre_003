@@ -33,20 +33,10 @@ public class Comment extends Auditable {
     private CommentState commentState = CommentState.ACTIVE;
 
 //    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
-    @Column
-    private Long memberId; // Temporary column
-
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    @JoinColumn(name = "QA_ID")
 //    private QA qa;
     @Column
     private Long qaId; // Temporary column
-
-//    public void setMember(Member member) {
-//        this.member = member;
-//    }
 
 //    public void setQA(QA qa) {
 //        this.qa = qa;
@@ -54,11 +44,10 @@ public class Comment extends Auditable {
 
     @Builder // Temporary constructor
     public Comment(Long commentId, String commentContent, CommentState commentState,
-        Long memberId, Long qaId) {
+        Long qaId) {
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentState = commentState;
-        this.memberId = memberId;
         this.qaId = qaId;
     }
 
