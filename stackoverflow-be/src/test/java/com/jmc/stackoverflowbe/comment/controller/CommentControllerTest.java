@@ -57,28 +57,24 @@ public class CommentControllerTest {
     private final Comment comment = Comment.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .memberId(1L)
         .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
 
     private final CommentDto.Post post = CommentDto.Post.builder()
         .commentContent("Sample comment.")
-        .memberId(1L)
         .qaId(1L)
         .build();
 
     private final CommentDto.Patch patch = CommentDto.Patch.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .memberId(1L)
         .qaId(1L)
         .build();
 
     private final CommentDto.Response response = CommentDto.Response.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .memberId(1L)
         .qaId(1L)
         .commentState(CommentState.ACTIVE)
         .build();
@@ -100,7 +96,7 @@ public class CommentControllerTest {
     void postCommentTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(mapper.PostDtoToComment(Mockito.any(CommentDto.Post.class)))
+        given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
             .willReturn(new Comment());
         given(commentService.createComment(Mockito.any(Comment.class)))
             .willReturn(comment);
@@ -115,8 +111,6 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Post.class);
         List<String> contentDescriptions = postQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> memberIdDescriptions = postQuestionConstraints
-            .descriptionsForProperty("memberId");
         List<String> qaIdDescriptions = postQuestionConstraints
             .descriptionsForProperty("qaId");
 
@@ -132,10 +126,6 @@ public class CommentControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용"),
-                    fieldWithPath("memberId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value(memberIdDescriptions))
-                        .description("회원 식별자"),
                     fieldWithPath("qaId")
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value(qaIdDescriptions))
@@ -152,7 +142,7 @@ public class CommentControllerTest {
     void patchCommentTest() throws Exception {
         String content = gson.toJson(patch);
 
-        given(mapper.PatchDtoToComment(Mockito.any(CommentDto.Patch.class)))
+        given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
             .willReturn(new Comment());
         given(commentService.updateComment(Mockito.any(Comment.class)))
             .willReturn(comment);
@@ -167,8 +157,6 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Patch.class);
         List<String> contentDescriptions = patchQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> memberIdDescriptions = patchQuestionConstraints
-            .descriptionsForProperty("memberId");
         List<String> qaIdDescriptions = patchQuestionConstraints
             .descriptionsForProperty("qaId");
 
@@ -177,6 +165,9 @@ public class CommentControllerTest {
             .andDo(document("Patch-Comment",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("comment-id").description("댓글 식별자")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for comment revision")),
                     fieldWithPath("commentId")
@@ -187,10 +178,6 @@ public class CommentControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용"),
-                    fieldWithPath("memberId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value(memberIdDescriptions))
-                        .description("회원 식별자"),
                     fieldWithPath("qaId")
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value(qaIdDescriptions))
@@ -215,7 +202,6 @@ public class CommentControllerTest {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.data.commentId").exists())
             .andExpect(jsonPath("$.data.commentContent").exists())
-            .andExpect(jsonPath("$.data.memberId").exists())
             .andExpect(jsonPath("$.data.qaId").exists())
             .andExpect(jsonPath("$.data.commentState").exists())
             .andDo(document("Get-Comment",
@@ -233,9 +219,6 @@ public class CommentControllerTest {
                     fieldWithPath("data.commentContent")
                         .type(JsonFieldType.STRING)
                         .description("댓글 내용"),
-                    fieldWithPath("data.memberId")
-                        .type(JsonFieldType.NUMBER)
-                        .description("회원 식별자"),
                     fieldWithPath("data.qaId")
                         .type(JsonFieldType.NUMBER)
                         .description("질답 식별자"),
