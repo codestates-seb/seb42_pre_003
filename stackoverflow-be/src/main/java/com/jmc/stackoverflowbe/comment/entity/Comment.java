@@ -57,7 +57,7 @@ public class Comment extends Auditable {
     // this.question = question;
     // }
 
-    // public void setQuestion(Answer answer) {
+    // public void setAnswer(Answer answer) {
     // this.answer = answer;
     // }
 
