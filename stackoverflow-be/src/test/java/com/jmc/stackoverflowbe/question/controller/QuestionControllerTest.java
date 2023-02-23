@@ -106,7 +106,7 @@ public class QuestionControllerTest {
                 requestFields(
                     attributes(key("title").value("Fields for question creation")),
                     fieldWithPath("questionTitle")
-                        .type(JsonFieldType.NUMBER)
+                        .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("제목"))
                         .description("질문 제목"),
                     fieldWithPath("memberId")
@@ -166,11 +166,11 @@ public class QuestionControllerTest {
                         .attributes(key("constraints").value("내용"))
                         .description("수정한 내용"),
                     fieldWithPath("state")
-                        .type(JsonFieldType.NUMBER)
+                        .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("상태"))
                         .description("질문의 상태"),
                     fieldWithPath("selection")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.BOOLEAN)
                         .attributes(key("constraints").value("채택"))
                         .description("답변 채택 여부"))));
     }
@@ -224,28 +224,28 @@ public class QuestionControllerTest {
                         .type(JsonFieldType.NUMBER)
                         .description("질문 식별자"),
                     fieldWithPath("data.questionTitle")
-                        .type(JsonFieldType.NUMBER)
+                        .type(JsonFieldType.STRING)
                         .description("질문 제목"),
                     fieldWithPath("data.questionContent")
-                        .type(JsonFieldType.NUMBER)
+                        .type(JsonFieldType.STRING)
                         .description("질문 내용"),
                     fieldWithPath("data.memberId")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.NUMBER)
                         .description("질문 작성자"),
                     fieldWithPath("data.state")
-                        .type(JsonFieldType.NUMBER)
+                        .type(JsonFieldType.STRING)
                         .description("질문 상태"),
                     fieldWithPath("data.votes")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.NUMBER)
                         .description("질문 득표수"),
                     fieldWithPath("data.selection")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.BOOLEAN)
                         .description("채택 여부"),
                     fieldWithPath("data.answers")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.NUMBER)
                         .description("답변 갯수"),
                     fieldWithPath("data.views")
-                        .type(JsonFieldType.STRING)
+                        .type(JsonFieldType.NUMBER)
                         .description("조회수"),
                     fieldWithPath("data.createdAt")
                         .type(JsonFieldType.NULL)
