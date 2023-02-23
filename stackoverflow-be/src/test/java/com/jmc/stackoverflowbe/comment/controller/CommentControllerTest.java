@@ -69,15 +69,27 @@ public class CommentControllerTest {
 
     private final CommentDto.Post post = CommentDto.Post.builder()
         .commentContent("Sample comment.")
+        .questionId(1L)
+        .answerId(1L)
         .build();
 
     private final CommentDto.Patch patch = CommentDto.Patch.builder()
         .commentContent("Sample comment.")
         .build();
 
-    private final CommentDto.Response response = CommentDto.Response.builder()
+    private final CommentDto.Response response1 = CommentDto.Response.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
+        .memberId(1L)
+        .memberName("kimcoding")
+        .questionId(1L)
+        .answerId(null)
+        .commentState(CommentState.ACTIVE)
+        .build();
+
+    private final CommentDto.Response response2 = CommentDto.Response.builder()
+        .commentId(2L)
+        .commentContent("Sample comment 2.")
         .memberId(1L)
         .memberName("kimcoding")
         .questionId(1L)
@@ -117,8 +129,10 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Post.class);
         List<String> contentDescriptions = postQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> qaStateDescriptions = postQuestionConstraints
-            .descriptionsForProperty("qaState");
+        List<String> questionIdDescriptions = postQuestionConstraints
+            .descriptionsForProperty("questionId");
+        List<String> answerIdDescriptions = postQuestionConstraints
+            .descriptionsForProperty("answerId");
 
         actions
             .andExpect(status().isCreated())
@@ -131,7 +145,17 @@ public class CommentControllerTest {
                     fieldWithPath("commentContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
-                        .description("댓글 내용")),
+                        .description("댓글 내용"),
+                    fieldWithPath("questionId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(questionIdDescriptions))
+                        .description("질문 식별자")
+                        .optional(),
+                    fieldWithPath("answerId")
+                        .type(JsonFieldType.NUMBER)
+                        .attributes(key("constraints").value(answerIdDescriptions))
+                        .description("답변 식별자")
+                        .optional()),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
@@ -159,8 +183,6 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Patch.class);
         List<String> contentDescriptions = patchQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> qaStateDescriptions = patchQuestionConstraints
-            .descriptionsForProperty("qaState");
 
         actions
             .andExpect(status().isOk())
@@ -182,60 +204,73 @@ public class CommentControllerTest {
 
     @DisplayName("댓글 조회")
     @Test
-    void getCommentTest() throws Exception {
-        given(commentService.getComment(Mockito.anyLong()))
-            .willReturn(new Comment());
-        given(mapper.commentToResponseDto(Mockito.any(Comment.class)))
-            .willReturn(response);
+    void getCommentsTest() throws Exception {
+        given(commentService.getComments(Mockito.anyString(), Mockito.anyLong()))
+            .willReturn(List.of(new Comment(), new Comment()));
+        given(mapper.commentsToResponseDtos(Mockito.anyList()))
+            .willReturn(List.of(response1, response2));
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("qaType", "Question");
+        queryParams.add("qaId", "1");
 
         ResultActions actions = mockMvc.perform(
-            get(BASE_URL + "/{comment-id}", comment.getCommentId())
+            get(BASE_URL)
+                .params(queryParams)
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.data.commentId").exists())
-            .andExpect(jsonPath("$.data.commentContent").exists())
-            .andExpect(jsonPath("$.data.memberId").exists())
-            .andExpect(jsonPath("$.data.memberName").exists())
-            .andExpect(jsonPath("$.data.questionId").exists())
-            .andExpect(jsonPath("$.data.answerId").doesNotExist())
-            .andExpect(jsonPath("$.data.commentState").exists())
-            .andDo(document("Get-Comment",
+            .andExpect(jsonPath("$.data.*").exists())
+            .andExpect(jsonPath("$.data[0].commentId").exists())
+            .andExpect(jsonPath("$.data[0].commentContent").exists())
+            .andExpect(jsonPath("$.data[0].memberId").exists())
+            .andExpect(jsonPath("$.data[0].memberName").exists())
+            .andExpect(jsonPath("$.data[0].questionId").exists())
+            .andExpect(jsonPath("$.data[0].answerId").doesNotExist())
+            .andExpect(jsonPath("$.data[0].commentState").exists())
+            .andExpect(jsonPath("$.data[1].commentId").exists())
+            .andExpect(jsonPath("$.data[1].commentContent").exists())
+            .andExpect(jsonPath("$.data[1].memberId").exists())
+            .andExpect(jsonPath("$.data[1].memberName").exists())
+            .andExpect(jsonPath("$.data[1].questionId").exists())
+            .andExpect(jsonPath("$.data[1].answerId").doesNotExist())
+            .andExpect(jsonPath("$.data[1].commentState").exists())
+            .andDo(document("Get-Comments",
                 preprocessResponse(prettyPrint()),
-                pathParameters(
-                    parameterWithName("comment-id").description("댓글 식별자")
+                requestParameters(
+                    parameterWithName("qaType").description("질문/답변 항목 표시"),
+                    parameterWithName("qaId").description("질문/답변 식별자")
                 ),
                 responseFields(
-                    fieldWithPath("data")
-                        .type(JsonFieldType.OBJECT)
-                        .description("댓글"),
-                    fieldWithPath("data.commentId")
+                    fieldWithPath("data[]")
+                        .type(JsonFieldType.ARRAY)
+                        .description("댓글 리스트"),
+                    fieldWithPath("data[].commentId")
                         .type(JsonFieldType.NUMBER)
                         .description("댓글 식별자"),
-                    fieldWithPath("data.commentContent")
+                    fieldWithPath("data[].commentContent")
                         .type(JsonFieldType.STRING)
                         .description("댓글 내용"),
-                    fieldWithPath("data.memberId")
+                    fieldWithPath("data[].memberId")
                         .type(JsonFieldType.NUMBER)
                         .description("회원 식별자"),
-                    fieldWithPath("data.memberName")
+                    fieldWithPath("data[].memberName")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
-                    fieldWithPath("data.questionId")
+                    fieldWithPath("data[].questionId")
                         .type(JsonFieldType.NUMBER)
                         .description("질문 식별자"),
-                    fieldWithPath("data.answerId")
+                    fieldWithPath("data[].answerId")
                         .type(JsonFieldType.NULL)
                         .description("답변 식별자"),
-                    fieldWithPath("data.commentState")
+                    fieldWithPath("data[].commentState")
                         .type(JsonFieldType.STRING)
                         .description("댓글 상태"),
-                    fieldWithPath("data.createdAt")
+                    fieldWithPath("data[].createdAt")
                         .type(JsonFieldType.NULL)
                         .description("댓글 생성 날짜"),
-                    fieldWithPath("data.modifiedAt")
+                    fieldWithPath("data[].modifiedAt")
                         .type(JsonFieldType.NULL)
                         .description("댓글 수정 날짜")
                 ))
