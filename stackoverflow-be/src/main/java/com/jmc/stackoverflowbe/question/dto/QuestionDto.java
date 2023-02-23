@@ -1,6 +1,5 @@
 package com.jmc.stackoverflowbe.question.dto;
 
-import com.jmc.stackoverflowbe.question.entity.Question.QaGroup;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import java.sql.Timestamp;
 import lombok.Builder;

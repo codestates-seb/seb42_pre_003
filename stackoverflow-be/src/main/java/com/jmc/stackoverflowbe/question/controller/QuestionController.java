@@ -28,30 +28,30 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity postQuestion(@RequestBody QuestionDto.Post post){
-        questionService.createQuestion(mapper.PostDtoToQA(post));
-        URI location = UriCreator.createURI("/qas", 1l);
+        questionService.createQuestion(mapper.postDtoToQuestion(post));
+        URI location = UriCreator.createURI("/questions", 1l);
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{qa-id}")
-    public ResponseEntity patchQA(
-        @PathVariable("qa-id") long qaId,
+    @PatchMapping("/{question-id}")
+    public ResponseEntity patchQuestion(
+        @PathVariable("question-id") long questionId,
         @RequestBody QuestionDto.Patch patch) {
-        questionService.updateQA(mapper.PatchDtoToQA(patch));
+        questionService.updateQuestion(mapper.patchDtoToQuestion(patch));
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{qa-id}")
-    public ResponseEntity getQA(@PathVariable("qa-id") long qaId){
-        Question question = questionService.getQA(qaId);
+    @GetMapping("/{question-id}")
+    public ResponseEntity getQuestion(@PathVariable("question-id") long questionId){
+        Question question = questionService.getQuestion(questionId);
         return new ResponseEntity(new SingleResponseDto<>(
-            mapper.QAToResponseDto(question)),
+            mapper.questionToResponseDto(question)),
             HttpStatus.OK);
     }
 
-    @DeleteMapping("/{qa-id}")
-    public ResponseEntity deleteQA(@PathVariable("qa-id") long qaId){
-        questionService.deleteQA(qaId);
+    @DeleteMapping("/{question-id}")
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId){
+        questionService.deleteQuestion(questionId);
         return ResponseEntity.noContent().build();
     }
 
