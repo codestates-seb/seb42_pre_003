@@ -14,9 +14,27 @@ spring:
         format_sql: true
     init:
       data-locations: classpath*:db/h2/data.sql
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
 logging:
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 360
