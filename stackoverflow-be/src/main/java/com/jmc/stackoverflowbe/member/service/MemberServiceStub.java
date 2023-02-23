@@ -18,9 +18,9 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public Member getMember(Long id) {
+    public Member getMember(Long memberId) {
         return Member.builder()
-            .id(id)
+            .memberId(memberId)
             .email("hgd@gmail.com")
             .name("홍길동")
             .state(MemberState.ACTIVE)
@@ -28,7 +28,7 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public void deleteMember(Long id) {
+    public void deleteMember(Long memberId) {
 
     }
 
@@ -38,7 +38,7 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public Member findExistId(Long id) {
+    public Member findExistId(Long memberId) {
         return null;
     }
 }
