@@ -5,8 +5,6 @@ const NavContainer = styled.div`
 	width: 164px;
 	min-height: calc(100vh - 2506px);
 	background-color: #fff;
-	position: absolute;
-	left: 202px;
 	border-right: 1px solid #c3c3c3;
 	padding-top: 30px;
 `;
@@ -49,7 +47,7 @@ const Leftsidebar = () => {
 	if (
 		location === '/login' ||
 		location === '/signup' ||
-		location === '/questions/ask'
+		location === '/askQuestion'
 	)
 		return null;
 
