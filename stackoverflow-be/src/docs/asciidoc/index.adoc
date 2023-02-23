@@ -155,21 +155,21 @@ include::{snippets}/Patch-Comment/request-fields.adoc[]
 .http-response
 include::{snippets}/Patch-Comment/http-response.adoc[]
 
-=== 댓글 상세 조회
+=== 댓글 리스트 조회
 .curl-request
-include::{snippets}/Get-Comment/curl-request.adoc[]
+include::{snippets}/Get-Comments/curl-request.adoc[]
 
 .http-request
-include::{snippets}/Get-Comment/http-request.adoc[]
+include::{snippets}/Get-Comments/http-request.adoc[]
 
-.request-path-parameters
-include::{snippets}/Get-Comment/path-parameters.adoc[]
+.request-query-parameters
+include::{snippets}/Get-Comments/request-parameters.adoc[]
 
 .http-response
-include::{snippets}/Get-Comment/http-response.adoc[]
+include::{snippets}/Get-Comments/http-response.adoc[]
 
 .response-fields
-include::{snippets}/Get-Comment/response-fields.adoc[]
+include::{snippets}/Get-Comments/response-fields.adoc[]
 
 === 댓글 삭제
 .curl-request
