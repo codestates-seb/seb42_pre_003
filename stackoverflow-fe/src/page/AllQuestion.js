@@ -4,6 +4,7 @@ import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import FilterButton from '../components/list/FilterButton';
 import Filter from '../components/list/Filter';
+import { Link } from 'react-router-dom';
 
 const Content = styled.div`
 	padding: 24px;
@@ -169,7 +170,9 @@ const Question = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<a href='/'>Why does Prestashop API not add a resource in XML</a>
+							<Link to={'/allQuestion/answer'}>
+								Why does Prestashop API not add a resource in XML
+							</Link>
 						</li>
 						<li className='contents-excerpt'>
 							In our application we have screen with multiple header titles

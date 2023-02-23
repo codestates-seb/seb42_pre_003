@@ -7,6 +7,7 @@ const NavContainer = styled.div`
 	background-color: #fff;
 	border-right: 1px solid #c3c3c3;
 	padding-top: 30px;
+	font-size: 13px;
 `;
 
 const Navbar = styled.nav`
@@ -58,7 +59,11 @@ const Leftsidebar = () => {
 					<li>
 						<a
 							href='/'
-							className={location === '/' ? 'homeActive' : 'homeMenu'}
+							className={
+								location === '/' || location === '/answer'
+									? 'homeActive'
+									: 'homeMenu'
+							}
 						>
 							Home
 						</a>
@@ -66,7 +71,12 @@ const Leftsidebar = () => {
 					<li>
 						<a
 							href='/allQuestion'
-							className={location === '/allQuestion' ? 'active' : null}
+							className={
+								location === '/allQuestion' ||
+								location === '/allQuestion/answer'
+									? 'active'
+									: null
+							}
 						>
 							Questions
 						</a>

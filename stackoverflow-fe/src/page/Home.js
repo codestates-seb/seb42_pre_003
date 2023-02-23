@@ -142,7 +142,7 @@ const Contents = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<Link to={'/Answer'}>
+							<Link to={'/answer'}>
 								Why does Prestashop API not add a resource in XML
 							</Link>
 						</li>
