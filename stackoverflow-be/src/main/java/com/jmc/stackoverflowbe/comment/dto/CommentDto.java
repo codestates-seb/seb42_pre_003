@@ -1,8 +1,10 @@
 package com.jmc.stackoverflowbe.comment.dto;
 
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
+import com.jmc.stackoverflowbe.comment.entity.Comment.QAState;
 import java.sql.Timestamp;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,13 +20,13 @@ public class CommentDto {
         @NotBlank
         private String commentContent;
 
-        @Positive
-        private Long qaId;
+        @NotNull
+        private QAState qaState;
 
         @Builder
-        public Post(String commentContent, Long qaId) {
+        public Post(String commentContent, QAState qaState) {
             this.commentContent = commentContent;
-            this.qaId = qaId;
+            this.qaState = qaState;
         }
     }
 
@@ -38,14 +40,14 @@ public class CommentDto {
         @NotBlank
         private String commentContent;
 
-        @Positive
-        private Long qaId;
+        @NotNull
+        private QAState qaState;
 
         @Builder
-        public Patch(Long commentId, String commentContent, Long qaId) {
+        public Patch(Long commentId, String commentContent, QAState qaState) {
             this.commentId = commentId;
             this.commentContent = commentContent;
-            this.qaId = qaId;
+            this.qaState = qaState;
         }
     }
 
@@ -61,9 +63,13 @@ public class CommentDto {
 
         private String memberName;
 
-        private Long qaId;
+        private Long questionId;
+
+        private Long answerId;
 
         private CommentState commentState;
+
+        private QAState qaState;
 
         private Timestamp createdAt;
 
@@ -71,13 +77,15 @@ public class CommentDto {
 
         @Builder
         public Response(Long commentId, String commentContent, Long memberId, String memberName,
-            Long qaId, CommentState commentState) {
+            Long questionId, Long answerId, CommentState commentState, QAState qaState) {
             this.commentId = commentId;
             this.commentContent = commentContent;
             this.memberId = memberId;
             this.memberName = memberName;
-            this.qaId = qaId;
+            this.questionId = questionId;
+            this.answerId = answerId;
             this.commentState = commentState;
+            this.qaState = qaState;
         }
     }
 }

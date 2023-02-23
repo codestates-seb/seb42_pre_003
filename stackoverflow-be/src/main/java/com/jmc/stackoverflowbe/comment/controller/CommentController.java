@@ -2,6 +2,7 @@ package com.jmc.stackoverflowbe.comment.controller;
 
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
+import com.jmc.stackoverflowbe.comment.entity.Comment.QAState;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,18 +30,22 @@ public class CommentController {
     private final CommentMapper mapper;
 
     @PostMapping
-    public ResponseEntity postComment(@RequestBody CommentDto.Post post) {
-        Comment comment = commentService.createComment(mapper.postDtoToComment(post));
+    public ResponseEntity postComment(@RequestBody CommentDto.Post post,
+        @RequestParam QAState qaState,
+        @RequestParam long qaId) {
+        Comment comment = commentService.createComment(
+            mapper.postDtoToComment(post), qaState, qaId);
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patchComment(
+    public ResponseEntity patchComment(@RequestBody CommentDto.Patch patch,
         @PathVariable("comment-id") long commentId,
-        @RequestBody CommentDto.Patch patch) {
-        commentService.updateComment(mapper.patchDtoToComment(patch));
+        @RequestParam QAState qaState,
+        @RequestParam long qaId) {
+        commentService.updateComment(mapper.patchDtoToComment(patch), qaState, qaId);
 
         return ResponseEntity.ok().build();
     }

@@ -32,7 +32,10 @@ public class Comment extends Auditable {
     @Column
     private CommentState commentState = CommentState.ACTIVE;
 
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @Column
+    private QAState qaState = QAState.QUESTION;
+
+    //    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 //    @JoinColumn(name = "MEMBER_ID")
 //    private Member member;
     @Column
@@ -41,25 +44,41 @@ public class Comment extends Auditable {
     @Column
     private String memberName; // Temporary column
 
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JoinColumn(name = "QA_ID")
-//    private QA qa;
+    //    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JoinColumn(name = "QUESTION_ID")
+//    private Question question;
     @Column
-    private Long qaId; // Temporary column
+    private Long questionId; // Temporary column
 
-//    public void setQA(QA qa) {
-//        this.qa = qa;
+    //    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JoinColumn(name = "ANSWER_ID")
+//    private ANSWER answer;
+    @Column
+    private Long answerId; // Temporary column
+
+//    public void setMember(Member member) {
+//        this.member = member;
+//    }
+
+//    public void setQuestion(Question question) {
+//        this.question = question;
+//    }
+
+//    public void setQuestion(Answer answer) {
+//        this.answer = answer;
 //    }
 
     @Builder // Temporary constructor
-    public Comment(Long commentId, String commentContent, CommentState commentState, Long memberId,
-        String memberName, Long qaId) {
+    public Comment(Long commentId, String commentContent, CommentState commentState,
+        QAState qaState, Long memberId, String memberName, Long questionId, Long answerId) {
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentState = commentState;
+        this.qaState = qaState;
         this.memberId = memberId;
         this.memberName = memberName;
-        this.qaId = qaId;
+        this.questionId = questionId;
+        this.answerId = answerId;
     }
 
     public enum CommentState {
@@ -72,6 +91,18 @@ public class Comment extends Auditable {
 
         CommentState(String state) {
             this.state = state;
+        }
+    }
+
+    public enum QAState {
+        QUESTION("질문"),
+        ANSWER("답변");
+
+        @Getter
+        private String qaState;
+
+        QAState(String qaState) {
+            this.qaState = qaState;
         }
     }
 }
