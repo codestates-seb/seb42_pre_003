@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.qa.controller;
+package com.jmc.stackoverflowbe.question.controller;
 
 
 import static org.hamcrest.Matchers.is;
@@ -27,14 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.jmc.stackoverflowbe.article.entity.Article;
-import com.jmc.stackoverflowbe.member.entity.Member;
-import com.jmc.stackoverflowbe.qa.dto.QADto;
-import com.jmc.stackoverflowbe.qa.entity.QA;
-import com.jmc.stackoverflowbe.qa.entity.QA.QaGroup;
-import com.jmc.stackoverflowbe.qa.entity.QA.StateGroup;
-import com.jmc.stackoverflowbe.qa.mapper.QAMapper;
-import com.jmc.stackoverflowbe.qa.service.QAService;
+import com.jmc.stackoverflowbe.question.dto.QuestionDto;
+import com.jmc.stackoverflowbe.question.entity.Question;
+import com.jmc.stackoverflowbe.question.entity.Question.QaGroup;
+import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
+import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
+import com.jmc.stackoverflowbe.question.service.QuestionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -49,13 +47,13 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(QAController.class)
+@WebMvcTest(QuestionController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
-public class QAControllerTest {
+public class QuestionControllerTest {
     String BASE_URL = "/qas";
 
-    QA qa = QA.builder()
+    Question question = Question.builder()
         .id(1L)
         .qaContent("testing content")
         .qaGroup(QaGroup.QUESTION)
@@ -69,10 +67,10 @@ public class QAControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    QAService qaService;
+    QuestionService questionService;
 
     @MockBean
-    QAMapper mapper;
+    QuestionMapper mapper;
 
     @Autowired
     Gson gson;
@@ -80,17 +78,17 @@ public class QAControllerTest {
     @DisplayName("Qa 생성")
     @Test
     void postQATest() throws Exception{
-        QADto.Post post = QADto.Post.builder()
+        QuestionDto.Post post = QuestionDto.Post.builder()
             .articleId(0L)
             .memberId(0L)
             .qaContent("post testing content")
             .build();
 
         String content = gson.toJson(post);
-        given(mapper.PostDtoToQA(Mockito.any(QADto.Post.class)))
-            .willReturn(qa);
-        given(qaService.createQA(Mockito.any(QA.class)))
-            .willReturn(qa);
+        given(mapper.PostDtoToQA(Mockito.any(QuestionDto.Post.class)))
+            .willReturn(question);
+        given(questionService.createQA(Mockito.any(Question.class)))
+            .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
@@ -127,17 +125,17 @@ public class QAControllerTest {
     @DisplayName("질답 수정")
     @Test
     void patchQATest() throws Exception{
-        QADto.Patch patch = QADto.Patch.builder()
+        QuestionDto.Patch patch = QuestionDto.Patch.builder()
             .qaId(1L)
             .qaContent("patch testing content")
             .votes(0)
             .build();
 
         String content = gson.toJson(patch);
-        given(mapper.PatchDtoToQA(Mockito.any(QADto.Patch.class)))
-            .willReturn(new QA());
-        given(qaService.updateQA(Mockito.any(QA.class)))
-            .willReturn(qa);
+        given(mapper.PatchDtoToQA(Mockito.any(QuestionDto.Patch.class)))
+            .willReturn(new Question());
+        given(questionService.updateQA(Mockito.any(Question.class)))
+            .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL+"/{qa-id}", patch.getQaId())
@@ -169,8 +167,8 @@ public class QAControllerTest {
     @DisplayName("질답 조회")
     @Test
     void getQATest() throws Exception{
-        QADto.Response response = QADto.Response.builder()
-            .id(qa.getId())
+        QuestionDto.Response response = QuestionDto.Response.builder()
+            .id(question.getId())
             .articleId(0L)
             .memberId(0L)
             .qaContent("get testing content")
@@ -179,13 +177,13 @@ public class QAControllerTest {
             .state(StateGroup.ACTIVE)
             .build();
 
-        given(qaService.getQA(Mockito.anyLong()))
-            .willReturn(new QA());
-        given(mapper.QAToResponseDto(Mockito.any(QA.class)))
+        given(questionService.getQA(Mockito.anyLong()))
+            .willReturn(new Question());
+        given(mapper.QAToResponseDto(Mockito.any(Question.class)))
             .willReturn(response);
 
         ResultActions actions = mockMvc.perform(
-            get(BASE_URL+"/{qa-id}", qa.getId())
+            get(BASE_URL+"/{qa-id}", question.getId())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
@@ -239,10 +237,10 @@ public class QAControllerTest {
     @DisplayName("질답 삭제")
     @Test
     void deleteQATest() throws Exception{
-        doNothing().when(qaService).deleteQA(qa.getId());
+        doNothing().when(questionService).deleteQA(question.getId());
 
         ResultActions actions = mockMvc.perform(
-            delete(BASE_URL + "/{qa-id}", qa.getId())
+            delete(BASE_URL + "/{qa-id}", question.getId())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
