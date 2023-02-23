@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import AskText from './AskText';
 import AskGuide from './AskGuide';
+import { useBoxStore } from '../../store/askStore';
 
 const BREAK_POINT_PC = 1100;
 
@@ -25,9 +26,9 @@ function AskBox({
 	review,
 	...rest
 }) {
-	const getAble = localStorage.getItem('able');
-	const able = JSON.parse(getAble);
-	const base = able[name] || able[name] === undefined ? true : false;
+	const { ableData } = useBoxStore();
+	const base =
+		ableData[0][name] || ableData[0][name] === undefined ? true : false;
 
 	return (
 		<AskBoxWrap able={base}>

@@ -41,11 +41,11 @@ function AskText({ able, type, label, text, values, review, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
-				return <AskEditor able={able} values={values} />;
+				return <AskEditor able={able} func={values} />;
 			case 'selector':
 				return <AskSelector able={able} />;
 			default:
-				return <AskInput able={able} values={values} />;
+				return <AskInput able={able} func={values} />;
 		}
 	};
 

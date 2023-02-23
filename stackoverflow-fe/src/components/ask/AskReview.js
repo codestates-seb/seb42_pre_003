@@ -2,7 +2,6 @@ import AskNotice from './AskNotice';
 import AskBox from './AskBox';
 
 function AskReview({ titleBind, bodyBind, tagBind }) {
-	console.log(bodyBind);
 	return (
 		<>
 			<h3>Review your question</h3>

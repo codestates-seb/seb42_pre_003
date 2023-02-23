@@ -12,6 +12,7 @@ import Paging from '../components/pagination/Paging';
 
 const AnsWrap = styled.div`
 	max-width: 830px;
+	width: 100%;
 	padding: 3rem 0.66rem;
 `;
 

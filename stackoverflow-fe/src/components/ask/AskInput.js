@@ -14,11 +14,11 @@ const Input = styled.input`
 	}
 `;
 
-function AskInput({ able, values }) {
+function AskInput({ able, func }) {
 	return (
 		<Input
 			disabled={!able}
-			{...values}
+			onChange={({ target: { value } }) => func(value)}
 			placeholder='e.g. Is there an R function for finding the index of an element in a vector?'
 		/>
 	);

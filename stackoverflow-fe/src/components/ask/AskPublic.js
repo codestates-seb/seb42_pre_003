@@ -1,14 +1,34 @@
 import AskNotice from './AskNotice';
 import AskBox from './AskBox';
+import { useAskStore, useBoxStore } from '../../store/askStore';
 
-function AskPublic({
-	titleBind,
-	detailBind,
-	tryBind,
-	tagBind,
-	handleDisable,
-	handleCashe,
-}) {
+function AskPublic() {
+	const { titleBind, detailBind, expectBind, tagBind } = useAskStore();
+	const { ableData, setAbleData, setAskData } = useBoxStore();
+	const { title, detail, expect, tag, handlePage } = useAskStore();
+
+	const handleDisable = (item) => {
+		let obj = { ...ableData[0] };
+		obj[item] = true;
+		setAbleData(obj);
+	};
+
+	const handleCashe = (e) => {
+		e.preventDefault();
+
+		const item = {
+			title,
+			detail,
+			expect,
+			tag,
+		};
+
+		console.log(item);
+
+		setAskData(item);
+		handlePage();
+	};
+
 	return (
 		<>
 			<h3>Ask a public question</h3>
@@ -40,7 +60,7 @@ function AskPublic({
 			<AskBox
 				name={'try'}
 				type={'editor'}
-				values={tryBind}
+				values={expectBind}
 				onClick={() => handleDisable('tag')}
 				inputLabel={'What did you try and what were you expecting?'}
 				inputText={
