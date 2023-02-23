@@ -22,6 +22,12 @@ const useAnsStore = create(
 		comment: '',
 		comBind: (item) => set({ comment: item }),
 		comReset: () => set({ comment: '' }),
+		edTitle: '',
+		edTitleBind: (item) => set({ edTitle: item }),
+		edBody: '',
+		edBodyBind: (item) => set({ edBody: item }),
+		edTag: '',
+		edTagBind: (item) => set({ edTag: item }),
 	})),
 );
 

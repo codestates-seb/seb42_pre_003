@@ -1,12 +1,10 @@
-import useAnsStore from '../../store/ansStore';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function AnsEditor() {
-	const { answerBind } = useAnsStore();
+function AnsEditor({ func }) {
 	return (
 		<div>
-			<ReactQuill onChange={(value) => answerBind(value)} />
+			<ReactQuill onChange={(value) => func(value)} />
 
 			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>

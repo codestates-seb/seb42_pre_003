@@ -1,4 +1,3 @@
-import useAnsStore from '../../store/ansStore';
 import styled from 'styled-components';
 
 const Input = styled.input`
@@ -15,8 +14,7 @@ const Input = styled.input`
 	}
 `;
 
-function AnsInput() {
-	const { comBind } = useAnsStore();
-	return <Input onChange={({ target: { value } }) => comBind(value)} />;
+function AnsInput({ func }) {
+	return <Input onChange={({ target: { value } }) => func(value)} />;
 }
 export default AnsInput;
