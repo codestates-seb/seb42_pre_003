@@ -29,34 +29,48 @@ public class Comment extends Auditable {
     @Column
     private CommentState commentState = CommentState.ACTIVE;
 
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
+    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    // @JoinColumn(name = "MEMBER_ID")
+    // private Member member;
     @Column
     private Long memberId; // Temporary column
 
     @Column
     private String memberName; // Temporary column
 
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    @JoinColumn(name = "QA_ID")
-//    private QA qa;
-    @Column
-    private Long qaId; // Temporary column
+    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    // @JoinColumn(name = "QUESTION_ID")
+    // private Question question;
+    private Long questionId; // Temporary column
 
-//    public void setQA(QA qa) {
-//        this.qa = qa;
-//    }
+    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    // @JoinColumn(name = "ANSWER_ID")
+    // private ANSWER answer;
+    @Column
+    private Long answerId; // Temporary column
+
+    // public void setMember(Member member) {
+    // this.member = member;
+    // }
+
+    // public void setQuestion(Question question) {
+    // this.question = question;
+    // }
+
+    // public void setQuestion(Answer answer) {
+    // this.answer = answer;
+    // }
 
     @Builder // Temporary constructor
-    public Comment(Long commentId, String commentContent, CommentState commentState, Long memberId,
-        String memberName, Long qaId) {
+    public Comment(Long commentId, String commentContent, CommentState commentState,
+        Long memberId, String memberName, Long questionId, Long answerId) {
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentState = commentState;
         this.memberId = memberId;
         this.memberName = memberName;
-        this.qaId = qaId;
+        this.questionId = questionId;
+        this.answerId = answerId;
     }
 
     public enum CommentState {
