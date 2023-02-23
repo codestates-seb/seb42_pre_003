@@ -6,31 +6,12 @@ const ConTitle = styled.h4`
 	font-weight: 500;
 `;
 
-function AnsList({
-	comBind,
-	handleComment,
-	vote,
-	plusVote,
-	minusVote,
-	book,
-	handleBook,
-	handlePage,
-}) {
+function AnsList({ comBind, handleComment }) {
 	return (
 		<>
 			<ConTitle>2 Answers</ConTitle>
 			{[0, 1].map((el, idx) => (
-				<AnsCon
-					key={idx}
-					comBind={comBind}
-					handleComment={handleComment}
-					vote={vote}
-					plusVote={plusVote}
-					minusVote={minusVote}
-					handleBook={handleBook}
-					book={book}
-					handlePage={handlePage}
-				/>
+				<AnsCon key={idx} comBind={comBind} handleComment={handleComment} />
 			))}
 		</>
 	);

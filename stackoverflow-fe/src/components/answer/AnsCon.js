@@ -42,26 +42,10 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon({
-	type,
-	comBind,
-	handleComment,
-	vote,
-	plusVote,
-	minusVote,
-	book,
-	handleBook,
-	handlePage,
-}) {
+function AnsCon({ type, handleComment }) {
 	return (
 		<ConWrap type={type}>
-			<AnsSide
-				vote={vote}
-				plusVote={plusVote}
-				minusVote={minusVote}
-				handleBook={handleBook}
-				book={book}
-			/>
+			<AnsSide />
 			<AnsBox>
 				<p>
 					As for now, I'm using mongoose middleware to handle Mongoose specific
@@ -92,8 +76,8 @@ function AnsCon({
 						</ul>
 					</AnsTag>
 				) : null}
-				<AnsInfo handlePage={handlePage} />
-				<AnsComment comBind={comBind} handleComment={handleComment} />
+				<AnsInfo />
+				<AnsComment handleComment={handleComment} />
 			</AnsBox>
 		</ConWrap>
 	);

@@ -5,6 +5,7 @@ import {
 	BookMarkIcon,
 	BookFullIcon,
 } from './AnsIcon';
+import useAnsStore from '../../store/ansStore';
 
 const SideWrap = styled.div`
 	display: flex;
@@ -22,7 +23,9 @@ const SideWrap = styled.div`
 	}
 `;
 
-function AnsSide({ vote, plusVote, minusVote, book, handleBook }) {
+function AnsSide() {
+	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
+
 	return (
 		<SideWrap>
 			<div onClick={plusVote}>

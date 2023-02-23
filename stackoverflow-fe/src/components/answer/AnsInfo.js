@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import useAnsStore from '../../store/ansStore';
 
 const BREAK_POINT_MO = 576;
 
@@ -53,7 +54,9 @@ const InfoAva = styled.div`
 	}
 `;
 
-function AnsInfo({ handlePage }) {
+function AnsInfo() {
+	const { handlePage } = useAnsStore();
+
 	return (
 		<InfoWrap>
 			<InfoButton onClick={handlePage}>Edit</InfoButton>

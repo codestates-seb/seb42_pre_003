@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import AskEditor from '../ask/AskEditor';
+// import AskEditor from '../ask/AskEditor';
+import AnsEditor from './AnsEditor';
 
 const ConTitle = styled.h4`
 	margin-top: 1rem;
@@ -19,11 +20,11 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
-function AnsAdd({ answerBind, handleAnswer }) {
+function AnsAdd({ handleAnswer }) {
 	return (
 		<>
 			<ConTitle>Your Answer</ConTitle>
-			<AskEditor able={'false'} values={answerBind} />
+			<AnsEditor />
 			<InputButton onClick={handleAnswer}>post your answer</InputButton>
 		</>
 	);
