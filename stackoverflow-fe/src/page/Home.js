@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
+import { Link } from 'react-router-dom';
 
 const Content = styled.div`
 	padding: 24px;
@@ -141,7 +142,9 @@ const Contents = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<a href='/'>Why does Prestashop API not add a resource in XML</a>
+							<Link to={'/Answer'}>
+								Why does Prestashop API not add a resource in XML
+							</Link>
 						</li>
 						<ul className='tags'>
 							<li>
