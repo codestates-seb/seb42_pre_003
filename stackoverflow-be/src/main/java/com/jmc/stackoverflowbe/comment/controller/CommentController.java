@@ -2,7 +2,6 @@ package com.jmc.stackoverflowbe.comment.controller;
 
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
-import com.jmc.stackoverflowbe.comment.entity.Comment.QAState;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
@@ -34,11 +33,9 @@ public class CommentController {
     private final CommentMapper mapper;
 
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
-        @RequestParam QAState qaState,
-        @Positive @RequestParam long qaId) {
+    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post) {
         Comment comment = commentService.createComment(
-            mapper.postDtoToComment(post), qaState, qaId);
+                mapper.postDtoToComment(post));
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -46,10 +43,10 @@ public class CommentController {
 
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
-        @Positive @PathVariable("comment-id") long commentId,
-        @RequestParam QAState qaState,
-        @Positive @RequestParam long qaId) {
-        commentService.updateComment(mapper.patchDtoToComment(patch), qaState, qaId);
+            @Positive @PathVariable("comment-id") long commentId) {
+        Comment comment = mapper.patchDtoToComment(patch);
+        comment.setCommentId(commentId);
+        commentService.updateComment(comment);
 
         return ResponseEntity.ok().build();
     }
@@ -59,8 +56,8 @@ public class CommentController {
         Comment comment = commentService.getComment(commentId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(
-            mapper.commentToResponseDto(comment)),
-            HttpStatus.OK);
+                mapper.commentToResponseDto(comment)),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{comment-id}")

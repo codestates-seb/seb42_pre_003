@@ -1,7 +1,7 @@
 package com.jmc.stackoverflowbe.comment.dto;
 
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
-import com.jmc.stackoverflowbe.comment.entity.Comment.QAState;
+import com.jmc.stackoverflowbe.global.audit.Auditable;
 import java.sql.Timestamp;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,13 +20,15 @@ public class CommentDto {
         @NotBlank
         private String commentContent;
 
-        @NotNull
-        private QAState qaState;
+        private Long questionId;
+
+        private Long answerId;
 
         @Builder
-        public Post(String commentContent, QAState qaState) {
+        public Post(@NotBlank String commentContent, Long questionId, Long answerId) {
             this.commentContent = commentContent;
-            this.qaState = qaState;
+            this.questionId = questionId;
+            this.answerId = answerId;
         }
     }
 
@@ -34,26 +36,18 @@ public class CommentDto {
     @NoArgsConstructor
     public static class Patch {
 
-        @Positive
-        private Long commentId;
-
         @NotBlank
         private String commentContent;
 
-        @NotNull
-        private QAState qaState;
-
         @Builder
-        public Patch(Long commentId, String commentContent, QAState qaState) {
-            this.commentId = commentId;
+        public Patch(@NotBlank String commentContent) {
             this.commentContent = commentContent;
-            this.qaState = qaState;
         }
     }
 
     @Getter
     @NoArgsConstructor
-    public static class Response {
+    public static class Response extends Auditable {
 
         private Long commentId;
 
@@ -69,15 +63,9 @@ public class CommentDto {
 
         private CommentState commentState;
 
-        private QAState qaState;
-
-        private Timestamp createdAt;
-
-        private Timestamp modifiedAt;
-
         @Builder
         public Response(Long commentId, String commentContent, Long memberId, String memberName,
-            Long questionId, Long answerId, CommentState commentState, QAState qaState) {
+            Long questionId, Long answerId, CommentState commentState) {
             this.commentId = commentId;
             this.commentContent = commentContent;
             this.memberId = memberId;
@@ -85,7 +73,6 @@ public class CommentDto {
             this.questionId = questionId;
             this.answerId = answerId;
             this.commentState = commentState;
-            this.qaState = qaState;
         }
     }
 }
