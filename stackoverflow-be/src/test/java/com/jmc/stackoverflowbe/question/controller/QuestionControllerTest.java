@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.entity.Question;
-import com.jmc.stackoverflowbe.question.entity.Question.QaGroup;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import com.jmc.stackoverflowbe.question.service.QuestionService;
@@ -51,16 +50,18 @@ import org.springframework.test.web.servlet.ResultActions;
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 public class QuestionControllerTest {
-    String BASE_URL = "/qas";
+    String BASE_URL = "/questions";
 
     Question question = Question.builder()
-        .id(1L)
-        .qaContent("testing content")
-        .qaGroup(QaGroup.QUESTION)
-        .state(StateGroup.ACTIVE)
-        .votes(0L)
+        .questionId(0L)
+        .questionTitle("Question title for test")
         .memberId(0L)
-        .articleId(0L)
+        .questionContent("Question contents for test")
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(false)
+        .answers(0L)
+        .views(0L)
         .build();
 
     @Autowired
@@ -75,19 +76,19 @@ public class QuestionControllerTest {
     @Autowired
     Gson gson;
 
-    @DisplayName("Qa 생성")
+    @DisplayName("질문 생성")
     @Test
-    void postQATest() throws Exception{
+    void postQuestionTest() throws Exception{
         QuestionDto.Post post = QuestionDto.Post.builder()
-            .articleId(0L)
+            .questionTitle("Title for post")
             .memberId(0L)
-            .qaContent("post testing content")
+            .questionContent("Contents for post")
             .build();
 
         String content = gson.toJson(post);
-        given(mapper.PostDtoToQA(Mockito.any(QuestionDto.Post.class)))
+        given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
             .willReturn(question);
-        given(questionService.createQA(Mockito.any(Question.class)))
+        given(questionService.createQuestion(Mockito.any(Question.class)))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
@@ -98,21 +99,21 @@ public class QuestionControllerTest {
 
         actions
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", is(startsWith("/qas/"))))
-            .andDo(document("Post-QA",
+            .andExpect(header().string("Location", is(startsWith("/questions/"))))
+            .andDo(document("Post-Question",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    attributes(key("title").value("Fields for qa creation")),
-                    fieldWithPath("articleId")
+                    attributes(key("title").value("Fields for question creation")),
+                    fieldWithPath("questionTitle")
                         .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value("글"))
-                        .description("작성된 글"),
+                        .attributes(key("constraints").value("제목"))
+                        .description("질문 제목"),
                     fieldWithPath("memberId")
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value("작성자"))
                         .description("질답 작성자"),
-                    fieldWithPath("qaContent")
+                    fieldWithPath("questionContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
                         .description("질답 내용")),
@@ -122,109 +123,130 @@ public class QuestionControllerTest {
                 )));
     }
 
-    @DisplayName("질답 수정")
+    @DisplayName("질문 수정")
     @Test
-    void patchQATest() throws Exception{
+    void patchQuestionTest() throws Exception{
         QuestionDto.Patch patch = QuestionDto.Patch.builder()
-            .qaId(1L)
-            .qaContent("patch testing content")
-            .votes(0)
+            .questionId(0L)
+            .questionTitle("title for patch")
+            .questionContent("contents for patch")
+            .state(StateGroup.ACTIVE)
+            .selection(true)
             .build();
 
         String content = gson.toJson(patch);
-        given(mapper.PatchDtoToQA(Mockito.any(QuestionDto.Patch.class)))
+        given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
             .willReturn(new Question());
-        given(questionService.updateQA(Mockito.any(Question.class)))
+        given(questionService.updateQuestion(Mockito.any(Question.class)))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
-            patch(BASE_URL+"/{qa-id}", patch.getQaId())
+            patch(BASE_URL+"/{question-id}", patch.getQuestionId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
 
         actions
             .andExpect(status().isOk())
-            .andDo(document("Patch-QA",
+            .andDo(document("Patch-Question",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    attributes(key("title").value("Fields for qa revision")),
-                    fieldWithPath("qaId")
+                    attributes(key("title").value("Fields for Question revision")),
+                    fieldWithPath("questionId")
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value("질답 식별자"))
                         .description("질답 식별자"),
-                    fieldWithPath("qaContent")
+                    fieldWithPath("questionTitle")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("제목"))
+                        .description("수정한 제목"),
+                    fieldWithPath("questionContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
                         .description("수정한 내용"),
-                    fieldWithPath("votes")
+                    fieldWithPath("state")
                         .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value("투표"))
-                        .description("투표의 증감"))));
+                        .attributes(key("constraints").value("상태"))
+                        .description("질문의 상태"),
+                    fieldWithPath("selection")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("채택"))
+                        .description("답변 채택 여부"))));
     }
 
-    @DisplayName("질답 조회")
+    @DisplayName("질문 조회")
     @Test
     void getQATest() throws Exception{
         QuestionDto.Response response = QuestionDto.Response.builder()
-            .id(question.getId())
-            .articleId(0L)
+            .questionId(0L)
+            .questionTitle("title for get")
+            .questionContent("content for get")
             .memberId(0L)
-            .qaContent("get testing content")
-            .votes(0)
-            .group(QaGroup.QUESTION)
             .state(StateGroup.ACTIVE)
+            .votes(0)
+            .selection(true)
+            .answers(1L)
+            .views(1L)
             .build();
 
-        given(questionService.getQA(Mockito.anyLong()))
+        given(questionService.getQuestion(Mockito.anyLong()))
             .willReturn(new Question());
-        given(mapper.QAToResponseDto(Mockito.any(Question.class)))
+        given(mapper.questionToResponseDto(Mockito.any(Question.class)))
             .willReturn(response);
 
         ResultActions actions = mockMvc.perform(
-            get(BASE_URL+"/{qa-id}", question.getId())
+            get(BASE_URL+"/{question-id}", question.getQuestionId())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.data.articleId").exists())
+            .andExpect(jsonPath("$.data.questionId").exists())
             .andExpect(jsonPath("$.data.memberId").exists())
-            .andExpect(jsonPath("$.data.qaContent").exists())
+            .andExpect(jsonPath("$.data.questionTitle").exists())
+            .andExpect(jsonPath("$.data.questionContent").exists())
+            .andExpect(jsonPath("$.data.answers").exists())
+            .andExpect(jsonPath("$.data.views").exists())
             .andExpect(jsonPath("$.data.votes").exists())
-            .andExpect(jsonPath("$.data.group").exists())
             .andExpect(jsonPath("$.data.state").exists())
-            .andDo(document("Get-QA",
+            .andExpect(jsonPath("$.data.selection").exists())
+            .andDo(document("Get-Question",
                 preprocessResponse(prettyPrint()),
                 pathParameters(
-                    parameterWithName("qa-id")
-                        .description("질답 식별자")),
+                    parameterWithName("question-id")
+                        .description("질문 식별자")),
                 responseFields(
                     fieldWithPath("data")
                         .type(JsonFieldType.OBJECT)
                         .description("조회 데이터"),
-                    fieldWithPath("data.id")
+                    fieldWithPath("data.questionId")
                         .type(JsonFieldType.NUMBER)
-                        .description("질답 식별자"),
-                    fieldWithPath("data.articleId")
+                        .description("질문 식별자"),
+                    fieldWithPath("data.questionTitle")
                         .type(JsonFieldType.NUMBER)
-                        .description("글"),
+                        .description("질문 제목"),
+                    fieldWithPath("data.questionContent")
+                        .type(JsonFieldType.NUMBER)
+                        .description("질문 내용"),
                     fieldWithPath("data.memberId")
-                        .type(JsonFieldType.NUMBER)
-                        .description("질답 작성자"),
-                    fieldWithPath("data.qaContent")
                         .type(JsonFieldType.STRING)
-                        .description("질답 내용"),
-                    fieldWithPath("data.votes")
-                        .type(JsonFieldType.NUMBER)
-                        .description("받은 투표 현황"),
-                    fieldWithPath("data.group")
-                        .type(JsonFieldType.STRING)
-                        .description("질답 구분"),
+                        .description("질문 작성자"),
                     fieldWithPath("data.state")
+                        .type(JsonFieldType.NUMBER)
+                        .description("질문 상태"),
+                    fieldWithPath("data.votes")
                         .type(JsonFieldType.STRING)
-                        .description("질답 상태"),
+                        .description("질문 득표수"),
+                    fieldWithPath("data.selection")
+                        .type(JsonFieldType.STRING)
+                        .description("채택 여부"),
+                    fieldWithPath("data.answers")
+                        .type(JsonFieldType.STRING)
+                        .description("답변 갯수"),
+                    fieldWithPath("data.views")
+                        .type(JsonFieldType.STRING)
+                        .description("조회수"),
                     fieldWithPath("data.createdAt")
                         .type(JsonFieldType.NULL)
                         .description("질답 생성 시간"),
@@ -234,21 +256,21 @@ public class QuestionControllerTest {
 
     }
 
-    @DisplayName("질답 삭제")
+    @DisplayName("질문 삭제")
     @Test
-    void deleteQATest() throws Exception{
-        doNothing().when(questionService).deleteQA(question.getId());
+    void deleteQuestionTest() throws Exception{
+        doNothing().when(questionService).deleteQuestion(question.getQuestionId());
 
         ResultActions actions = mockMvc.perform(
-            delete(BASE_URL + "/{qa-id}", question.getId())
+            delete(BASE_URL + "/{question-id}", question.getQuestionId())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
             .andExpect(status().isNoContent())
             .andExpect(jsonPath("$.data").doesNotExist())
-            .andDo(document("Delete-QA",
+            .andDo(document("Delete-Question",
                 pathParameters(
-                    parameterWithName("qa-id").description("질답 아이디")
+                    parameterWithName("question-id").description("질문 식별자")
                 ))
             );
     }
