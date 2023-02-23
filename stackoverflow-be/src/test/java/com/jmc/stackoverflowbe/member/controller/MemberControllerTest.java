@@ -52,7 +52,7 @@ public class MemberControllerTest {
     String BASE_URL = "/members";
 
     Member member = Member.builder()
-        .id(1L)
+        .memberId(1L)
         .email("hgd@gmail.com")
         .name("홍길동")
         .state(MemberState.ACTIVE)
@@ -72,7 +72,7 @@ public class MemberControllerTest {
         .build();
 
     MemberDto.Response response = MemberDto.Response.builder()
-        .id(member.getId())
+        .memberId(member.getMemberId())
         .email(member.getEmail())
         .name(member.getName())
         .state(member.getState())
@@ -149,7 +149,7 @@ public class MemberControllerTest {
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
 
         ResultActions actions = mockMvc.perform(
-            patch(BASE_URL + "/{member-id}", member.getId())
+            patch(BASE_URL + "/{member-id}", member.getMemberId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -199,13 +199,13 @@ public class MemberControllerTest {
         given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
-            get(BASE_URL + "/{member-id}", member.getId())
+            get(BASE_URL + "/{member-id}", member.getMemberId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.data.id").value(member.getId()))
+            .andExpect(jsonPath("$.data.memberId").value(member.getMemberId()))
             .andExpect(jsonPath("$.data.location").value(member.getLocation()))
             .andExpect(jsonPath("$.data.about").value(member.getAbout()))
             .andDo(document("Get-Member",
@@ -218,7 +218,7 @@ public class MemberControllerTest {
                     fieldWithPath("data")
                         .type(JsonFieldType.OBJECT)
                         .description("조회 데이터"),
-                    fieldWithPath("data.id")
+                    fieldWithPath("data.memberId")
                         .type(JsonFieldType.NUMBER)
                         .description("회원 아이디"),
                     fieldWithPath("data.email")
@@ -254,10 +254,10 @@ public class MemberControllerTest {
     @DisplayName("회원 삭제")
     @Test
     void deleteMember() throws Exception {
-        doNothing().when(memberService).deleteMember(member.getId());
+        doNothing().when(memberService).deleteMember(member.getMemberId());
 
         ResultActions actions = mockMvc.perform(
-            delete(BASE_URL + "/{member-id}", member.getId())
+            delete(BASE_URL + "/{member-id}", member.getMemberId())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
