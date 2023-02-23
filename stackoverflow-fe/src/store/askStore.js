@@ -32,6 +32,9 @@ export const useBoxStore = create(
 	),
 );
 
+const raw = JSON.parse(localStorage.getItem('ask-storage'));
+const data = raw.state.askData[0];
+
 export const useAskStore = create(
 	devtools((set) => ({
 		initialAble: {
@@ -47,16 +50,16 @@ export const useAskStore = create(
 			expect: '',
 			tag: '',
 		},
-		title: '',
+		title: `${data.title}`,
 		titleBind: (item) => set({ title: item }),
 		titleReset: () => set({ title: '' }),
-		detail: '',
+		detail: `${data.detail}`,
 		detailBind: (item) => set({ detail: item }),
 		detailReset: () => set({ detail: '' }),
-		expect: '',
+		expect: `${data.expect}`,
 		expectBind: (item) => set({ expect: item }),
 		expectReset: () => set({ expect: '' }),
-		tag: '',
+		tag: `${data.tag}`,
 		tagBind: (item) => set({ tag: item }),
 		tagReset: () => set({ tag: '' }),
 		body: '',

@@ -4,6 +4,7 @@ import { useAskStore } from '../../store/askStore';
 
 function AskReview() {
 	const { titleBind, bodyBind, tagBind } = useAskStore();
+	const { title, body, tag } = useAskStore();
 	return (
 		<>
 			<h3>Review your question</h3>
@@ -11,6 +12,7 @@ function AskReview() {
 			<AskBox
 				review
 				name={'title'}
+				value={title}
 				func={titleBind}
 				inputLabel={'Title'}
 				inputText={
@@ -23,6 +25,7 @@ function AskReview() {
 			<AskBox
 				review
 				name={'body'}
+				value={body}
 				type={'editor'}
 				func={bodyBind}
 				inputLabel={'Body'}
@@ -36,6 +39,7 @@ function AskReview() {
 			<AskBox
 				review
 				name={'tag'}
+				value={tag}
 				func={tagBind}
 				inputLabel={'Tags'}
 				inputText={

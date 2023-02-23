@@ -1,6 +1,6 @@
 import AskNotice from './AskNotice';
 import AskBox from './AskBox';
-import { useAskStore, useBoxStore } from '../../store/askStore';
+import { useBoxStore, useAskStore } from '../../store/askStore';
 
 function AskPublic() {
 	const { titleBind, detailBind, expectBind, tagBind } = useAskStore();
@@ -35,6 +35,7 @@ function AskPublic() {
 			<AskNotice />
 			<AskBox
 				name={'title'}
+				value={title}
 				func={titleBind}
 				onClick={() => handleDisable('detail')}
 				inputLabel={'Title'}
@@ -47,6 +48,7 @@ function AskPublic() {
 			/>
 			<AskBox
 				name={'detail'}
+				value={detail}
 				type={'editor'}
 				func={detailBind}
 				onClick={() => handleDisable('try')}
@@ -59,6 +61,7 @@ function AskPublic() {
 			/>
 			<AskBox
 				name={'try'}
+				value={expect}
 				type={'editor'}
 				func={expectBind}
 				onClick={() => handleDisable('tag')}
@@ -73,6 +76,7 @@ function AskPublic() {
 			/>
 			<AskBox
 				name={'tag'}
+				value={tag}
 				func={tagBind}
 				onClick={() => handleDisable('review')}
 				inputLabel={'Tags'}
