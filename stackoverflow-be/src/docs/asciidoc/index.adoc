@@ -79,7 +79,10 @@ include::{snippets}/Post-Question/http-request.adoc[]
 include::{snippets}/Post-Question/request-fields.adoc[]
 
 .http-response
-include::{snippets}/Patch-Question/http-response.adoc[]
+include::{snippets}/Post-Question/http-response.adoc[]
+
+.response-header
+include::{snippets}/Post-Question/response-headers.adoc[]
 === 질문 수정
 .curl-request
 include::{snippets}/Patch-Question/curl-request.adoc[]
@@ -87,12 +90,28 @@ include::{snippets}/Patch-Question/curl-request.adoc[]
 .http-request
 include::{snippets}/Patch-Question/http-request.adoc[]
 
+.request-path-parameters
+include::{snippets}/Patch-Question/path-parameters.adoc[]
+
 .request-fields
 include::{snippets}/Patch-Question/request-fields.adoc[]
 
 .http-response
 include::{snippets}/Patch-Question/http-response.adoc[]
-=== 질문 조회
+=== 질문 리스트 조회 & 정렬
+.curl-request
+include::{snippets}/Get-Questions/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-Questions/http-request.adoc[]
+
+.http-response
+include::{snippets}/Get-Questions/http-response.adoc[]
+
+.response-fields
+include::{snippets}/Get-Questions/response-fields.adoc[]
+
+=== 질문 상세 조회
 .curl-request
 include::{snippets}/Get-Question/curl-request.adoc[]
 
