@@ -20,12 +20,15 @@ public class CommentDto {
         @NotBlank
         private String commentContent;
 
+        @Positive
         private Long questionId;
 
+        @Positive
         private Long answerId;
 
         @Builder
-        public Post(@NotBlank String commentContent, Long questionId, Long answerId) {
+        public Post(@NotBlank String commentContent,
+            @Positive Long questionId, @Positive Long answerId) {
             this.commentContent = commentContent;
             this.questionId = questionId;
             this.answerId = answerId;
