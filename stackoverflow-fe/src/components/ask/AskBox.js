@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AskInput from './AskInput';
+import AskText from './AskText';
 import AskGuide from './AskGuide';
 
 const BREAK_POINT_PC = 1100;
@@ -31,7 +31,7 @@ function AskBox({
 
 	return (
 		<AskBoxWrap able={base}>
-			<AskInput
+			<AskText
 				type={type}
 				label={inputLabel}
 				text={inputText}

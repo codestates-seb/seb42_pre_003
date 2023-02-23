@@ -48,7 +48,6 @@ function AskQuestion() {
 
 	const data = localStorage.getItem('ask');
 	const askData = JSON.parse(data);
-	console.log(askData);
 
 	const [titleValue, titleBind, titleReset] = useAskInput(
 		askData ? askData.title : '',
