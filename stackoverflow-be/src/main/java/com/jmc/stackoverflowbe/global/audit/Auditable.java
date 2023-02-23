@@ -21,8 +21,4 @@ public abstract class Auditable {
     @UpdateTimestamp
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
-
-    @UpdateTimestamp
-    @Column(name = "LAST_LOGIN_TIME")
-    private LocalDateTime lastLoginTime;
 }
