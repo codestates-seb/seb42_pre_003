@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.qa.repository;
+package com.jmc.stackoverflowbe.question.repository;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
