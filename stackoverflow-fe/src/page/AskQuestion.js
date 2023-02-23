@@ -1,6 +1,4 @@
-// import { useState } from 'react';
 import styled from 'styled-components';
-// import { useAskEditor } from '../util/askUtil/useAskInput';
 import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
 import { useBoxStore, useAskStore } from '../store/askStore';
@@ -46,19 +44,10 @@ const DelButton = styled.button`
 
 function AskQuestion() {
 	const { setAbleData, setAskData } = useBoxStore();
-	const {
-		page,
-		initialAble,
-		initialAsk,
-		title,
-		detail,
-		expect,
-		tag,
-		titleReset,
-		detailReset,
-		expectReset,
-		tagReset,
-	} = useAskStore();
+	const { page, initialAble, initialAsk } = useAskStore();
+	const { title, detail, expect, tag } = useAskStore();
+	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
+		useAskStore();
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
@@ -86,8 +75,9 @@ function AskQuestion() {
 		detailReset();
 		expectReset();
 		tagReset();
+		bodyReset();
 
-		// window.location.reload();
+		window.location.reload();
 	};
 
 	return (

@@ -35,7 +35,7 @@ function AskPublic() {
 			<AskNotice />
 			<AskBox
 				name={'title'}
-				values={titleBind}
+				func={titleBind}
 				onClick={() => handleDisable('detail')}
 				inputLabel={'Title'}
 				inputText={
@@ -48,7 +48,7 @@ function AskPublic() {
 			<AskBox
 				name={'detail'}
 				type={'editor'}
-				values={detailBind}
+				func={detailBind}
 				onClick={() => handleDisable('try')}
 				inputLabel={'What are the details of your problem?'}
 				inputText={
@@ -60,7 +60,7 @@ function AskPublic() {
 			<AskBox
 				name={'try'}
 				type={'editor'}
-				values={expectBind}
+				func={expectBind}
 				onClick={() => handleDisable('tag')}
 				inputLabel={'What did you try and what were you expecting?'}
 				inputText={
@@ -73,7 +73,7 @@ function AskPublic() {
 			/>
 			<AskBox
 				name={'tag'}
-				values={tagBind}
+				func={tagBind}
 				onClick={() => handleDisable('review')}
 				inputLabel={'Tags'}
 				inputText={
@@ -87,7 +87,7 @@ function AskPublic() {
 			<AskBox
 				name={'review'}
 				type={'selector'}
-				values={'review'}
+				func={'review'}
 				onClick={handleCashe}
 				inputLabel={
 					'Review questions already on Stack Overflow to see if your question is a duplicate.'

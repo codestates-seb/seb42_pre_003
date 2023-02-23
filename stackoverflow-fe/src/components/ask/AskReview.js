@@ -1,7 +1,9 @@
 import AskNotice from './AskNotice';
 import AskBox from './AskBox';
+import { useAskStore } from '../../store/askStore';
 
-function AskReview({ titleBind, bodyBind, tagBind }) {
+function AskReview() {
+	const { titleBind, bodyBind, tagBind } = useAskStore();
 	return (
 		<>
 			<h3>Review your question</h3>
@@ -9,7 +11,7 @@ function AskReview({ titleBind, bodyBind, tagBind }) {
 			<AskBox
 				review
 				name={'title'}
-				values={titleBind}
+				func={titleBind}
 				inputLabel={'Title'}
 				inputText={
 					'Be specific and imagine you’re asking a question to another person.'
@@ -22,7 +24,7 @@ function AskReview({ titleBind, bodyBind, tagBind }) {
 				review
 				name={'body'}
 				type={'editor'}
-				values={bodyBind}
+				func={bodyBind}
 				inputLabel={'Body'}
 				inputText={
 					'The body of your question contains your problem details and results. Minimum 30 characters.'
@@ -34,7 +36,7 @@ function AskReview({ titleBind, bodyBind, tagBind }) {
 			<AskBox
 				review
 				name={'tag'}
-				values={tagBind}
+				func={tagBind}
 				inputLabel={'Tags'}
 				inputText={
 					'Add up to 5 tags to describe what your question is about. Start typing to see suggestions.'

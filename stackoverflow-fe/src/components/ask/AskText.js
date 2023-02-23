@@ -37,15 +37,15 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
-function AskText({ able, type, label, text, values, review, ...rest }) {
+function AskText({ able, value, type, label, text, func, review, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
-				return <AskEditor able={able} func={values} />;
+				return <AskEditor able={able} value={value} func={func} />;
 			case 'selector':
 				return <AskSelector able={able} />;
 			default:
-				return <AskInput able={able} func={values} />;
+				return <AskInput able={able} value={value} func={func} />;
 		}
 	};
 

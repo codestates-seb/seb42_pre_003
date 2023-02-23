@@ -17,10 +17,11 @@ const AskBoxWrap = styled.div`
 
 function AskBox({
 	name,
+	value,
 	type,
 	inputLabel,
 	inputText,
-	values,
+	func,
 	guideTitle,
 	guideDes,
 	review,
@@ -33,10 +34,11 @@ function AskBox({
 	return (
 		<AskBoxWrap able={base}>
 			<AskText
+				value={value}
 				type={type}
 				label={inputLabel}
 				text={inputText}
-				values={values}
+				func={func}
 				able={base}
 				review={review}
 				{...rest}
