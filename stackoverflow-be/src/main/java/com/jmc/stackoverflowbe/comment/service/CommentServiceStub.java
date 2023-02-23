@@ -3,37 +3,47 @@ package com.jmc.stackoverflowbe.comment.service;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentBuilder;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommentServiceStub implements CommentService {
 
-    private final CommentBuilder stubComment = Comment.builder()
+    private final CommentBuilder stubComment1 = Comment.builder()
+        .commentId(1L)
         .commentContent("Sample comment.")
         .memberId(1L)
         .memberName("kimcoding")
+        .questionId(1L)
+        .answerId(null)
+        .commentState(CommentState.ACTIVE);
+
+    private final CommentBuilder stubComment2 = Comment.builder()
+        .commentId(2L)
+        .commentContent("Sample comment 2.")
+        .memberId(1L)
+        .memberName("kimcoding")
+        .questionId(1L)
+        .answerId(null)
         .commentState(CommentState.ACTIVE);
 
     @Override
     public Comment createComment(Comment comment) {
-        return this.stubComment
-            .commentId(1L)
+        return this.stubComment1
             .build();
     }
 
     @Override
     public Comment updateComment(Comment comment) {
-
-        return this.stubComment
+        return Comment.builder()
             .commentId(comment.getCommentId())
+            .commentContent("Sample comment.")
             .build();
     }
 
     @Override
-    public Comment getComment(Long commentId) {
-        return this.stubComment
-            .commentId(commentId)
-            .build();
+    public List<Comment> getComments(String qaType, Long qaId) {
+        return List.of(stubComment1.build(), stubComment2.build());
     }
 
     @Override

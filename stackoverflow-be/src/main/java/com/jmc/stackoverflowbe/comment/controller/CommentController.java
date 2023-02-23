@@ -1,12 +1,13 @@
 package com.jmc.stackoverflowbe.comment.controller;
 
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
+import com.jmc.stackoverflowbe.comment.dto.CommentMultiResponseDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
-import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +52,12 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{comment-id}")
-    public ResponseEntity getComment(@Positive @PathVariable("comment-id") long commentId) {
-        Comment comment = commentService.getComment(commentId);
+    @GetMapping
+    public ResponseEntity getComments(@RequestParam String qaType, @RequestParam long qaId) {
+        List<Comment> comments = commentService.getComments(qaType, qaId);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(
-                mapper.commentToResponseDto(comment)),
+        return new ResponseEntity<>(new CommentMultiResponseDto<>(
+                mapper.commentsToResponseDtos(comments)),
                 HttpStatus.OK);
     }
 
