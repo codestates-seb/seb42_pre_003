@@ -3,13 +3,14 @@ import styled from 'styled-components';
 
 const Section = styled.section`
 	button {
-		width: 105px;
-		height: 37px;
+		width: auto;
+		height: 35px;
 		color: #fff;
 		background-color: hsl(206deg 100% 52%);
 		border-radius: 3px;
 		font-size: 13px;
-		margin-bottom: 20px;
+		padding: 9px;
+		margin-right: 5px;
 	}
 
 	button:hover {
@@ -17,14 +18,12 @@ const Section = styled.section`
 	}
 `;
 
-const AskButton = () => {
+const ApplyButton = () => {
 	return (
 		<Section>
-			<button>
-				<a href='/askQuestion'>Ask Question</a>
-			</button>
+			<button>Apply filter</button>
 		</Section>
 	);
 };
 
-export default AskButton;
+export default ApplyButton;

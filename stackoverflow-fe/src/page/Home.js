@@ -7,6 +7,8 @@ const Content = styled.div`
 	padding: 24px;
 	width: auto;
 	display: flex;
+	justify-content: center;
+	margin-top: 50px;
 `;
 
 const Questions = styled.div`
@@ -18,7 +20,7 @@ const Questions = styled.div`
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 750px;
+			width: 650px;
 		}
 	}
 
@@ -53,7 +55,7 @@ const Questions = styled.div`
 	}
 
 	.qlist-contents {
-		width: 700px;
+		width: 620px;
 	}
 
 	.contents-title {
