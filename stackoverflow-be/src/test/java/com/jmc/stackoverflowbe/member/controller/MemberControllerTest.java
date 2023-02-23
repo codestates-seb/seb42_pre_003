@@ -18,6 +18,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,12 +42,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(MemberController.class)
 @AutoConfigureRestDocs
 @MockBean(JpaMetamodelMappingContext.class)
+@WithMockUser(username = "kimcoding@gmail.com", roles = {"USER"})
 public class MemberControllerTest {
 
     String BASE_URL = "/members";
@@ -103,6 +106,7 @@ public class MemberControllerTest {
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -150,6 +154,7 @@ public class MemberControllerTest {
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{member-id}", member.getMemberId())
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -258,6 +263,7 @@ public class MemberControllerTest {
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{member-id}", member.getMemberId())
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions

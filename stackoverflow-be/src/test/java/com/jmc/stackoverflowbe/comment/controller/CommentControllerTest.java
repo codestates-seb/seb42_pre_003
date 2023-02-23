@@ -22,6 +22,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +46,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
@@ -53,6 +55,7 @@ import org.springframework.util.MultiValueMap;
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
+@WithMockUser(username = "kimcoding@gmail.com", roles = {"USER"})
 public class CommentControllerTest {
 
     String BASE_URL = "/comments";
@@ -121,6 +124,7 @@ public class CommentControllerTest {
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -175,6 +179,7 @@ public class CommentControllerTest {
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{comment-id}", comment.getCommentId())
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -284,6 +289,7 @@ public class CommentControllerTest {
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{comment-id}", comment.getCommentId())
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
