@@ -19,6 +19,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
+import com.jmc.stackoverflowbe.comment.entity.Comment.QAState;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
 import java.util.List;
@@ -46,6 +48,8 @@ import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
@@ -59,19 +63,21 @@ public class CommentControllerTest {
         .commentContent("Sample comment.")
         .memberId(1L)
         .memberName("kimcoding")
-        .qaId(1L)
+        .questionId(1L)
+        .answerId(null)
         .commentState(CommentState.ACTIVE)
+        .qaState(QAState.QUESTION)
         .build();
 
     private final CommentDto.Post post = CommentDto.Post.builder()
         .commentContent("Sample comment.")
-        .qaId(1L)
+        .qaState(QAState.QUESTION)
         .build();
 
     private final CommentDto.Patch patch = CommentDto.Patch.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .qaId(1L)
+        .qaState(QAState.QUESTION)
         .build();
 
     private final CommentDto.Response response = CommentDto.Response.builder()
@@ -79,8 +85,10 @@ public class CommentControllerTest {
         .commentContent("Sample comment.")
         .memberId(1L)
         .memberName("kimcoding")
-        .qaId(1L)
+        .questionId(1L)
+        .answerId(null)
         .commentState(CommentState.ACTIVE)
+        .qaState(QAState.QUESTION)
         .build();
 
     @Autowired
@@ -102,11 +110,17 @@ public class CommentControllerTest {
 
         given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
             .willReturn(new Comment());
-        given(commentService.createComment(Mockito.any(Comment.class)))
+        given(commentService.createComment(Mockito.any(Comment.class),
+            Mockito.any(QAState.class), Mockito.anyLong()))
             .willReturn(comment);
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("qaState", post.getQaState().toString());
+        queryParams.add("qaId", "1");
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .params(queryParams)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -115,8 +129,8 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Post.class);
         List<String> contentDescriptions = postQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> qaIdDescriptions = postQuestionConstraints
-            .descriptionsForProperty("qaId");
+        List<String> qaStateDescriptions = postQuestionConstraints
+            .descriptionsForProperty("qaState");
 
         actions
             .andExpect(status().isCreated())
@@ -124,16 +138,20 @@ public class CommentControllerTest {
             .andDo(document("Post-Comment",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestParameters(
+                    parameterWithName("qaState").description("질문/답변 항목 표시"),
+                    parameterWithName("qaId").description("질문/답변 식별자")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for comment creation")),
                     fieldWithPath("commentContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용"),
-                    fieldWithPath("qaId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value(qaIdDescriptions))
-                        .description("질답 식별자")),
+                    fieldWithPath("qaState")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value(qaStateDescriptions))
+                        .description("질문/답변 항목 표시")),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
                         .description("Header Location, 리소스의 URL")
@@ -148,11 +166,17 @@ public class CommentControllerTest {
 
         given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
             .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class)))
+        given(commentService.updateComment(Mockito.any(Comment.class),
+            Mockito.any(QAState.class), Mockito.anyLong()))
             .willReturn(comment);
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("qaState", patch.getQaState().toString());
+        queryParams.add("qaId", "1");
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{comment-id}", patch.getCommentId())
+                .params(queryParams)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -161,8 +185,8 @@ public class CommentControllerTest {
             new ConstraintDescriptions(CommentDto.Patch.class);
         List<String> contentDescriptions = patchQuestionConstraints
             .descriptionsForProperty("commentContent");
-        List<String> qaIdDescriptions = patchQuestionConstraints
-            .descriptionsForProperty("qaId");
+        List<String> qaStateDescriptions = patchQuestionConstraints
+            .descriptionsForProperty("qaState");
 
         actions
             .andExpect(status().isOk())
@@ -171,6 +195,10 @@ public class CommentControllerTest {
                 preprocessResponse(prettyPrint()),
                 pathParameters(
                     parameterWithName("comment-id").description("댓글 식별자")
+                ),
+                requestParameters(
+                    parameterWithName("qaState").description("질문/답변 항목 표시"),
+                    parameterWithName("qaId").description("질문/답변 식별자")
                 ),
                 requestFields(
                     attributes(key("title").value("Fields for comment revision")),
@@ -182,10 +210,10 @@ public class CommentControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용"),
-                    fieldWithPath("qaId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value(qaIdDescriptions))
-                        .description("질답 식별자")))
+                    fieldWithPath("qaState")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value(qaStateDescriptions))
+                        .description("질문/답변 항목 표시")))
             );
     }
 
@@ -208,8 +236,10 @@ public class CommentControllerTest {
             .andExpect(jsonPath("$.data.commentContent").exists())
             .andExpect(jsonPath("$.data.memberId").exists())
             .andExpect(jsonPath("$.data.memberName").exists())
-            .andExpect(jsonPath("$.data.qaId").exists())
+            .andExpect(jsonPath("$.data.questionId").exists())
+            .andExpect(jsonPath("$.data.answerId").doesNotExist())
             .andExpect(jsonPath("$.data.commentState").exists())
+            .andExpect(jsonPath("$.data.qaState").exists())
             .andDo(document("Get-Comment",
                 preprocessResponse(prettyPrint()),
                 pathParameters(
@@ -231,12 +261,18 @@ public class CommentControllerTest {
                     fieldWithPath("data.memberName")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
-                    fieldWithPath("data.qaId")
+                    fieldWithPath("data.questionId")
                         .type(JsonFieldType.NUMBER)
-                        .description("질답 식별자"),
+                        .description("질문 식별자"),
+                    fieldWithPath("data.answerId")
+                        .type(JsonFieldType.NULL)
+                        .description("답변 식별자"),
                     fieldWithPath("data.commentState")
                         .type(JsonFieldType.STRING)
                         .description("댓글 상태"),
+                    fieldWithPath("data.qaState")
+                        .type(JsonFieldType.STRING)
+                        .description("질문/답변 항목 표시"),
                     fieldWithPath("data.createdAt")
                         .type(JsonFieldType.NULL)
                         .description("댓글 생성 날짜"),

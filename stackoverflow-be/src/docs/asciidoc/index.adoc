@@ -130,6 +130,9 @@ include::{snippets}/Post-Comment/curl-request.adoc[]
 .http-request
 include::{snippets}/Post-Comment/http-request.adoc[]
 
+.request-query-parameters
+include::{snippets}/Post-Comment/request-parameters.adoc[]
+
 .request-fields
 include::{snippets}/Post-Comment/request-fields.adoc[]
 
@@ -145,6 +148,9 @@ include::{snippets}/Patch-Comment/curl-request.adoc[]
 
 .http-request
 include::{snippets}/Patch-Comment/http-request.adoc[]
+
+.request-query-parameters
+include::{snippets}/Post-Comment/request-parameters.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Comment/path-parameters.adoc[]
