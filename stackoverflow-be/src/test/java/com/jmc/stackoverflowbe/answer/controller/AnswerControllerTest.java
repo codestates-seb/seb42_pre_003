@@ -180,7 +180,7 @@ public class AnswerControllerTest {
 
         ResultActions actions = mockMvc.perform(
             get(BASE_URL)
-                .param("question", "1")
+                .param("questionId", "1")
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
@@ -200,7 +200,7 @@ public class AnswerControllerTest {
             .andDo(document("Get-Answers",
                 preprocessResponse(prettyPrint()),
                 requestParameters(
-                    parameterWithName("question").description("불러올 답변 리스트들의 질문")
+                    parameterWithName("questionId").description("불러올 답변 리스트들의 질문")
                 ),
                 responseFields(
                     fieldWithPath("data")
