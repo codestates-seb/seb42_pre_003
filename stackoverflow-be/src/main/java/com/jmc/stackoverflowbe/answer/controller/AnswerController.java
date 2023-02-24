@@ -4,9 +4,12 @@ import com.jmc.stackoverflowbe.answer.dto.AnswerDto;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
+import com.jmc.stackoverflowbe.comment.dto.CommentMultiResponseDto;
+import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,11 +45,12 @@ public class AnswerController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{answer-id}")
-    public ResponseEntity getAnswer(@PathVariable("answer-id") long qaId){
-        Answer answer = answerService.getAnswer(qaId);
-        return new ResponseEntity(new SingleResponseDto<>(
-            mapper.answerToResponseDto(answer)),
+    @GetMapping
+    public ResponseEntity getComments(@RequestParam long question) {
+        List<Answer> answers = answerService.getAnswers(question);
+
+        return new ResponseEntity<>(new CommentMultiResponseDto<>(
+            mapper.answersToResponseDtos(answers)),
             HttpStatus.OK);
     }
 
