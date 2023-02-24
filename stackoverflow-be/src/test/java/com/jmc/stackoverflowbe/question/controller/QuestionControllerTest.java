@@ -44,6 +44,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -97,7 +99,6 @@ public class QuestionControllerTest {
     void postQuestionTest() throws Exception{
         QuestionDto.Post post = QuestionDto.Post.builder()
             .questionTitle("Title for post")
-            .memberId(0L)
             .questionContent("Contents for post")
             .build();
 
@@ -125,10 +126,6 @@ public class QuestionControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("제목"))
                         .description("질문 제목"),
-                    fieldWithPath("memberId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value("작성자"))
-                        .description("질문 작성자"),
                     fieldWithPath("questionContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
@@ -143,11 +140,8 @@ public class QuestionControllerTest {
     @Test
     void patchQuestionTest() throws Exception{
         QuestionDto.Patch patch = QuestionDto.Patch.builder()
-            .questionId(0L)
             .questionTitle("title for patch")
             .questionContent("contents for patch")
-            .state(StateGroup.ACTIVE)
-            .selection(true)
             .build();
 
         String content = gson.toJson(patch);
@@ -157,7 +151,7 @@ public class QuestionControllerTest {
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
-            patch(BASE_URL+"/{question-id}", patch.getQuestionId())
+            patch(BASE_URL+"/{question-id}", 0L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -172,10 +166,6 @@ public class QuestionControllerTest {
                         .description("질문 식별자")),
                 requestFields(
                     attributes(key("title").value("Fields for Question revision")),
-                    fieldWithPath("questionId")
-                        .type(JsonFieldType.NUMBER)
-                        .attributes(key("constraints").value("질문 식별자"))
-                        .description("질문 식별자"),
                     fieldWithPath("questionTitle")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("제목"))
@@ -183,15 +173,7 @@ public class QuestionControllerTest {
                     fieldWithPath("questionContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
-                        .description("수정한 내용"),
-                    fieldWithPath("state")
-                        .type(JsonFieldType.STRING)
-                        .attributes(key("constraints").value("상태"))
-                        .description("질문의 상태"),
-                    fieldWithPath("selection")
-                        .type(JsonFieldType.BOOLEAN)
-                        .attributes(key("constraints").value("채택"))
-                        .description("답변 채택 여부"))));
+                        .description("수정한 내용"))));
     }
 
     @DisplayName("질문 상세 조회")
@@ -280,7 +262,8 @@ public class QuestionControllerTest {
         String page = "1";
         String sort = "questionId";
         List<Question> questionList = List.of(question,question2);
-        Page<Question> questionPage = new PageImpl<>(questionList);
+        Page<Question> questionPage = new PageImpl<>(questionList,
+            PageRequest.of(0,15, Sort.by(sort).descending()), 2);
 
         given(mapper.questionsToQuestionResponses(Mockito.any(List.class)))
             .willReturn(questionList);
