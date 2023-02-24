@@ -67,6 +67,7 @@ include::{snippets}/Delete-Member/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/Delete-Member/http-response.adoc[]
+
 == 질문
 === 질문 등록
 .curl-request
@@ -83,6 +84,7 @@ include::{snippets}/Post-Question/http-response.adoc[]
 
 .response-header
 include::{snippets}/Post-Question/response-headers.adoc[]
+
 === 질문 수정
 .curl-request
 include::{snippets}/Patch-Question/curl-request.adoc[]
@@ -98,6 +100,7 @@ include::{snippets}/Patch-Question/request-fields.adoc[]
 
 .http-response
 include::{snippets}/Patch-Question/http-response.adoc[]
+
 === 질문 리스트 조회 & 정렬
 .curl-request
 include::{snippets}/Get-Questions/curl-request.adoc[]
@@ -126,6 +129,7 @@ include::{snippets}/Get-Question/http-response.adoc[]
 
 .response-fields
 include::{snippets}/Get-Question/response-fields.adoc[]
+
 === 질문 삭제
 .curl-request
 include::{snippets}/Delete-Question/curl-request.adoc[]
@@ -139,7 +143,67 @@ include::{snippets}/Delete-Question/path-parameters.adoc[]
 .http-response
 include::{snippets}/Delete-Question/http-response.adoc[]
 
+== 답변
+=== 답변 등록
+.curl-request
+include::{snippets}/Post-Answer/curl-request.adoc[]
 
+.http-request
+include::{snippets}/Post-Answer/http-request.adoc[]
+
+.request-fields
+include::{snippets}/Post-Answer/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Post-Answer/http-response.adoc[]
+
+.response-header
+include::{snippets}/Post-Answer/response-headers.adoc[]
+
+=== 답변 수정
+.curl-request
+include::{snippets}/Patch-Answer/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Patch-Answer/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Patch-Answer/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/Patch-Answer/request-fields.adoc[]
+
+.http-response
+include::{snippets}/Patch-Answer/http-response.adoc[]
+
+=== 답변 리스트 조회
+.curl-request
+include::{snippets}/Get-Answers/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-Answers/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/Get-Answers/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-Answers/http-response.adoc[]
+
+.response-fields
+include::{snippets}/Get-Answers/response-fields.adoc[]
+
+=== 답변 삭제
+.curl-request
+include::{snippets}/Delete-Answer/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Delete-Answer/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Delete-Answer/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Delete-Answer/http-response.adoc[]
 
 == 댓글
 === 댓글 등록

@@ -57,6 +57,7 @@ task copyDocument(type: Copy) {
 	println "asciidoctor output: ${asciidoctor.outputDir}"
 	from file("${asciidoctor.outputDir}")
 	into file("build/resources/main/static")
+	into file("src/main/resources/static/docs")
 }
 
 build {

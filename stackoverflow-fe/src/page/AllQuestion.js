@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
-import FilterButton from '../components/list/FilterButton';
+import Filter from '../components/list/Filter';
 import { Link } from 'react-router-dom';
+import Filtericon from '../img/filter_ic.svg';
 
 const Content = styled.div`
 	width: auto;
@@ -27,6 +28,7 @@ const Questions = styled.div`
 
 	.listfilter {
 		display: flex;
+		justify-content: space-between;
 
 		.Total {
 			font-size: 1.2rem;
@@ -36,6 +38,33 @@ const Questions = styled.div`
 		.Total span {
 			margin-right: 5px;
 		}
+
+		button {
+			width: 71px;
+			height: 35px;
+			color: #39739d;
+			background-color: #e1ecf4;
+			border-radius: 3px;
+			font-size: 13px;
+			margin-bottom: 20px;
+			border: 1px solid #39739d;
+		}
+
+		button:hover {
+			color: #2c5877;
+			background-color: #b3d3ea;
+		}
+	}
+
+	.filterinfo {
+		height: 0;
+		opacity: 0;
+		transition: opacity 0.3s ease-in-out, height 0.3s 0.3s ease-in-out;
+	}
+
+	.animated {
+		opacity: 1;
+		transition: height 0.3s ease-in-out, opacity 0.3s 0.3s ease-in-out;
 	}
 
 	.qlist {
@@ -137,7 +166,28 @@ const Questions = styled.div`
 	}
 `;
 
+const FilterImg = styled.img`
+	width: 10px;
+	height: 10px;
+`;
+
 const Question = () => {
+	const [toggle, setToggle] = useState(false);
+	const [heightEl, setHeightEl] = useState();
+
+	const refHeight = useRef();
+
+	useEffect(() => {
+		console.log(refHeight);
+		setHeightEl(`${refHeight.current.scrollHeight}px`);
+	}, []);
+
+	const toggleState = () => {
+		setToggle(!toggle);
+	};
+
+	console.log(toggle);
+
 	return (
 		<Content>
 			<Questions>
@@ -149,7 +199,17 @@ const Question = () => {
 					<div className='Total'>
 						<span>1</span>questions
 					</div>
-					<FilterButton></FilterButton>
+					<button onClick={toggleState}>
+						<FilterImg src={Filtericon}></FilterImg>
+						Filter
+					</button>
+				</div>
+				<div
+					className={toggle ? 'filterinfo animated' : 'filterinfo'}
+					style={{ height: toggle ? `${heightEl}` : '0px' }}
+					ref={refHeight}
+				>
+					<Filter></Filter>
 				</div>
 				<div className='qlist-wrapper'>
 					<ul className='qlist-stats'>
