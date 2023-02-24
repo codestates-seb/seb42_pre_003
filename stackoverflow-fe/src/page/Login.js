@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../img/logo.png';
 import google from '../img/google.png';
+import { useErrorMessageStore, useIsLoginStore } from '../store/loginstore';
 
 const Background = styled.div`
 	background-color: #f6f6f6;
@@ -142,9 +143,11 @@ const Linker = styled.a`
 const Login = () => {
 	const navigate = useNavigate();
 
+	const { errorMessage, setErrorMessage } = useErrorMessageStore();
+	const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
+
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
-	const [errorMessage, setErrorMessage] = useState('');
 
 	const loginHandler = () => {};
 
