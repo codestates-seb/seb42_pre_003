@@ -228,8 +228,9 @@ const Error = styled.div`
 `;
 
 const SignUp = () => {
-	const [nickName, setNickName] = useState('');
+	const [name, setName] = useState('');
 	const [isNameError, setIsNameError] = useState(false);
+	const [namelErrorMessage, setnameErrorMessage] = useState('');
 	const [nameState, setNameState] = useState(false);
 
 	const [email, setEmail] = useState('');
@@ -244,8 +245,8 @@ const SignUp = () => {
 
 	const navigate = useNavigate();
 
-	const nickNameHandler = (e) => {
-		setNickName(e.target.value);
+	const nameHandler = (e) => {
+		setName(e.target.value);
 	};
 
 	const emailHandler = (e) => {
@@ -261,12 +262,15 @@ const SignUp = () => {
 	};
 
 	useEffect(() => {
-		if (nickName === '') {
+		if (name === '') {
 			setIsNameError(false);
-			setNameState(false);
-		} else {
+		} else if (name.match(/^[0-9A-Za-z가-힣]{2,30}$/)) {
 			setIsNameError(false);
 			setNameState(true);
+		} else {
+			setnameErrorMessage('한글 / 영문만 허용됩니다.');
+			setIsNameError(true);
+			setNameState(false);
 		}
 
 		if (email === '') {
@@ -306,9 +310,29 @@ const SignUp = () => {
 			setIsPwError(true);
 			setPwState(false);
 		}
-	}, [nickName, email, password]);
+	}, [name, email, password]);
 
-	const signupHandler = () => {};
+	const signupHandler = () => {
+		if (emailState === true && nameState === true) {
+			axios
+				.post(
+					'http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/members',
+					{
+						name,
+						email,
+					},
+				)
+				.then((res) => res.data)
+				.then((res) => {
+					console.log(res);
+					if (res.signUp === true) {
+						navigate('/login');
+					} else {
+						console.log('이미 가입된 회원입니다.');
+					}
+				});
+		}
+	};
 
 	return (
 		<>
@@ -350,7 +374,8 @@ const SignUp = () => {
 						</GoogleSignupButton>
 						<SignUpForm>
 							<Name>Display name</Name>
-							<NameForm onChange={nickNameHandler} isNameError={isNameError} />
+							<NameForm onChange={nameHandler} isNameError={isNameError} />
+							{isNameError ? <Error>{namelErrorMessage}</Error> : null}
 							<Email>Email</Email>
 							<EmailForm onChange={emailHandler} isEmailError={isEmailError} />
 							{isEmailError ? <Error>{emailErrorMessage}</Error> : null}
@@ -365,7 +390,9 @@ const SignUp = () => {
 								Passwords must contain at least eight characters, including at
 								least 1 letter and 1 number.
 							</PasswordMessage>
-							<SignSubmit>Sing up</SignSubmit>
+							<SignSubmit className='singup' onClick={signupHandler}>
+								Sing up
+							</SignSubmit>
 							<SignupAgreeInfo>
 								By clicking “Sign up”, you agree to our
 								<a href='https://stackoverflow.com/legal/terms-of-service/public'>
