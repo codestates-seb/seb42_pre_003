@@ -1,8 +1,7 @@
 package com.jmc.stackoverflowbe.comment.service;
 
 import com.jmc.stackoverflowbe.comment.entity.Comment;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 public interface CommentService {
 
@@ -10,7 +9,7 @@ public interface CommentService {
 
     Comment updateComment(Comment comment);
 
-    Comment getComment(Long commentId);
+    List<Comment> getComments(String qaType, Long qaId);
 
     void deleteComment(Long commentId);
 }

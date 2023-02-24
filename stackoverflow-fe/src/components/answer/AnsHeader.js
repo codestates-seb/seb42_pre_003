@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import AskButton from '../list/AskButton';
 
 const BREAK_POINT_MO = 576;
 
@@ -6,7 +7,10 @@ const HeaderWrap = styled.div`
 	padding-bottom: 1rem;
 	border-bottom: 1px solid #e3e6e8;
 	h3 {
+		display: flex;
 		margin-bottom: 0.8rem;
+		align-items: center;
+		justify-content: space-between;
 		font-size: 1.2rem;
 		font-weight: 600;
 		color: #3b4045;
@@ -37,7 +41,11 @@ const HeaderInfo = styled.ul`
 function AnsHeader() {
 	return (
 		<HeaderWrap>
-			<h3>How to handle mongoose errors globaly</h3>
+			<h3>
+				How to handle mongoose errors globaly
+				<AskButton />
+			</h3>
+
 			<HeaderInfo>
 				<li>
 					<strong>Asked</strong>
