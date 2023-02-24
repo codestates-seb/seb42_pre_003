@@ -4,13 +4,24 @@ import { useBoxStore, useAskStore } from '../../store/askStore';
 
 function AskPublic() {
 	const { titleBind, detailBind, expectBind, tagBind } = useAskStore();
-	const { ableData, setAbleData, setAskData } = useBoxStore();
-	const { title, detail, expect, tag, handlePage } = useAskStore();
+	const { title, detail, expect, tag, handlePage, initialAble } = useAskStore();
+	const { ableData, actData, btnData } = useBoxStore();
+	const { setActData, setAbleData, setAskData, setBtnData } = useBoxStore();
 
-	const handleDisable = (item) => {
+	const handleDisable = (here, next) => {
 		let obj = { ...ableData[0] };
-		obj[item] = true;
+		const act = { ...actData[0] };
+		const btn = { ...btnData[0] };
+
+		obj[next] = true;
+		act[here] = false;
+		act[next] = true;
+		btn[here] = false;
+		btn[next] = true;
+
 		setAbleData(obj);
+		setActData(act);
+		setBtnData(btn);
 	};
 
 	const handleCashe = (e) => {
@@ -25,6 +36,7 @@ function AskPublic() {
 
 		console.log(item);
 		setAskData(item);
+		setActData(initialAble);
 		handlePage();
 	};
 
@@ -36,7 +48,7 @@ function AskPublic() {
 				name={'title'}
 				value={title}
 				func={titleBind}
-				onClick={() => handleDisable('detail')}
+				onClick={() => handleDisable('title', 'detail')}
 				inputLabel={'Title'}
 				inputText={
 					'Be specific and imagine you’re asking a question to another person.'
@@ -50,7 +62,7 @@ function AskPublic() {
 				value={detail}
 				type={'editor'}
 				func={detailBind}
-				onClick={() => handleDisable('try')}
+				onClick={() => handleDisable('detail', 'try')}
 				inputLabel={'What are the details of your problem?'}
 				inputText={
 					'Introduce the problem and expand on what you put in the title. Minimum 20 characters.'
@@ -63,7 +75,7 @@ function AskPublic() {
 				value={expect}
 				type={'editor'}
 				func={expectBind}
-				onClick={() => handleDisable('tag')}
+				onClick={() => handleDisable('try', 'tag')}
 				inputLabel={'What did you try and what were you expecting?'}
 				inputText={
 					'Describe what you tried, what you expected to happen, and what actually resulted. Minimum 20 characters.'
@@ -77,7 +89,7 @@ function AskPublic() {
 				name={'tag'}
 				value={tag}
 				func={tagBind}
-				onClick={() => handleDisable('review')}
+				onClick={() => handleDisable('tag', 'review')}
 				inputLabel={'Tags'}
 				inputText={
 					'Add up to 5 tags to describe what your question is about. Start typing to see suggestions.'

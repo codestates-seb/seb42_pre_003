@@ -4,7 +4,6 @@ import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
 import AnsInput from '../components/answer/AnsInput';
 import useAnsStore from '../store/ansStore';
-
 import RightMenu from '../components/list/RightMenu';
 
 /*sample*/

@@ -45,10 +45,10 @@ const NoticeBox = styled.div`
 	}
 `;
 
-function AskNotice({ review }) {
+function AskNotice() {
 	return (
 		<NoticeBox>
-			{review ? (
+			{window.location.pathname === '/review' ? (
 				<p>Please do a final review of your question and then post.</p>
 			) : (
 				<>

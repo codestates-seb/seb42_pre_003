@@ -1,8 +1,9 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../../style/quill-custom.css';
+import { useBoxStore } from '../../store/askStore';
 
-function AskEditor({ able, value, func }) {
+function AskEditor({ able, value, func, name }) {
 	const modules = {
 		toolbar: [
 			[{ header: '1' }, { header: '2' }, { font: [] }],
@@ -39,9 +40,21 @@ function AskEditor({ able, value, func }) {
 		'image',
 		'video',
 	];
+	const { actData, setActData } = useBoxStore();
+	const click = (item) => {
+		let obj = { ...actData[0] };
+		for (let el in obj) {
+			if (el === item) {
+				obj[el] = true;
+			} else {
+				obj[el] = false;
+			}
+		}
+		setActData(obj);
+	};
 
 	return (
-		<div>
+		<div onClick={() => click(name)}>
 			<ReactQuill
 				modules={modules}
 				formats={formats}
