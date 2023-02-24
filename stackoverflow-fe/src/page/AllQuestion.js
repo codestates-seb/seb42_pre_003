@@ -27,8 +27,6 @@ const Questions = styled.div`
 
 	.listfilter {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
 
 		.Total {
 			font-size: 1.2rem;
@@ -151,7 +149,6 @@ const Question = () => {
 					<div className='Total'>
 						<span>1</span>questions
 					</div>
-
 					<FilterButton></FilterButton>
 				</div>
 				<div className='qlist-wrapper'>

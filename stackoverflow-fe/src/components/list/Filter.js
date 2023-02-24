@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ApplyButton from './ApplyButton';
 import CancelButton from './CancelButton';
@@ -46,12 +46,6 @@ const FilterContainer = styled.section`
 `;
 
 const Filter = () => {
-	const [select, setSelect] = useState('');
-
-	const handleClickRadioButton = (radioBtnName) => {
-		setSelect(radioBtnName);
-	};
-
 	return (
 		<FilterContainer>
 			<ul className='filterlist'>
