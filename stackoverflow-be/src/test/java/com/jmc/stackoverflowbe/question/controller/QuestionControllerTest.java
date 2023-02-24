@@ -24,6 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,12 +49,14 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(QuestionController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
+@WithMockUser(username = "kimcoding@gmail.com", roles = {"USER"})
 public class QuestionControllerTest {
     String BASE_URL = "/questions";
 
@@ -109,6 +112,7 @@ public class QuestionControllerTest {
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -158,6 +162,7 @@ public class QuestionControllerTest {
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL+"/{question-id}", patch.getQuestionId())
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -369,6 +374,7 @@ public class QuestionControllerTest {
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{question-id}", question.getQuestionId())
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
