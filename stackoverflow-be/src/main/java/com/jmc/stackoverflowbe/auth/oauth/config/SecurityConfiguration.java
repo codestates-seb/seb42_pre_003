@@ -10,7 +10,9 @@ import com.jmc.stackoverflowbe.auth.oauth.jwt.JwtTokenizer;
 import com.jmc.stackoverflowbe.auth.oauth.utils.CustomAuthorityUtils;
 import com.jmc.stackoverflowbe.member.service.MemberService;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,19 +23,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@RequiredArgsConstructor
+@Configuration
 public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
-
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
-        CustomAuthorityUtils authorityUtils,
-        MemberService memberService) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-        this.memberService = memberService;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -53,23 +49,26 @@ public class SecurityConfiguration {
             .apply(new CustomFilterConfigurer())
             .and()
             .authorizeHttpRequests(authorize -> authorize
-                .antMatchers(HttpMethod.POST, "/*/members")
+                .antMatchers(HttpMethod.GET, "/")
                 .permitAll()
-                .antMatchers(HttpMethod.PATCH, "/*/members/**")
-                .hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/*/members/**")
-                .hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.DELETE, "/*/members/**")
-                .hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/*/questions").hasRole("USER")
-                .antMatchers(HttpMethod.PATCH, "/*/questions/**").hasAnyRole("USER")
-                .antMatchers(HttpMethod.GET, "/*/questions/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/*/questions/**").hasRole("USER")
-                .anyRequest().permitAll()
+//                .antMatchers(HttpMethod.POST, "/*/members")
+//                .permitAll()
+//                .antMatchers(HttpMethod.PATCH, "/*/members/**")
+//                .hasRole("USER")
+//                .antMatchers(HttpMethod.GET, "/*/members/**")
+//                .hasAnyRole("ADMIN", "USER")
+//                .antMatchers(HttpMethod.DELETE, "/*/members/**")
+//                .hasRole("USER")
+//                .antMatchers(HttpMethod.POST, "/*/questions").hasRole("USER")
+//                .antMatchers(HttpMethod.PATCH, "/*/questions/**").hasAnyRole("USER")
+//                .antMatchers(HttpMethod.GET, "/*/questions/**").hasAnyRole("USER", "ADMIN")
+//                .antMatchers(HttpMethod.DELETE, "/*/questions/**").hasRole("USER")
+                .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(
                     new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService))
+                .loginPage("/")
             );
 
         return http.build();
