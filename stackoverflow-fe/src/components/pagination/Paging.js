@@ -61,7 +61,7 @@ function Paging() {
 		}
 	};
 
-	console.log(curr);
+	// console.log(curr);
 
 	return (
 		<PagingBox>

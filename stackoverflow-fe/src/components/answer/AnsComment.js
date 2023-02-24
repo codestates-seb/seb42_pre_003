@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import AskInput from '../ask/AskInput';
+import AnsInput from './AnsInput';
+import useAnsStore from '../../store/ansStore';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -67,11 +68,19 @@ const AddButton = styled.button`
 	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
 `;
 
-function AnsComment({ comBind, handleComment }) {
+function AnsComment() {
 	const [com, setCom] = useState(false);
+	const { comment, comBind, comReset } = useAnsStore();
 
 	const handleActive = () => {
 		setCom(!com);
+	};
+
+	const handleComment = (e) => {
+		e.preventDefault();
+
+		console.log(comment);
+		comReset();
 	};
 
 	return (
@@ -93,7 +102,7 @@ function AnsComment({ comBind, handleComment }) {
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (
 				<Comment>
-					<AskInput able='true' values={comBind} />
+					<AnsInput func={comBind} />
 					<AddButton onClick={handleComment}>Enter</AddButton>
 				</Comment>
 			) : null}

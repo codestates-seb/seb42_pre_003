@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import stacklogo from '../../img/stacklogo.png';
 import search from '../../img/search.png';
@@ -13,6 +13,7 @@ const HeaderWrap = styled.div`
 	height: 53px;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
 	background-color: #f8f9f9;
+	z-index: 1;
 `;
 
 const OrangeBg = styled.div`
@@ -101,13 +102,13 @@ const Header = () => {
 
 	const navigate = useNavigate();
 
-	let username = '';
-	let id = '';
+	// let username = '';
+	// let id = '';
 
-	if (JSON.parse(sessionStorage.getItem('userInfoStorage'))) {
-		username = JSON.parse(sessionStorage.getItem('userInfoStorage')).email;
-		id = JSON.parse(sessionStorage.getItem('userInfoStorage')).memberId;
-	}
+	// if (JSON.parse(sessionStorage.getItem('userInfoStorage'))) {
+	// 	username = JSON.parse(sessionStorage.getItem('userInfoStorage')).email;
+	// 	id = JSON.parse(sessionStorage.getItem('userInfoStorage')).memberId;
+	// }
 
 	const logoutHandler = () => {
 		sessionStorage.clear();

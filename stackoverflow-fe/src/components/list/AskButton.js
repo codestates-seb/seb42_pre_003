@@ -20,7 +20,9 @@ const Section = styled.section`
 const AskButton = () => {
 	return (
 		<Section>
-			<button>Ask Question</button>
+			<button>
+				<a href='/askQuestion'>Ask Question</a>
+			</button>
 		</Section>
 	);
 };
