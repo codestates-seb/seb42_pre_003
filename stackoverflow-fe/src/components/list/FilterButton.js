@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import filtericon from '../../img/filter_ic.svg';
+import Filtericon from '../../img/filter_ic.svg';
 
 const Section = styled.section`
 	button {
@@ -15,21 +15,16 @@ const Section = styled.section`
 	}
 
 	button:hover {
-		background-color: hsl(206deg 100% 40%);
+		color: #2c5877;
+		background-color: #b3d3ea;
 	}
-`;
-
-const FilterImg = styled.img`
-	width: 10px;
-	height: 10px;
-	margin-right: 3px;
 `;
 
 const FilterButton = () => {
 	return (
 		<Section>
 			<button>
-				<FilterImg src={filtericon}></FilterImg>
+				<img src={Filtericon} />
 				Filter
 			</button>
 		</Section>

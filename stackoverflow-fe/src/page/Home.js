@@ -5,23 +5,22 @@ import RightMenu from '../components/list/RightMenu';
 import { Link } from 'react-router-dom';
 
 const Content = styled.div`
-	padding: 24px;
 	width: auto;
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin-top: 40px;
 `;
 
 const Questions = styled.div`
 	.Listheader {
 		display: flex;
-		padding: 16px;
+		justify-content: space-between;
 
 		h1 {
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 650px;
+			margin-left: 20px;
 		}
 	}
 

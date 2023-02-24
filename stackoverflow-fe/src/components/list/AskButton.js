@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Section = styled.section`
 	button {
@@ -21,7 +22,7 @@ const AskButton = () => {
 	return (
 		<Section>
 			<button>
-				<a href='/askQuestion'>Ask Question</a>
+				<Link to={'/askquestion'}>Ask Question</Link>
 			</button>
 		</Section>
 	);

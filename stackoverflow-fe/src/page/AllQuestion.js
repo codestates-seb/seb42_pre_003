@@ -3,35 +3,36 @@ import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import FilterButton from '../components/list/FilterButton';
-import Filter from '../components/list/Filter';
 import { Link } from 'react-router-dom';
 
 const Content = styled.div`
-	padding: 24px;
 	width: auto;
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin-top: 40px;
 `;
 
 const Questions = styled.div`
 	.listheader {
 		display: flex;
-		padding: 16px;
+		justify-content: space-between;
 
 		h1 {
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 650px;
+			margin-left: 20px;
 		}
 	}
 
 	.listfilter {
 		display: flex;
+		justify-content: space-between;
+		align-items: center;
 
 		.Total {
-			font-size: 1.3rem;
+			font-size: 1.2rem;
+			margin-left: 25px;
 		}
 
 		.Total span {
@@ -39,34 +40,36 @@ const Questions = styled.div`
 		}
 	}
 
-	.qlist-wrapper {
-		display: flex;
-		border-top: 1px solid #bebdbd;
-		border-bottom: 1px solid #bebdbd;
-		padding: 16px;
+	.qlist {
+		&-wrapper {
+			display: flex;
+			border-top: 1px solid #bebdbd;
+			border-bottom: 1px solid #bebdbd;
+			padding: 16px;
+		}
+
+		&-stats {
+			font-size: 13px;
+			display: flex;
+			align-items: flex-end;
+			flex-direction: column;
+			width: 105px;
+			margin-right: 17px;
+		}
 	}
 
 	.qlist-stats {
-		font-size: 13px;
-		display: flex;
-		align-items: flex-end;
-		flex-direction: column;
-		width: 105px;
-		margin-right: 17px;
-	}
-
-	.qlist-stats li {
-		margin-bottom: 12px;
-		color: #999;
-	}
-
-	.qlist-stats .vote {
-		color: #333;
-	}
-
-	.qlist-stats .number {
-		margin-right: 3px;
-		font-weight: bold;
+		li {
+			margin-bottom: 12px;
+			color: #999;
+		}
+		.vote {
+			color: #333;
+		}
+		.number {
+			margin-right: 3px;
+			font-weight: bold;
+		}
 	}
 
 	.qlist-contents {
@@ -148,10 +151,8 @@ const Question = () => {
 					<div className='Total'>
 						<span>1</span>questions
 					</div>
+
 					<FilterButton></FilterButton>
-				</div>
-				<div className='filterinfo'>
-					<Filter></Filter>
 				</div>
 				<div className='qlist-wrapper'>
 					<ul className='qlist-stats'>
