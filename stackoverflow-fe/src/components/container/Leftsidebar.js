@@ -48,7 +48,7 @@ const Leftsidebar = () => {
 	if (
 		location === '/login' ||
 		location === '/signup' ||
-		location === '/askQuestion'
+		location === '/askquestion'
 	)
 		return null;
 
