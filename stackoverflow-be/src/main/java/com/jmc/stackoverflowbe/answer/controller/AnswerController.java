@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/answers")
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class AnswerController {
     private final AnswerMapper mapper;
 
     @PostMapping
-    public ResponseEntity postAnswer(@RequestBody AnswerDto.Post post){
+    public ResponseEntity postAnswer(@RequestBody AnswerDto.Post post) {
         answerService.createAnswer(mapper.postDtoToAnswer(post));
         URI location = UriCreator.createURI("/answers", 1L);
         return ResponseEntity.created(location).build();
@@ -37,8 +39,8 @@ public class AnswerController {
 
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(
-        @PathVariable("answer-id") long answerId,
-        @RequestBody AnswerDto.Patch patch) {
+            @PathVariable("answer-id") long answerId,
+            @RequestBody AnswerDto.Patch patch) {
         answerService.updateAnswer(mapper.patchDtoToAnswer(patch));
         return ResponseEntity.ok().build();
     }
@@ -48,12 +50,12 @@ public class AnswerController {
         List<Answer> answers = answerService.getAnswers(questionId);
 
         return new ResponseEntity<>(new AnswerMultiResponseDto<>(
-            mapper.answersToResponseDtos(answers)),
-            HttpStatus.OK);
+                mapper.answersToResponseDtos(answers)),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long answerId){
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long answerId) {
         answerService.deleteAnswer(answerId);
         return ResponseEntity.noContent().build();
     }
