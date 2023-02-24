@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import styled from 'styled-components';
-import { useAskInput, useAskEditor } from '../util/askUtil/useAskInput';
 import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
+import { useBoxStore, useAskStore } from '../store/askStore';
 
 const BREAK_POINT_PC = 1100;
 
@@ -44,68 +43,17 @@ const DelButton = styled.button`
 `;
 
 function AskQuestion() {
-	const [page, setPage] = useState('ask');
-
-	const data = localStorage.getItem('ask');
-	const askData = JSON.parse(data);
-
-	const [titleValue, titleBind, titleReset] = useAskInput(
-		askData ? askData.title : '',
-	);
-	const [detailValue, detailBind, detailReset] = useAskEditor(
-		askData ? askData.detail : '',
-	);
-	const [tryValue, tryBind, tryReset] = useAskEditor(
-		askData ? askData.try : '',
-	);
-	const [tagValue, tagBind, tagReset] = useAskInput(askData ? askData.tag : '');
-
-	const mergeBody = askData && askData.detail + askData.try;
-	const [bodyValue, bodyBind, bodyReset] = useAskEditor(
-		askData ? mergeBody : '',
-	);
-
-	const [status, setStatus] = useState({
-		title: true,
-		detail: false,
-		try: false,
-		tag: false,
-		review: false,
-	});
-
-	if (!localStorage.getItem('able')) {
-		localStorage.setItem('able', JSON.stringify(status));
-	}
-
-	const handlePage = (page) => {
-		setPage(page);
-	};
-
-	const handleCashe = (e) => {
-		e.preventDefault();
-
-		const item = {
-			title: titleValue,
-			detail: detailValue,
-			try: tryValue,
-			tag: tagValue,
-		};
-
-		localStorage.setItem('ask', JSON.stringify(item));
-		handlePage('review');
-	};
-
-	const handleDisable = (item) => {
-		let obj = { ...status };
-		obj[item] = true;
-
-		setStatus({ ...obj });
-		localStorage.setItem('able', JSON.stringify(obj));
-	};
+	const { setAbleData, setAskData } = useBoxStore();
+	const { page, initialAble, initialAsk } = useAskStore();
+	const { title, detail, expect, tag } = useAskStore();
+	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
+		useAskStore();
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
-		localStorage.removeItem('ask');
+
+		setAbleData(initialAble);
+		setAskData(initialAsk);
 		window.location.reload();
 	};
 
@@ -114,18 +62,18 @@ function AskQuestion() {
 
 		//askData 전송(api 부분)
 		const item = {
-			title: titleValue,
-			body: bodyValue,
-			tag: tagValue,
+			title,
+			body: detail + expect,
+			tag,
 		};
-
 		console.log(item);
-		localStorage.removeItem('able');
-		localStorage.removeItem('ask');
+
+		setAbleData(initialAble);
+		setAskData(initialAsk);
 
 		titleReset();
 		detailReset();
-		tryReset();
+		expectReset();
 		tagReset();
 		bodyReset();
 
@@ -134,22 +82,7 @@ function AskQuestion() {
 
 	return (
 		<AskWrap onSubmit={handleSubmit}>
-			{page === 'review' ? (
-				<AskReview
-					titleBind={titleBind}
-					tagBind={tagBind}
-					bodyBind={bodyBind}
-				/>
-			) : (
-				<AskPublic
-					titleBind={titleBind}
-					detailBind={detailBind}
-					tryBind={tryBind}
-					tagBind={tagBind}
-					handleDisable={handleDisable}
-					handleCashe={handleCashe}
-				/>
-			)}
+			{page === 'review' ? <AskReview /> : <AskPublic />}
 
 			{page === 'review' ? <BlueButton>Post your question</BlueButton> : null}
 			<DelButton type='button' onClick={deleteCashe}>

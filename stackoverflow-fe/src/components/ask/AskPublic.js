@@ -1,21 +1,42 @@
 import AskNotice from './AskNotice';
 import AskBox from './AskBox';
+import { useBoxStore, useAskStore } from '../../store/askStore';
 
-function AskPublic({
-	titleBind,
-	detailBind,
-	tryBind,
-	tagBind,
-	handleDisable,
-	handleCashe,
-}) {
+function AskPublic() {
+	const { titleBind, detailBind, expectBind, tagBind } = useAskStore();
+	const { ableData, setAbleData, setAskData } = useBoxStore();
+	const { title, detail, expect, tag, handlePage } = useAskStore();
+
+	const handleDisable = (item) => {
+		let obj = { ...ableData[0] };
+		obj[item] = true;
+		setAbleData(obj);
+	};
+
+	const handleCashe = (e) => {
+		e.preventDefault();
+
+		const item = {
+			title,
+			detail,
+			expect,
+			tag,
+		};
+
+		console.log(item);
+
+		setAskData(item);
+		handlePage();
+	};
+
 	return (
 		<>
 			<h3>Ask a public question</h3>
 			<AskNotice />
 			<AskBox
 				name={'title'}
-				values={titleBind}
+				value={title}
+				func={titleBind}
 				onClick={() => handleDisable('detail')}
 				inputLabel={'Title'}
 				inputText={
@@ -27,8 +48,9 @@ function AskPublic({
 			/>
 			<AskBox
 				name={'detail'}
+				value={detail}
 				type={'editor'}
-				values={detailBind}
+				func={detailBind}
 				onClick={() => handleDisable('try')}
 				inputLabel={'What are the details of your problem?'}
 				inputText={
@@ -39,8 +61,9 @@ function AskPublic({
 			/>
 			<AskBox
 				name={'try'}
+				value={expect}
 				type={'editor'}
-				values={tryBind}
+				func={expectBind}
 				onClick={() => handleDisable('tag')}
 				inputLabel={'What did you try and what were you expecting?'}
 				inputText={
@@ -53,7 +76,8 @@ function AskPublic({
 			/>
 			<AskBox
 				name={'tag'}
-				values={tagBind}
+				value={tag}
+				func={tagBind}
 				onClick={() => handleDisable('review')}
 				inputLabel={'Tags'}
 				inputText={
@@ -67,7 +91,7 @@ function AskPublic({
 			<AskBox
 				name={'review'}
 				type={'selector'}
-				values={'review'}
+				func={'review'}
 				onClick={handleCashe}
 				inputLabel={
 					'Review questions already on Stack Overflow to see if your question is a duplicate.'
