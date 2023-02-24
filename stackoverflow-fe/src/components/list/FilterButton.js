@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Filtericon from '../../img/filter_ic.svg';
+import filtericon from '../../img/filter_ic.svg';
 
 const Section = styled.section`
 	button {
@@ -20,11 +20,16 @@ const Section = styled.section`
 	}
 `;
 
+const FilterImg = styled.img`
+	width: 10px;
+	height: 10px;
+`;
+
 const FilterButton = () => {
 	return (
 		<Section>
 			<button>
-				<img src={Filtericon} />
+				<FilterImg src={filtericon}></FilterImg>
 				Filter
 			</button>
 		</Section>
