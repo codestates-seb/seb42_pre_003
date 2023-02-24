@@ -1,103 +1,106 @@
 import styled from 'styled-components';
 import AnsHeader from '../components/answer/AnsHeader';
 import AnsCon from '../components/answer/AnsCon';
-import { useAskInput, useAskEditor } from '../util/askUtil/useAskInput';
-import AnsList from '../components/answer/AnsList';
-import AnsAdd from '../components/answer/AnsAdd';
-import AnsEdit from '../components/answer/AnsEdit';
-import { useState } from 'react';
+import AnsEditor from '../components/answer/AnsEditor';
+import AnsInput from '../components/answer/AnsInput';
+import useAnsStore from '../store/ansStore';
+
+import RightMenu from '../components/list/RightMenu';
 
 /*sample*/
 import Paging from '../components/pagination/Paging';
 
 const AnsWrap = styled.div`
-	max-width: 728px;
-	margin: 0 auto;
+	max-width: 830px;
+	width: 100%;
 	padding: 3rem 0.66rem;
 `;
 
+const ConTitle = styled.h4`
+	margin: 1rem 0 0.75rem;
+	font-weight: 500;
+`;
+
+const InputButton = styled.button`
+	margin-top: 0.8rem;
+	padding: 0.45rem 0.5rem;
+	color: #fff;
+	font-size: 0.6rem;
+	font-weight: 500;
+	border-radius: 0.188rem;
+	background: hsl(206, 100%, 52%);
+	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
+	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
+`;
+
 function Answer() {
-	const [answerValue, answerBind, answerReset] = useAskEditor('');
-	const [comValue, comBind, comReset] = useAskInput('');
-	const [vote, setVote] = useState(0);
-	const [book, setBook] = useState(false);
-	const [page, setPage] = useState('read');
+	const {
+		page,
+		answer,
+		answerBind,
+		answerReset,
+		edTitle,
+		edBody,
+		edTag,
+		edTitleBind,
+		edBodyBind,
+		edTagBind,
+	} = useAnsStore();
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
 
-		const answer = {
-			answer: answerValue,
-		};
-
-		//api - patch
 		console.log(answer);
 		answerReset();
 	};
 
-	const handleComment = (e) => {
+	const handleEdit = (e) => {
 		e.preventDefault();
 
-		const comment = {
-			comment: comValue,
+		const item = {
+			title: edTitle,
+			body: edBody,
+			tag: edTag,
 		};
 
-		//api - patch
-		console.log(comment);
-		comReset();
-	};
-
-	const plusVote = () => {
-		setVote(vote + 1);
-	};
-
-	const minusVote = () => {
-		setVote(vote - 1);
-	};
-
-	const handleBook = () => {
-		setBook(!book);
-	};
-
-	const handlePage = () => {
-		setPage('edit');
+		console.log(item);
 	};
 
 	return (
-		<AnsWrap>
-			{page === 'read' ? (
-				<>
-					<AnsHeader />
-					<AnsCon
-						type={'question'}
-						comBind={comBind}
-						handleComment={handleComment}
-						vote={vote}
-						plusVote={plusVote}
-						minusVote={minusVote}
-						book={book}
-						handleBook={handleBook}
-						handlePage={handlePage}
-					/>
-					<AnsList
-						comBind={comBind}
-						handleComment={handleComment}
-						vote={vote}
-						plusVote={plusVote}
-						minusVote={minusVote}
-						book={book}
-						handleBook={handleBook}
-						handlePage={handlePage}
-					/>
-					<AnsAdd answerBind={answerBind} handleAnswer={handleAnswer} />{' '}
-				</>
-			) : (
-				<AnsEdit />
-			)}
+		<>
+			<AnsWrap>
+				{page === 'read' ? (
+					<>
+						<AnsHeader />
+						<AnsCon type={'question'} />
+						<ConTitle>2 Answers</ConTitle>
+						{[0, 1].map((el, idx) => (
+							<AnsCon key={idx} />
+						))}
+						<>
+							<ConTitle>Your Answer</ConTitle>
+							<AnsEditor func={answerBind} />
+							<InputButton onClick={handleAnswer}>post your answer</InputButton>
+						</>
+					</>
+				) : (
+					<>
+						<ConTitle>Title</ConTitle>
+						<AnsInput func={edTitleBind} />
+						<ConTitle>Body</ConTitle>
+						<AnsEditor func={edBodyBind} />
+						<ConTitle>Tags</ConTitle>
+						<AnsInput func={edTagBind} />
+						<InputButton onClick={handleEdit}>Save Edits</InputButton>
+					</>
+				)}
 
-			{/* sample */}
-			<Paging />
-		</AnsWrap>
+				{/* sample */}
+				<Paging />
+			</AnsWrap>
+
+			<RightMenu />
+		</>
 	);
 }
 
