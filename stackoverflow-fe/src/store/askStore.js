@@ -62,7 +62,7 @@ export const useAskStore = create(
 		tag: `${data.tag}`,
 		tagBind: (item) => set({ tag: item }),
 		tagReset: () => set({ tag: '' }),
-		body: '',
+		body: `${data.detail + data.expect}`,
 		bodyBind: (item) => set({ body: item }),
 		bodyReset: () => set({ body: '' }),
 		page: 'ask',
