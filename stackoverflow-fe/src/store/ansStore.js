@@ -28,6 +28,13 @@ const useAnsStore = create(
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),
+		fishies: {},
+		fetch: async () => {
+			const response = await fetch(
+				'http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080//questions?page=1&sort=questionId',
+			);
+			set({ fishies: await response.json() });
+		},
 	})),
 );
 

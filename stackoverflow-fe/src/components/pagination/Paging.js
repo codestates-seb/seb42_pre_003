@@ -3,27 +3,29 @@ import { useState } from 'react';
 
 const PagingBox = styled.div`
 	display: flex;
-	margin: 2rem 0;
+	margin: 2rem 1rem;
 	gap: 0.15rem;
 `;
 
 const PagingList = styled.ul`
 	display: flex;
 	gap: 0.15rem;
-	li {
-		min-width: 1.25rem;
-		height: 1.25rem;
-		padding: 0 0.25rem;
-		color: hsl(210, 8%, 25%);
-		font-size: 0.7rem;
-		font-weight: 500;
-		line-height: 1.25rem;
-		text-align: center;
-		border: 1px solid hsl(210, 8%, 85%);
-		border-radius: 0.188rem;
-		/* background: ${(props) =>
-			props.active === 'active' ? '#00ABBB' : '#fff'}; */
-	}
+`;
+
+const PagingLi = styled.li`
+	min-width: 1.25rem;
+	height: 1.25rem;
+	padding: 0 0.25rem;
+	color: ${(props) =>
+		props.active === 'active' ? '#fff' : 'hsl(210, 8%, 25%)'};
+	font-size: 0.7rem;
+	font-weight: 500;
+	line-height: 1.25rem;
+	text-align: center;
+	border: 1px solid hsl(210, 8%, 85%);
+	border-radius: 0.188rem;
+	background: ${(props) => (props.active === 'active' ? '#00ABBB' : '#fff')};
+	cursor: pointer;
 `;
 
 const PagingButton = styled.button`
@@ -48,7 +50,13 @@ function Paging() {
 	};
 
 	const handlePrev = () => {
-		setCurr(curr - 1);
+		if (curr <= arr[0]) {
+			const newArr = arr.map((el) => el - arr.length);
+			setArr(newArr);
+			setCurr(newArr[arr.length - 1]);
+		} else {
+			setCurr(curr - 1);
+		}
 	};
 
 	const handleNext = () => {
@@ -61,8 +69,6 @@ function Paging() {
 		}
 	};
 
-	// console.log(curr);
-
 	return (
 		<PagingBox>
 			{curr === 1 ? null : (
@@ -70,9 +76,13 @@ function Paging() {
 			)}
 			<PagingList>
 				{arr.map((el, idx) => (
-					<li key={idx} onClick={() => handlePaging(idx + 1)}>
+					<PagingLi
+						key={idx}
+						active={curr === el ? 'active' : null}
+						onClick={() => handlePaging(el)}
+					>
 						{el}
-					</li>
+					</PagingLi>
 				))}
 			</PagingList>
 			<PagingButton onClick={handleNext}>Next</PagingButton>

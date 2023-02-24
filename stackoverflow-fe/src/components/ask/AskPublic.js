@@ -24,7 +24,6 @@ function AskPublic() {
 		};
 
 		console.log(item);
-
 		setAskData(item);
 		handlePage();
 	};

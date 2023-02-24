@@ -7,10 +7,17 @@ const Input = styled.input`
 	padding: 0.6em 0.7em;
 	font-size: 0.6rem;
 	border: 1px solid #babfc4;
+	border-color: ${(props) => (props.value === undefined ? null : '#92c1e6')};
+	box-shadow: ${(props) =>
+		props.value === undefined ? null : '0 0 0 4px #dceaf7'};
 	border-radius: 0.188rem;
 	&::placeholder {
 		font-weight: 500;
 		color: rgb(59 64 69 / 39%);
+	}
+	&:focus {
+		border: 1px solid #92c1e6;
+		box-shadow: 0 0 0 4px #dceaf7;
 	}
 `;
 

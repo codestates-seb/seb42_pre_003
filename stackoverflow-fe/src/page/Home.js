@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import { Link } from 'react-router-dom';
+import Paging from '../components/pagination/Paging';
 
 const Content = styled.div`
 	width: auto;
@@ -181,6 +182,7 @@ const Contents = () => {
 						</ul>
 					</ul>
 				</div>
+				<Paging />
 			</Questions>
 			<RightMenu></RightMenu>
 		</Content>

@@ -8,12 +8,12 @@ import useAnsStore from '../store/ansStore';
 import RightMenu from '../components/list/RightMenu';
 
 /*sample*/
-import Paging from '../components/pagination/Paging';
+// import Paging from '../components/pagination/Paging';
 
 const AnsWrap = styled.div`
 	max-width: 830px;
 	width: 100%;
-	padding: 3rem 0.66rem;
+	padding: 3rem 1.66rem;
 `;
 
 const ConTitle = styled.h4`
@@ -66,11 +66,16 @@ function Answer() {
 		console.log(item);
 	};
 
+	// const { fishies, fetch } = useAnsStore();
+
+	// console.log(fishies);
+
 	return (
 		<>
 			<AnsWrap>
 				{page === 'read' ? (
 					<>
+						{/* <button onClick={fetch}>call</button> */}
 						<AnsHeader />
 						<AnsCon type={'question'} />
 						<ConTitle>2 Answers</ConTitle>
@@ -96,10 +101,11 @@ function Answer() {
 				)}
 
 				{/* sample */}
-				<Paging />
+				{/* <Paging /> */}
 			</AnsWrap>
-
-			<RightMenu />
+			<div style={{ marginTop: '3rem' }}>
+				<RightMenu />
+			</div>
 		</>
 	);
 }
