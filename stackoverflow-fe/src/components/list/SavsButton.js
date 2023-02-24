@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Section = styled.section`
+	margin-right: 480px;
+
 	button {
 		width: auto;
 		height: 35px;

@@ -16,6 +16,7 @@ const Contents = styled.div`
 	display: flex;
 	margin-top: 50px;
 	justify-content: center;
+	min-height: 700px;
 `;
 
 function App() {

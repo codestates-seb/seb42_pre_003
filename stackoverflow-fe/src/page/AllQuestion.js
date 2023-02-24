@@ -1,72 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
-import FilterButton from '../components/list/FilterButton';
 import Filter from '../components/list/Filter';
 import { Link } from 'react-router-dom';
+import Filtericon from '../img/filter_ic.svg';
 
 const Content = styled.div`
-	padding: 24px;
 	width: auto;
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin-top: 40px;
 `;
 
 const Questions = styled.div`
 	.listheader {
 		display: flex;
-		padding: 16px;
+		justify-content: space-between;
 
 		h1 {
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 650px;
+			margin-left: 20px;
 		}
 	}
 
 	.listfilter {
 		display: flex;
+		justify-content: space-between;
 
 		.Total {
-			font-size: 1.3rem;
+			font-size: 1.2rem;
+			margin-left: 25px;
 		}
 
 		.Total span {
 			margin-right: 5px;
 		}
+
+		button {
+			width: 71px;
+			height: 35px;
+			color: #39739d;
+			background-color: #e1ecf4;
+			border-radius: 3px;
+			font-size: 13px;
+			margin-bottom: 20px;
+			border: 1px solid #39739d;
+		}
+
+		button:hover {
+			color: #2c5877;
+			background-color: #b3d3ea;
+		}
 	}
 
-	.qlist-wrapper {
-		display: flex;
-		border-top: 1px solid #bebdbd;
-		border-bottom: 1px solid #bebdbd;
-		padding: 16px;
+	.filterinfo {
+		height: 0;
+		opacity: 0;
+		transition: opacity 0.3s ease-in-out, height 0.3s 0.3s ease-in-out;
+	}
+
+	.animated {
+		opacity: 1;
+		transition: height 0.3s ease-in-out, opacity 0.3s 0.3s ease-in-out;
+	}
+
+	.qlist {
+		&-wrapper {
+			display: flex;
+			border-top: 1px solid #bebdbd;
+			border-bottom: 1px solid #bebdbd;
+			padding: 16px;
+		}
+
+		&-stats {
+			font-size: 13px;
+			display: flex;
+			align-items: flex-end;
+			flex-direction: column;
+			width: 105px;
+			margin-right: 17px;
+		}
 	}
 
 	.qlist-stats {
-		font-size: 13px;
-		display: flex;
-		align-items: flex-end;
-		flex-direction: column;
-		width: 105px;
-		margin-right: 17px;
-	}
-
-	.qlist-stats li {
-		margin-bottom: 12px;
-		color: #999;
-	}
-
-	.qlist-stats .vote {
-		color: #333;
-	}
-
-	.qlist-stats .number {
-		margin-right: 3px;
-		font-weight: bold;
+		li {
+			margin-bottom: 12px;
+			color: #999;
+		}
+		.vote {
+			color: #333;
+		}
+		.number {
+			margin-right: 3px;
+			font-weight: bold;
+		}
 	}
 
 	.qlist-contents {
@@ -136,7 +166,28 @@ const Questions = styled.div`
 	}
 `;
 
+const FilterImg = styled.img`
+	width: 10px;
+	height: 10px;
+`;
+
 const Question = () => {
+	const [toggle, setToggle] = useState(false);
+	const [heightEl, setHeightEl] = useState();
+
+	const refHeight = useRef();
+
+	useEffect(() => {
+		console.log(refHeight);
+		setHeightEl(`${refHeight.current.scrollHeight}px`);
+	}, []);
+
+	const toggleState = () => {
+		setToggle(!toggle);
+	};
+
+	console.log(toggle);
+
 	return (
 		<Content>
 			<Questions>
@@ -148,9 +199,16 @@ const Question = () => {
 					<div className='Total'>
 						<span>1</span>questions
 					</div>
-					<FilterButton></FilterButton>
+					<button onClick={toggleState}>
+						<FilterImg src={Filtericon}></FilterImg>
+						Filter
+					</button>
 				</div>
-				<div className='filterinfo'>
+				<div
+					className={toggle ? 'filterinfo animated' : 'filterinfo'}
+					style={{ height: toggle ? `${heightEl}` : '0px' }}
+					ref={refHeight}
+				>
 					<Filter></Filter>
 				</div>
 				<div className='qlist-wrapper'>
