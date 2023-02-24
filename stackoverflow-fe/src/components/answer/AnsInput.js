@@ -14,15 +14,7 @@ const Input = styled.input`
 	}
 `;
 
-function AskInput({ able, value, func }) {
-	return (
-		<Input
-			disabled={!able}
-			value={value}
-			onChange={({ target: { value } }) => func(value)}
-			placeholder='e.g. Is there an R function for finding the index of an element in a vector?'
-		/>
-	);
+function AnsInput({ func }) {
+	return <Input onChange={({ target: { value } }) => func(value)} />;
 }
-
-export default AskInput;
+export default AnsInput;

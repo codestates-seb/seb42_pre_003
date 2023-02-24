@@ -1,7 +1,14 @@
 import styled from 'styled-components';
-import AnsSide from './AnsSide';
 import AnsComment from './AnsComment';
 import AnsInfo from './AnsInfo';
+import {
+	CountUpIcon,
+	CountDownIcon,
+	BookMarkIcon,
+	BookFullIcon,
+	WillbeDelete,
+} from './AnsIcon';
+import useAnsStore from '../../store/ansStore';
 
 const BREAK_POINT_MO = 576;
 
@@ -11,6 +18,22 @@ const ConWrap = styled.div`
 	padding-bottom: 1rem;
 	border-bottom: ${(props) =>
 		props.type === 'question' ? null : '1px solid #e3e6e8'};
+`;
+
+const AnsSide = styled.div`
+	display: flex;
+	padding-right: 0.8rem;
+	flex-direction: column;
+	align-items: center;
+	font-weight: 600;
+	color: #6a737c;
+	svg {
+		fill: hsl(210, 8%, 75%);
+		cursor: pointer;
+	}
+	svg.iconBookmark {
+		fill: #00abbb;
+	}
 `;
 
 const AnsBox = styled.div`
@@ -42,58 +65,36 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon({
-	type,
-	comBind,
-	handleComment,
-	vote,
-	plusVote,
-	minusVote,
-	book,
-	handleBook,
-	handlePage,
-}) {
+function AnsCon({ type }) {
+	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
+
 	return (
 		<ConWrap type={type}>
-			<AnsSide
-				vote={vote}
-				plusVote={plusVote}
-				minusVote={minusVote}
-				handleBook={handleBook}
-				book={book}
-			/>
+			<AnsSide>
+				<CountUpIcon onClick={plusVote} />
+				{vote}
+				<CountDownIcon onClick={minusVote} />
+				{book ? (
+					<BookFullIcon onClick={handleBook} />
+				) : (
+					<BookMarkIcon onClick={handleBook} />
+				)}
+			</AnsSide>
 			<AnsBox>
-				<p>
-					As for now, I'm using mongoose middleware to handle Mongoose specific
-					errors (validation, cast, ....). I'm using the following code in all
-					of my schemas: As for now, I'm using mongoose middleware to handle
-					Mongoose specific errors (validation, cast, ....). I'm using the
-					following code in all of my schemas: As for now, I'm using mongoose
-					middleware to handle Mongoose specific errors (validation, cast,
-					....). I'm using the following code in all of my schemas: As for now,
-					I'm using mongoose middleware to handle Mongoose specific errors
-					(validation, cast, ....). I'm using the following code in all of my
-					schemas: As for now, I'm using mongoose middleware to handle Mongoose
-					specific errors (validation, cast, ....). I'm using the following code
-					in all of my schemas: As for now, I'm using mongoose middleware to
-					handle Mongoose specific errors (validation, cast, ....). I'm using
-					the following code in all of my schemas: As for now, I'm using
-					mongoose middleware to handle Mongoose specific errors (validation,
-					cast, ....). I'm using the following code in all of my schemas:
-				</p>
+				<WillbeDelete />
 				{type === 'question' ? (
 					<AnsTag>
 						<ul>
-							<li>javascript</li>
-							<li>node.js</li>
-							<li>mongodb</li>
-							<li>express</li>
-							<li>mongoose</li>
+							{['javascript', 'node.js', 'mongodb', 'express', 'mongoose'].map(
+								(el, idx) => (
+									<li key={idx}>{el}</li>
+								),
+							)}
 						</ul>
 					</AnsTag>
 				) : null}
-				<AnsInfo handlePage={handlePage} />
-				<AnsComment comBind={comBind} handleComment={handleComment} />
+				<AnsInfo />
+				<AnsComment />
 			</AnsBox>
 		</ConWrap>
 	);

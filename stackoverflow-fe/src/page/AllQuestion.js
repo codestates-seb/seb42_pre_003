@@ -2,15 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
+import FilterButton from '../components/list/FilterButton';
+import Filter from '../components/list/Filter';
+import { Link } from 'react-router-dom';
 
 const Content = styled.div`
 	padding: 24px;
 	width: auto;
 	display: flex;
+	justify-content: center;
+	margin-top: 50px;
 `;
 
 const Questions = styled.div`
-	.Listheader {
+	.listheader {
 		display: flex;
 		padding: 16px;
 
@@ -18,7 +23,19 @@ const Questions = styled.div`
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 750px;
+			width: 650px;
+		}
+	}
+
+	.listfilter {
+		display: flex;
+
+		.Total {
+			font-size: 1.3rem;
+		}
+
+		.Total span {
+			margin-right: 5px;
 		}
 	}
 
@@ -53,7 +70,7 @@ const Questions = styled.div`
 	}
 
 	.qlist-contents {
-		width: 700px;
+		width: 620px;
 	}
 
 	.contents-title {
@@ -123,9 +140,18 @@ const Question = () => {
 	return (
 		<Content>
 			<Questions>
-				<div className='Listheader'>
+				<div className='listheader'>
 					<h1>All Questions</h1>
 					<AskButton></AskButton>
+				</div>
+				<div className='listfilter'>
+					<div className='Total'>
+						<span>1</span>questions
+					</div>
+					<FilterButton></FilterButton>
+				</div>
+				<div className='filterinfo'>
+					<Filter></Filter>
 				</div>
 				<div className='qlist-wrapper'>
 					<ul className='qlist-stats'>
@@ -144,7 +170,9 @@ const Question = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<a href='/'>Why does Prestashop API not add a resource in XML</a>
+							<Link to={'/allQuestion/answer'}>
+								Why does Prestashop API not add a resource in XML
+							</Link>
 						</li>
 						<li className='contents-excerpt'>
 							In our application we have screen with multiple header titles

@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +41,6 @@ public class Comment extends Auditable {
     // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     // @JoinColumn(name = "QUESTION_ID")
     // private Question question;
-    @Column
     private Long questionId; // Temporary column
 
     // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -60,13 +57,13 @@ public class Comment extends Auditable {
     // this.question = question;
     // }
 
-    // public void setQuestion(Answer answer) {
+    // public void setAnswer(Answer answer) {
     // this.answer = answer;
     // }
 
     @Builder // Temporary constructor
     public Comment(Long commentId, String commentContent, CommentState commentState,
-            Long memberId, String memberName, Long questionId, Long answerId) {
+        Long memberId, String memberName, Long questionId, Long answerId) {
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentState = commentState;
