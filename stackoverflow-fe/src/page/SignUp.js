@@ -28,7 +28,7 @@ const LoginWrap = styled.div`
 const LeftBox = styled.div`
 	width: 415px;
 	height: 285px;
-	margin-bottom: 60px;
+	margin-bottom: 150px;
 `;
 
 const Title = styled.div`
@@ -70,6 +70,7 @@ const RightBox = styled.div`
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	margin-bottom: 100px;
 `;
 
 const GoogleSignupButton = styled.div`
@@ -204,18 +205,18 @@ const LoginLink = styled.div`
 `;
 
 const SignupAgreeInfo = styled.div`
-	color: gray;
+	line-height: 1rem;
+	text-align: left;
+	color: hsl(210, 8%, 45%);
 	font-size: 12px;
-	margin-top: 25px;
-	width: 240px;
-	height: 50px;
-	text-align: center;
-`;
+	margin-top: 32px;
+	margin-left: 20px;
 
-const Linker = styled.div`
-	color: #0a95ff;
-	&:hover {
-		cursor: pointer;
+	> a {
+		color: #0a95ff;
+		&:hover {
+			cursor: pointer;
+		}
 	}
 `;
 
@@ -367,9 +368,17 @@ const SignUp = () => {
 							<SignSubmit>Sing up</SignSubmit>
 							<SignupAgreeInfo>
 								By clicking “Sign up”, you agree to our
-								<Linker>terms of service</Linker>,
-								<Linker>privacy policy</Linker> and
-								<Linker>cookie policy</Linker>
+								<a href='https://stackoverflow.com/legal/terms-of-service/public'>
+									terms of service
+								</a>
+								,
+								<a href='https://stackoverflow.com/legal/privacy-policy'>
+									privacy policy
+								</a>{' '}
+								and
+								<a href='https://stackoverflow.com/legal/cookie-policy'>
+									cookie policy
+								</a>
 							</SignupAgreeInfo>
 						</SignUpForm>
 						<LoginMessage>
