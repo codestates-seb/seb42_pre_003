@@ -58,7 +58,7 @@ public class AnswerDto {
         }
     }
     @Getter
-    public class AnswerMultiResponseDto<T> {
+    public static class AnswerMultiResponseDto<T> {
         private List<T> data;
 
         public AnswerMultiResponseDto(List<T> data) {

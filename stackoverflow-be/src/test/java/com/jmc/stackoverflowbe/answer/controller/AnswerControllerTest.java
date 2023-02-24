@@ -200,7 +200,7 @@ public class AnswerControllerTest {
             .andDo(document("Get-Answers",
                 preprocessResponse(prettyPrint()),
                 requestParameters(
-                    parameterWithName("question").description("불러올 댓글 리스트들의 질문")
+                    parameterWithName("question").description("불러올 답변 리스트들의 질문")
                 ),
                 responseFields(
                     fieldWithPath("data")
@@ -208,28 +208,28 @@ public class AnswerControllerTest {
                         .description("조회 데이터"),
                     fieldWithPath("data[].answerId")
                         .type(JsonFieldType.NUMBER)
-                        .description("질답 식별자"),
+                        .description("답변 식별자"),
                     fieldWithPath("data[].questionId")
                         .type(JsonFieldType.NUMBER)
                         .description("글"),
                     fieldWithPath("data[].memberId")
                         .type(JsonFieldType.NUMBER)
-                        .description("질답 작성자"),
+                        .description("답변 작성자"),
                     fieldWithPath("data[].answerContent")
                         .type(JsonFieldType.STRING)
-                        .description("질답 내용"),
+                        .description("답변 내용"),
                     fieldWithPath("data[].votes")
                         .type(JsonFieldType.NUMBER)
                         .description("받은 투표 현황"),
                     fieldWithPath("data[].state")
                         .type(JsonFieldType.STRING)
-                        .description("질답 상태"),
+                        .description("답변 상태"),
                     fieldWithPath("data[].createdAt")
                         .type(JsonFieldType.NULL)
                         .description("질답 생성 시간"),
                     fieldWithPath("data[].modifiedAt")
                         .type(JsonFieldType.NULL)
-                        .description("질답 수정 시간"))));
+                        .description("답변 수정 시간"))));
 
     }
 

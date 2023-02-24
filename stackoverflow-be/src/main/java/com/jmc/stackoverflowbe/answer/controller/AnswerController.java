@@ -1,6 +1,7 @@
 package com.jmc.stackoverflowbe.answer.controller;
 
 import com.jmc.stackoverflowbe.answer.dto.AnswerDto;
+import com.jmc.stackoverflowbe.answer.dto.AnswerDto.AnswerMultiResponseDto;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
@@ -33,7 +34,7 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity postAnswer(@RequestBody AnswerDto.Post post){
         answerService.createAnswer(mapper.postDtoToAnswer(post));
-        URI location = UriCreator.createURI("/answers", 1l);
+        URI location = UriCreator.createURI("/answers", 1L);
         return ResponseEntity.created(location).build();
     }
 
@@ -46,17 +47,17 @@ public class AnswerController {
     }
 
     @GetMapping
-    public ResponseEntity getComments(@RequestParam long question) {
-        List<Answer> answers = answerService.getAnswers(question);
+    public ResponseEntity getAnswers(@RequestParam long questionId) {
+        List<Answer> answers = answerService.getAnswers(questionId);
 
-        return new ResponseEntity<>(new CommentMultiResponseDto<>(
+        return new ResponseEntity<>(new AnswerMultiResponseDto<>(
             mapper.answersToResponseDtos(answers)),
             HttpStatus.OK);
     }
 
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long qaId){
-        answerService.deleteAnswer(qaId);
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long answerId){
+        answerService.deleteAnswer(answerId);
         return ResponseEntity.noContent().build();
     }
 }

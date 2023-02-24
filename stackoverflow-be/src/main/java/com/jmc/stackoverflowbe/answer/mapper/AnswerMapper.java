@@ -1,6 +1,7 @@
 package com.jmc.stackoverflowbe.answer.mapper;
 
 import com.jmc.stackoverflowbe.answer.dto.AnswerDto;
+import com.jmc.stackoverflowbe.answer.dto.AnswerDto.AnswerMultiResponseDto;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto.Response;
@@ -14,5 +15,5 @@ public interface AnswerMapper {
     Answer postDtoToAnswer(AnswerDto.Post post);
     Answer patchDtoToAnswer(AnswerDto.Patch patch);
     AnswerDto.Response answerToResponseDto(Answer answer);
-    List<Response> answersToResponseDtos(List<Answer> answers);
+    List<AnswerMultiResponseDto> answersToResponseDtos(List<Answer> answers);
 }
