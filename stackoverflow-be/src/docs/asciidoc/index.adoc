@@ -176,6 +176,32 @@ include::{snippets}/Patch-Answer/request-fields.adoc[]
 .http-response
 include::{snippets}/Patch-Answer/http-response.adoc[]
 
+=== 답변 조회
+.curl-request
+include::{snippets}/Get-Answer/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Get-Answer/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Get-Answer/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Get-Answer/http-response.adoc[]
+
+=== 답변 삭제
+.curl-request
+include::{snippets}/Delete-Answer/curl-request.adoc[]
+
+.http-request
+include::{snippets}/Delete-Answer/http-request.adoc[]
+
+.request-path-parameters
+include::{snippets}/Delete-Answer/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/Delete-Answer/http-response.adoc[]
+
 == 댓글
 === 댓글 등록
 .curl-request
