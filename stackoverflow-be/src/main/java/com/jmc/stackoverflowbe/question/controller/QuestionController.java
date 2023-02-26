@@ -32,7 +32,7 @@ public class QuestionController {
     private final QuestionMapper mapper;
 
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post post){
+    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post post) {
         questionService.createQuestion(mapper.postDtoToQuestion(post));
         URI location = UriCreator.createURI("/questions", 1L);
         return ResponseEntity.created(location).build();
@@ -40,34 +40,35 @@ public class QuestionController {
 
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(
-        @PathVariable("question-id") long questionId,
-        @RequestBody QuestionDto.Patch patch) {
+            @PathVariable("question-id") long questionId,
+            @RequestBody QuestionDto.Patch patch) {
         questionService.updateQuestion(mapper.patchDtoToQuestion(patch));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") long questionId){
+    public ResponseEntity getQuestion(@PathVariable("question-id") long questionId) {
         Question question = questionService.getQuestion(questionId);
         return new ResponseEntity(new SingleResponseDto<>(
-            mapper.questionToResponseDto(question)),
-            HttpStatus.OK);
+                mapper.questionToResponseDto(question)),
+                HttpStatus.OK);
     }
+
     @GetMapping
-    public ResponseEntity getQuestions(@RequestParam String sort ,@Positive @RequestParam int page){
+    public ResponseEntity getQuestions(@RequestParam String sort, @Positive @RequestParam int page) {
         Page<Question> questionPage = questionService.getQuestions(page - 1, sort);
         List<Question> questionList = questionPage.getContent();
         return new ResponseEntity<>(
-            new MultiResponseDto<>(mapper.questionsToQuestionResponses(questionList),
-                questionPage), HttpStatus.OK);
+                new MultiResponseDto<>(mapper.questionsToQuestionResponses(questionList),
+                        questionPage),
+                HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId){
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.noContent().build();
     }
-
 
 }
