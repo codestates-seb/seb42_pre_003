@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class QuestionServiceStub implements QuestionService {
     private Question stubQuestion1;
     private Question stubQuestion2;
@@ -40,11 +40,11 @@ public class QuestionServiceStub implements QuestionService {
             .build();
 
     }
-    @Override
+    //@Override
     public Question createQuestion(Question question){return null;}
-    @Override
+    //@Override
     public Question updateQuestion(Question question){return null;}
-    @Override
+    //@Override
     public Question getQuestion(Long id){
         return Question.builder()
             .questionId(0L)
@@ -59,18 +59,18 @@ public class QuestionServiceStub implements QuestionService {
             .build();
     }
 
-    @Override
+    //@Override
     public Page<Question> getQuestions(int page, String sort){
         return new PageImpl<>(List.of(stubQuestion1,stubQuestion2),
             PageRequest.of(0,15, Sort.by(sort).descending()),2);
     }
 
 
-    @Override
+    //@Override
     public void deleteQuestion(Long id){
 
     }
-    @Override
+    //@Override
     public Question findExistQuestion(Long id){ return null;}
 
 }

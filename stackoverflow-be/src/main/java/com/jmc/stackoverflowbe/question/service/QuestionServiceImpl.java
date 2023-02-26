@@ -68,6 +68,7 @@ public class QuestionServiceImpl implements QuestionService{
         //있으면 삭제
         questionRepository.delete(question);
     }
+    //조회수 증가, 투표기능, 선택 기능 추가해야할지?
 
     //질문이 존재하는지 확인
     @Override
