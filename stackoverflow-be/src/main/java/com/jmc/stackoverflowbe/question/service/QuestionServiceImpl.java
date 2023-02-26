@@ -26,12 +26,19 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public Question createQuestion(Question question){
+        //verifyExistQuestion(question.getQuestionId());
         return questionRepository.save(question);
     }
 
 
     @Override
-    public Question updateQuestion(Question question){return null;}
+    public Question updateQuestion(Question question){
+        Question findQuestion = findExistQuestion(question.getQuestionId());
+        Optional.ofNullable(question.getQuestionTitle())
+            .isPresent(title -> findQuestion.setQuestionTitle(title));
+
+        return questionRepository.save(findQuestion);
+    }
     @Override
     public Question getQuestion(Long questionId){
         return Question.builder()
@@ -61,11 +68,18 @@ public class QuestionServiceImpl implements QuestionService{
 
     //질문이 존재하는지 확인
     @Override
-    public Question findExistId(Long questionId){
+    public Question findExistQuestion(Long questionId){
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question findQuestion =
             optionalQuestion.orElseThrow(()->
                 new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
         return findQuestion;
     }
+
+//    private void verifyExistQuestion(long questionId){
+//        Optional<Question> question = questionRepository.findById(questionId);
+//        if(question.isPresent())
+//            throw new BusinessLogicException(ExceptionCode.QUESTION_EXISTS);
+//    }
+
 }

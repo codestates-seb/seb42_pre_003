@@ -71,6 +71,6 @@ public class QuestionServiceStub implements QuestionService {
 
     }
     @Override
-    public Question findExistId(Long id){ return null;}
+    public Question findExistQuestion(Long id){ return null;}
 
 }

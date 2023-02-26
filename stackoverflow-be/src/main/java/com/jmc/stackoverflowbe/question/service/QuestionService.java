@@ -9,6 +9,5 @@ public interface QuestionService {
     Question getQuestion(Long id);
     Page<Question> getQuestions(int page, String sort);
     void deleteQuestion(Long id);
-    Question findExistId(Long id);
-
+    Question findExistQuestion(Long id);
 }
