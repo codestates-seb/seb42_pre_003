@@ -30,8 +30,11 @@ import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
-import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
+import com.jmc.stackoverflowbe.question.entity.Question;
+import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,13 +60,30 @@ public class CommentControllerTest {
 
     String BASE_URL = "/comments";
 
+    Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
+
+    Question question = Question.builder()
+        .questionId(1L)
+        .questionTitle("Question title for stub")
+        .memberId(1L)
+        .questionContent("Question contents for stub")
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(false)
+        .answers(0L)
+        .views(0L)
+        .build();
+
     private final Comment comment = Comment.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .memberId(1L)
-        .memberName("kimcoding")
-        .questionId(1L)
-        .answerId(null)
+        .member(member)
+        .question(question)
         .commentState(CommentState.ACTIVE)
         .build();
 
@@ -102,9 +122,6 @@ public class CommentControllerTest {
 
     @MockBean
     CommentService commentService;
-
-    @MockBean
-    CommentMapper mapper;
 
     @Autowired
     Gson gson;

@@ -14,5 +14,5 @@ public interface CommentService {
 
     void deleteComment(Long commentId);
 
-    Comment findCommentByExistId(Long commentId);
+    Comment findExistCommentById(Long commentId);
 }
