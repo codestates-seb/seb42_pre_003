@@ -9,6 +9,7 @@ import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import com.jmc.stackoverflowbe.question.repository.QuestionRepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionServiceTest {
@@ -29,7 +31,7 @@ public class QuestionServiceTest {
     private QuestionMapper mapper;
 
     @InjectMocks
-    private QuestionService questionService;
+    private QuestionServiceImpl questionService;
 
     private final Question question = Question.builder()
         .questionId(0L)
@@ -81,10 +83,10 @@ public class QuestionServiceTest {
     @DisplayName("질문 생성 service test")
     @Test
     public void createQuestionTest(){
-        given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
-            .willReturn(new Question());
+
         given(questionRepository.save(Mockito.any(Question.class)))
             .willReturn(question);
+
         Executable executable = () -> questionService.createQuestion(question);
         assertDoesNotThrow(executable);
     }
@@ -92,14 +94,39 @@ public class QuestionServiceTest {
     @DisplayName("질문 수정 service test")
     @Test
     public void updateQuestionTest(){
-        given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
-            .willReturn(new Question());
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
         given(questionRepository.save(Mockito.any(Question.class)))
             .willReturn(question);
+        Executable executable = () -> questionService.updateQuestion(question);
+        assertDoesNotThrow(executable);
+    }
 
+    @DisplayName("질문 상세 조회 service test")
+    @Test
+    public void getQuestionTest(){
+        given(questionRepository.findById(Mockito.anyLong()))
+            .willReturn(Optional.of(question));
+        Executable executable = () -> questionService.getQuestion(question.getQuestionId());
 
+        assertDoesNotThrow(executable);
+    }
+    @DisplayName("질문 리스트 조회 service test")
+    @Test
+    public void getQuestionsTest(){
+
+        Executable executable = () -> questionService.getQuestions(0, "questionId");
+        assertDoesNotThrow(executable);
+    }
+
+    @DisplayName("질문 삭제 service test")
+    @Test
+    public void deleteQuestionTest(){
+        given(questionRepository.findById(Mockito.anyLong()))
+            .willReturn(Optional.of(question));
+        Executable executable = () -> questionService.deleteQuestion(question.getQuestionId());
+
+        assertDoesNotThrow(executable);
     }
 
 

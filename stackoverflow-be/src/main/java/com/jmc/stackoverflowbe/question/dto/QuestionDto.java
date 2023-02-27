@@ -25,10 +25,12 @@ public class QuestionDto {
     @NoArgsConstructor
     public static class Patch {
 
+        private Long questionId;
         private String questionTitle;
         private String questionContent;
 
-
+        public void setQuestionId(Long questionId){
+            this.questionId = questionId;}
         @Builder
         public Patch(String questionTitle, String questionContent) {
             this.questionTitle = questionTitle;
