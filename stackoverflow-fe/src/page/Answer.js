@@ -4,16 +4,14 @@ import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
 import AnsInput from '../components/answer/AnsInput';
 import useAnsStore from '../store/ansStore';
-
 import RightMenu from '../components/list/RightMenu';
-
-/*sample*/
-import Paging from '../components/pagination/Paging';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const AnsWrap = styled.div`
 	max-width: 830px;
 	width: 100%;
-	padding: 3rem 0.66rem;
+	padding: 3rem 1.66rem;
 `;
 
 const ConTitle = styled.h4`
@@ -45,6 +43,8 @@ function Answer() {
 		edTitleBind,
 		edBodyBind,
 		edTagBind,
+		ansList,
+		getAnswer,
 	} = useAnsStore();
 
 	const handleAnswer = (e) => {
@@ -66,6 +66,19 @@ function Answer() {
 		console.log(item);
 	};
 
+	let { id } = useParams();
+
+	useEffect(() => {
+		getAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?page=1&sort=questionId`,
+		);
+	}, [getAnswer]);
+
+	const ansItem =
+		ansList.data && ansList.data.filter((el) => el.questionId === Number(id));
+
+	console.log(ansItem);
+
 	return (
 		<>
 			<AnsWrap>
@@ -73,7 +86,7 @@ function Answer() {
 					<>
 						<AnsHeader />
 						<AnsCon type={'question'} />
-						<ConTitle>2 Answers</ConTitle>
+						<ConTitle>{`2 Answers`}</ConTitle>
 						{[0, 1].map((el, idx) => (
 							<AnsCon key={idx} />
 						))}
@@ -94,12 +107,10 @@ function Answer() {
 						<InputButton onClick={handleEdit}>Save Edits</InputButton>
 					</>
 				)}
-
-				{/* sample */}
-				<Paging />
 			</AnsWrap>
-
-			<RightMenu />
+			<div style={{ marginTop: '3rem' }}>
+				<RightMenu />
+			</div>
 		</>
 	);
 }

@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = mapper.postDtoToComment(post);
 
         // 댓글 생성 전 DB에 존재하는 멤버인지 확인하고 없으면 예외 처리.
-        // memberService.findExistId(comment.getMemberId());
+        // memberService.findExistMemberById(comment.getMember().getMemberId());
         // 댓글 생성 전 DB에 존재하는 질문 혹은 답변인지 확인하고 없으면 예외 처리.
         // verifyExistQAIdByEntity(comment);
         // 댓글 상태 활성.
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
         // Service단에서 dto를 entity로 변경.
         Comment comment = mapper.patchDtoToComment(patch);
         // DB에 존재하는 댓글인지 확인 후 있으면 obtainedComment 변수에 저장.
-        Comment obtainedComment = findCommentByExistId(commentId);
+        Comment obtainedComment = findExistCommentById(commentId);
 
         // 댓글 내용 수정 후 obtainedComment에 저장.
         Optional.ofNullable(comment.getCommentContent())
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Response> getComments(String qaType, Long qaId) {
         // 지정된 타입(질문/답변)의 식별자로 DB에서 식별자와 연결된 모든 댓글들을 가져온다.
-        List<Comment> comments = findCommentsByExistQAId(qaType, qaId);
+        List<Comment> comments = findExistCommentsByQAId(qaType, qaId);
 
         // Service단에서 entity를 dto로 변경하여 return.
         return mapper.commentsToResponseDtos(comments);
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long commentId) {
         // DB에 존재하는 댓글인지 확인 후 있으면 obtainedComment 변수에 저장.
-        Comment obtainedComment = findCommentByExistId(commentId);
+        Comment obtainedComment = findExistCommentById(commentId);
         // 댓글 상태 삭제로 변경.
         obtainedComment.setCommentState(CommentState.DELETED);
 
@@ -85,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
 
     // DB에 존재하는 댓글인지 확인하는 로직.
     @Override
-    public Comment findCommentByExistId(Long commentId) {
+    public Comment findExistCommentById(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         // 확인 후 없으면 예외 처리.
         Comment obtainedComment = optionalComment.orElseThrow(() ->
@@ -98,31 +98,22 @@ public class CommentServiceImpl implements CommentService {
     private void verifyExistQAIdByEntity(Comment comment) {
         // 답변 식별자가 null일 경우 questionService, 질문 식별자가 null일 경우 answerService에서
         // 질문/답변이 존재하는지 확인한다.
-        if (comment.getAnswerId() == null) {
-            questionService.findExistQuestionById(comment.getQuestionId());
-        } else if (comment.getQuestionId() == null) {
-            answerService.findExistId(comment.getAnswerId());
+        if (comment.getAnswer().getAnswerId() == null) {
+//            questionService.findExistQuestionById(comment.getQuestion().getQuestionId());
+        } else if (comment.getQuestion().getQuestionId() == null) {
+//            answerService.findExistAnswerById(comment.getAnswer().getAnswerId());
         }
     }
 
     // 질문인지 답변인지를 나타내는 qaType과 그 식별자를 통해 해당 식별자에 등록된 모든 댓글들을 반환하는 로직.
-    private List<Comment> findCommentsByExistQAId(String qaType, Long qaId) {
-        // 실제 로직.
+    private List<Comment> findExistCommentsByQAId(String qaType, Long qaId) {
         // 연관 관계 매핑 이후 Question.questionId 혹은
         // Answer.answerId로 연결되므로 query를 아래와 같이 생성.
-        // List<Comment> comments;
-        // if (qaType.equals("Question")) {
-        //     comments = commentRepository.findAllByQuestionQuestionId(qaId);
-        // } else {
-        //     comments = commentRepository.findAllByAnswerAnswerId(qaId);
-        // }
-
-        // 임시 로직, 임시 필드인 questionId, answerId로 쿼리를 날려 값을 찾는다.
         List<Comment> comments;
         if (qaType.equals("Question")) {
-            comments = commentRepository.findAllByQuestionId(qaId);
+            comments = commentRepository.findAllByQuestionQuestionId(qaId);
         } else {
-            comments = commentRepository.findAllByAnswerId(qaId);
+            comments = commentRepository.findAllByAnswerAnswerId(qaId);
         }
 
         // Java stream으로 CommentState가 ACTIVE인 것만 분리.
