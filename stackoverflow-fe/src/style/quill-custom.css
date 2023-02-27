@@ -2,6 +2,6 @@
 .ql-toolbar.ql-snow{border-bottom:0;border-top-left-radius: 0.188rem;border-top-right-radius: 0.188rem;}
 .ql-toolbar.ql-snow + .ql-container.ql-snow{min-height:8rem;border-bottom-left-radius: 0.188rem;border-bottom-right-radius: 0.188rem;}
 
-.quill:hover{box-shadow: 0 0 0 4px #dceaf7;}
-.quill:hover .ql-toolbar.ql-snow,
-.quill:hover .ql-toolbar.ql-snow + .ql-container.ql-snow{border-color: #92c1e6;}
+.quill.active{box-shadow: 0 0 0 4px #dceaf7;}
+.quill.active .ql-toolbar.ql-snow,
+.quill.active .ql-toolbar.ql-snow + .ql-container.ql-snow{border-color: #92c1e6;}

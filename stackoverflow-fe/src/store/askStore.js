@@ -40,6 +40,7 @@ export const useBoxStore = create(
 					detail: '',
 					expect: '',
 					tag: '',
+					body: '',
 				},
 			],
 			setAbleData: (select) => {
@@ -70,13 +71,14 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
-			body: false,
+			body: true,
 		},
 		initialAsk: {
 			title: '',
 			detail: '',
 			expect: '',
 			tag: '',
+			body: '',
 		},
 		title: `${data.title}`,
 		titleBind: (item) => set({ title: item }),

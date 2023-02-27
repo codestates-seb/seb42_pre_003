@@ -29,10 +29,12 @@ const useAnsStore = create(
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),
-		getAnswer: {},
-		fetch: async (URL) => {
-			const response = await axios.get(URL, { withCredentials: true });
-			set({ getAnswer: await response.json() });
+		ansList: {},
+		getAnswer: async (URL) => {
+			const response = await axios.get(URL, {
+				Accept: 'application / json',
+			});
+			set({ ansList: await response.data });
 		},
 	})),
 );

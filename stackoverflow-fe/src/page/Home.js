@@ -4,6 +4,8 @@ import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import { Link } from 'react-router-dom';
 import Paging from '../components/pagination/Paging';
+import { useEffect } from 'react';
+import useAnsStore from '../store/ansStore';
 
 const Content = styled.div`
 	width: auto;
@@ -118,6 +120,16 @@ const Questions = styled.div`
 `;
 
 const Contents = () => {
+	const { ansList, getAnswer } = useAnsStore();
+
+	useEffect(() => {
+		getAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?page=1&sort=questionId`,
+		);
+	}, [getAnswer]);
+
+	const total = ansList.pageInfo && ansList.pageInfo.totalPages;
+
 	return (
 		<Content>
 			<Questions>
@@ -142,7 +154,7 @@ const Contents = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<Link to={'/answer'}>
+							<Link to={'/answer/1'}>
 								Why does Prestashop API not add a resource in XML
 							</Link>
 						</li>
@@ -182,7 +194,7 @@ const Contents = () => {
 						</ul>
 					</ul>
 				</div>
-				<Paging />
+				<Paging limit={6} total={total} />
 			</Questions>
 			<RightMenu></RightMenu>
 		</Content>

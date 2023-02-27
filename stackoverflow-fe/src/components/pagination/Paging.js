@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import useAnsStore from '../../store/ansStore';
 
 const PagingBox = styled.div`
 	display: flex;
@@ -41,31 +42,53 @@ const PagingButton = styled.button`
 	border-radius: 0.188rem;
 `;
 
-function Paging() {
-	const [arr, setArr] = useState([1, 2, 3, 4, 5, 6]);
+function Paging({ limit, total = 1 }) {
+	const [arr, setArr] = useState(
+		Array.from(
+			{ length: limit > total ? total : limit },
+			(_, index) => index + 1,
+		),
+	);
 	const [curr, setCurr] = useState(1);
+	const { ansList, getAnswer } = useAnsStore();
 
 	const handlePaging = (num) => {
 		setCurr(num);
+		getAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?page=${num}&sort=questionId`,
+		);
+		console.log(ansList);
 	};
 
 	const handlePrev = () => {
 		if (curr <= arr[0]) {
-			const newArr = arr.map((el) => el - arr.length);
+			let newArr;
+			if (arr.length < limit) {
+				newArr = Array.from(
+					{ length: limit },
+					(_, index) => arr[0] - (limit - index),
+				);
+			} else {
+				newArr = arr.map((el) => el - arr.length);
+			}
 			setArr(newArr);
-			setCurr(newArr[arr.length - 1]);
+			handlePaging(newArr[newArr.length - 1]);
 		} else {
-			setCurr(curr - 1);
+			handlePaging(curr - 1);
 		}
 	};
 
 	const handleNext = () => {
 		if (curr >= arr[arr.length - 1]) {
 			const newArr = arr.map((el) => el + arr.length);
-			setArr(newArr);
-			setCurr(newArr[0]);
+			if (newArr[newArr.length - 1] > total) {
+				setArr(newArr.slice(0, newArr.indexOf(total + 1)));
+			} else {
+				setArr(newArr);
+			}
+			handlePaging(newArr[0]);
 		} else {
-			setCurr(curr + 1);
+			handlePaging(curr + 1);
 		}
 	};
 
@@ -85,7 +108,9 @@ function Paging() {
 					</PagingLi>
 				))}
 			</PagingList>
-			<PagingButton onClick={handleNext}>Next</PagingButton>
+			{arr[arr.length - 1] === total ? null : (
+				<PagingButton onClick={handleNext}>Next</PagingButton>
+			)}
 		</PagingBox>
 	);
 }

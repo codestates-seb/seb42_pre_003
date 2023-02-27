@@ -32,6 +32,7 @@ function AskPublic() {
 			detail,
 			expect,
 			tag,
+			body: detail + expect,
 		};
 
 		console.log(item);

@@ -33,8 +33,6 @@ function AskBox({
 	const act =
 		actData[0][name] || ableData[0][name] === undefined ? true : false;
 
-	console.log(actData[0]);
-
 	return (
 		<AskBoxWrap able={base}>
 			<AskText

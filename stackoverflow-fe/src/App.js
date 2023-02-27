@@ -34,8 +34,8 @@ function App() {
 							<Route path='/' element={<Home />} />
 							<Route path='/allQuestion' element={<AllQuestion />} />
 							<Route path='/askQuestion' element={<AskQuestion />} />
-							<Route path='/allQuestion/answer' element={<Answer />} />
-							<Route path='/answer' element={<Answer />} />
+							<Route path='/allQuestion/answer/:id' element={<Answer />} />
+							<Route path='/answer/:id' element={<Answer />} />
 						</Routes>
 					</Contents>
 					<Footer />

@@ -62,6 +62,7 @@ function AskEditor({ able, value, func, name }) {
 				readOnly={!able}
 				value={value}
 				onChange={(value) => func(value)}
+				className={value === '' ? null : 'active'}
 			/>
 
 			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
