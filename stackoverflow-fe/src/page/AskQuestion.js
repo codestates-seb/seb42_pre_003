@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
 import { useBoxStore, useAskStore } from '../store/askStore';
+import useAnsStore from '../store/ansStore';
 
 const BREAK_POINT_PC = 1100;
 
@@ -49,6 +50,9 @@ function AskQuestion() {
 	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
 		useAskStore();
+	const { ansList, addAnswer } = useAnsStore();
+
+	console.log(ansList);
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
@@ -70,6 +74,10 @@ function AskQuestion() {
 			questionContent: body,
 		};
 		console.log(item);
+		addAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?_csrf=4481c2c3-9322-4c5f-8849-4630291fb6e6`,
+			item,
+		);
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
@@ -82,7 +90,7 @@ function AskQuestion() {
 		tagReset();
 		bodyReset();
 
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	return (

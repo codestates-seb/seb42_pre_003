@@ -36,7 +36,7 @@ const useAnsStore = create(
 			});
 			set({ ansList: await response.data });
 		},
-		postAnswer: async (URL, item) => {
+		addAnswer: async (URL, item) => {
 			const response = await axios.post(URL, {
 				headers: {
 					'Content-Type': 'application/json;charset=UTF-8',
