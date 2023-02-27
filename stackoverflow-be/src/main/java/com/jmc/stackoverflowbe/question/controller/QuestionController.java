@@ -9,6 +9,7 @@ import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import com.jmc.stackoverflowbe.question.service.QuestionService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,9 +35,9 @@ public class QuestionController {
     private final QuestionMapper mapper;
 
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post post) {
-        questionService.createQuestion(mapper.postDtoToQuestion(post));
-        URI location = UriCreator.createURI("/questions", 1L);
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post) {
+        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post));
+        URI location = UriCreator.createURI("/questions", question.getQuestionId());
         return ResponseEntity.created(location).build();
     }
 

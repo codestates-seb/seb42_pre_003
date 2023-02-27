@@ -37,7 +37,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Question updateQuestion(Question question){
         //db에 저장된 질문인지 확인
-        Question findQuestion = findExistQuestion(question.getQuestionId());
+        Question findQuestion = findExistQuestionById(question.getQuestionId());
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
             .ifPresent(title -> findQuestion.setQuestionTitle(title));
@@ -50,7 +50,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Question getQuestion(Long questionId){
         //Id로 질문 조회
-        return findExistQuestion(questionId);
+        return findExistQuestionById(questionId);
     }
 
     //질문 전체 조회
@@ -64,7 +64,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public void deleteQuestion(Long questionId){
         //db에 존재하는 질문인지 확인
-        Question question = findExistQuestion(questionId);
+        Question question = findExistQuestionById(questionId);
         //있으면 삭제
         questionRepository.delete(question);
     }
@@ -72,7 +72,7 @@ public class QuestionServiceImpl implements QuestionService{
 
     //질문이 존재하는지 확인
     @Override
-    public Question findExistQuestion(Long questionId){
+    public Question findExistQuestionById(Long questionId){
         //질문id로 존재하는지 확인
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         //질문이 존재하지 않으면 예외 처리

@@ -20,7 +20,7 @@ public class Question extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
 
-    @Column
+    @Column(nullable = false)
     private String questionTitle;
 
     @Column

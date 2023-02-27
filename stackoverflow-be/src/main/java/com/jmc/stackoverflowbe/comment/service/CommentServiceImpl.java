@@ -99,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
         // 답변 식별자가 null일 경우 questionService, 질문 식별자가 null일 경우 answerService에서
         // 질문/답변이 존재하는지 확인한다.
         if (comment.getAnswerId() == null) {
-            questionService.findExistId(comment.getQuestionId());
+            questionService.findExistQuestionById(comment.getQuestionId());
         } else if (comment.getQuestionId() == null) {
             answerService.findExistId(comment.getAnswerId());
         }
