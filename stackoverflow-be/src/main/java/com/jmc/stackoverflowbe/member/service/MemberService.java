@@ -11,7 +11,7 @@ public interface MemberService {
 
     Member updateMember(MemberDto.Patch patch, long memberId);
 
-    Member getMember(Long memberId);
+    MemberDto.Response getMember(Long memberId);
 
     void deleteMember(Long memberId);
 

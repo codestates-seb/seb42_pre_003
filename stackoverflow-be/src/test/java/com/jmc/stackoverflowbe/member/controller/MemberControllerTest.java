@@ -193,8 +193,7 @@ public class MemberControllerTest {
     @DisplayName("회원 조회")
     @Test
     void getMember() throws Exception {
-        given(memberService.getMember(Mockito.anyLong())).willReturn(new Member());
-        given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
+        given(memberService.getMember(Mockito.anyLong())).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
             get(BASE_URL + "/{member-id}", member.getMemberId())

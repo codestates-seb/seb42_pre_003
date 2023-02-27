@@ -41,8 +41,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member getMember(Long memberId) {
-        return findExistMemberById(memberId);
+    public MemberDto.Response getMember(Long memberId) {
+        MemberDto.Response response = mapper.memberToResponseDto(findExistMemberById(memberId));
+        response.setIsMine(false);
+        return response;
     }
 
     @Override

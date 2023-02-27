@@ -79,6 +79,13 @@ public class MemberServiceTest {
         .state(MemberState.DELETED)
         .build();
 
+    MemberDto.Response response = MemberDto.Response.builder()
+        .memberId(1L)
+        .name("홍길동")
+        .location("서울")
+        .about("안녕하세요")
+        .build();
+
     @DisplayName("회원 생성")
     @Test
     void createMember() {
@@ -101,6 +108,7 @@ public class MemberServiceTest {
     @Test
     void getMember() {
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(savedmember));
+        given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
         assertDoesNotThrow(() -> memberService.getMember(1L));
     }
 
