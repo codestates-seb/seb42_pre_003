@@ -33,6 +33,9 @@ import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.entity.Answer.StateGroup;
 import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
+import com.jmc.stackoverflowbe.question.entity.Question;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,15 +55,62 @@ import org.springframework.test.web.servlet.ResultActions;
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 public class AnswerControllerTest {
+
     String BASE_URL = "/answers";
 
-    Answer answer = Answer.builder()
+    private final Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
+
+    private final Question question = Question.builder()
+        .questionId(1L)
+        .questionTitle("Question title for stub")
+        .memberId(1L)
+        .questionContent("Question contents for stub")
+        .state(Question.StateGroup.ACTIVE)
+        .votes(0)
+        .selection(false)
+        .answers(0L)
+        .views(0L)
+        .build();
+
+    private final Answer answer = Answer.builder()
         .answerId(1L)
         .answerContent("testing content")
-        .state(Answer.StateGroup.ACTIVE)
+        .state(StateGroup.ACTIVE)
         .votes(0L)
-        .memberId(1L)
+        .member(member)
+        .question(question)
+        .build();
+
+    private final AnswerDto.Post post = AnswerDto.Post.builder()
         .questionId(1L)
+        .answerContent("post testing content")
+        .build();
+
+    private final AnswerDto.Patch patch = AnswerDto.Patch.builder()
+        .answerContent("patch testing content")
+        .build();
+
+    private final AnswerDto.Response response1 = AnswerDto.Response.builder()
+        .answerId(1L)
+        .questionId(1L)
+        .memberId(1L)
+        .answerContent("get testing content")
+        .votes(0)
+        .state(StateGroup.ACTIVE)
+        .build();
+
+    private final AnswerDto.Response response2 = AnswerDto.Response.builder()
+        .answerId(2L)
+        .questionId(1L)
+        .memberId(1L)
+        .answerContent("get testing content 2")
+        .votes(0)
+        .state(StateGroup.ACTIVE)
         .build();
 
     @Autowired
@@ -69,24 +119,15 @@ public class AnswerControllerTest {
     @MockBean
     AnswerService answerService;
 
-    @MockBean
-    AnswerMapper mapper;
-
     @Autowired
     Gson gson;
 
     @DisplayName("답변 생성")
     @Test
-    void postAnswerTest() throws Exception{
-        AnswerDto.Post post = AnswerDto.Post.builder()
-            .questionId(0L)
-            .answerContent("post testing content")
-            .build();
-
+    void postAnswerTest() throws Exception {
         String content = gson.toJson(post);
-        given(mapper.postDtoToAnswer(Mockito.any(AnswerDto.Post.class)))
-            .willReturn(answer);
-        given(answerService.createAnswer(Mockito.any(Answer.class)))
+
+        given(answerService.createAnswer(Mockito.any(AnswerDto.Post.class)))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
@@ -119,19 +160,14 @@ public class AnswerControllerTest {
 
     @DisplayName("답변 수정")
     @Test
-    void patchAnswerTest() throws Exception{
-        AnswerDto.Patch patch = AnswerDto.Patch.builder()
-            .answerContent("patch testing content")
-            .build();
-
+    void patchAnswerTest() throws Exception {
         String content = gson.toJson(patch);
-        given(mapper.patchDtoToAnswer(Mockito.any(AnswerDto.Patch.class)))
-            .willReturn(new Answer());
-        given(answerService.updateAnswer(Mockito.any(Answer.class)))
+
+        given(answerService.updateAnswer(Mockito.any(AnswerDto.Patch.class), Mockito.anyLong()))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
-            patch(BASE_URL+"/{answer-id}", answer.getAnswerId())
+            patch(BASE_URL + "/{answer-id}", answer.getAnswerId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -154,28 +190,8 @@ public class AnswerControllerTest {
 
     @DisplayName("답변 리스트 조회")
     @Test
-    void getAnswerListTest() throws Exception{
-        AnswerDto.Response response1 = AnswerDto.Response.builder()
-            .answerId(1L)
-            .questionId(1L)
-            .memberId(0L)
-            .answerContent("get testing content")
-            .votes(0)
-            .state(StateGroup.ACTIVE)
-            .build();
-
-        AnswerDto.Response response2 = AnswerDto.Response.builder()
-            .answerId(2L)
-            .questionId(1L)
-            .memberId(1L)
-            .answerContent("get testing content")
-            .votes(0)
-            .state(StateGroup.ACTIVE)
-            .build();
-
+    void getAnswerListTest() throws Exception {
         given(answerService.getAnswers(Mockito.anyLong()))
-            .willReturn(List.of(new Answer(), new Answer()));
-        given(mapper.answersToResponseDtos(Mockito.any(List.class)))
             .willReturn(List.of(response1, response2));
 
         ResultActions actions = mockMvc.perform(
@@ -235,7 +251,7 @@ public class AnswerControllerTest {
 
     @DisplayName("답변 삭제")
     @Test
-    void deleteAnswerTest() throws Exception{
+    void deleteAnswerTest() throws Exception {
         doNothing().when(answerService).deleteAnswer(answer.getAnswerId());
 
         ResultActions actions = mockMvc.perform(
