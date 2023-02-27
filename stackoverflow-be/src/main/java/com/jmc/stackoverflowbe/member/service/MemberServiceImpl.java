@@ -36,11 +36,11 @@ public class MemberServiceImpl implements MemberService {
 
         // member의 값이 비어있지 않으면 obtainedMember의 값을 변경.
         Optional.ofNullable(member.getName())
-                .ifPresent(content -> obtainedMember.setName(patch.getName()));
+                .ifPresent(name -> obtainedMember.setName(name));
         Optional.ofNullable(member.getAbout())
-                .ifPresent(content -> obtainedMember.setAbout(patch.getAbout()));
+                .ifPresent(about -> obtainedMember.setAbout(about));
         Optional.ofNullable(member.getLocation())
-                .ifPresent(content -> obtainedMember.setLocation(patch.getLocation()));
+                .ifPresent(location -> obtainedMember.setLocation(location));
 
         return memberRepository.save(obtainedMember);
     }
@@ -80,13 +80,13 @@ public class MemberServiceImpl implements MemberService {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
         // Optional Member에 값이 존재하지 않다면 예외 발생.
-        Member findedMember = optionalMember
+        Member obtainedMember = optionalMember
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         // 찾은 멤버가 탈퇴 상태라면 예외 발생.
-        if (findedMember.getState() == MemberState.DELETED) {
+        if (obtainedMember.getState() == MemberState.DELETED) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
-        return findedMember;
+        return obtainedMember;
     }
 }
