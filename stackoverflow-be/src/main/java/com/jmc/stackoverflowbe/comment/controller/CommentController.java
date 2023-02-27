@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/comments")
 @Validated
 @RequiredArgsConstructor
-@CrossOrigin
 public class CommentController {
 
     private final CommentService commentService;
