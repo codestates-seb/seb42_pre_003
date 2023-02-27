@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentMapper mapper;
 
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post) {
