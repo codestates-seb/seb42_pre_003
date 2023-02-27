@@ -2,11 +2,9 @@ package com.jmc.stackoverflowbe.comment.dto;
 
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
 import com.jmc.stackoverflowbe.global.audit.Auditable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,9 +64,14 @@ public class CommentDto {
 
         private CommentState commentState;
 
+        private LocalDateTime createdAt;
+
+        private LocalDateTime modifiedAt;
+
         @Builder
         public Response(Long commentId, String commentContent, Long memberId, String memberName,
-            Long questionId, Long answerId, CommentState commentState) {
+            Long questionId, Long answerId, CommentState commentState, LocalDateTime createdAt,
+            LocalDateTime modifiedAt) {
             this.commentId = commentId;
             this.commentContent = commentContent;
             this.memberId = memberId;
@@ -76,6 +79,8 @@ public class CommentDto {
             this.questionId = questionId;
             this.answerId = answerId;
             this.commentState = commentState;
+            this.createdAt = createdAt;
+            this.modifiedAt = modifiedAt;
         }
     }
 }
