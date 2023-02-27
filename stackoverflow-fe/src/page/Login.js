@@ -147,9 +147,49 @@ const Login = () => {
 	const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
 
 	const [email, setEmail] = useState();
-	const [password, setPassword] = useState();
+	const [name, setName] = useState();
 
-	const loginHandler = () => {};
+	const loginHandler = () => {
+		axios.defaults.withCredentials = true;
+
+		const headers = {
+			'Access-Control-Allow-Origin': '*',
+			'Content-Type': 'application/json',
+		};
+
+		if (!name || !email) {
+			setName('');
+			setEmail('');
+			setErrorMessage('Email or password cannot be empty.');
+			return;
+		} else {
+			setErrorMessage('');
+		}
+
+		return axios
+			.post(
+				`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`,
+				{ name, email },
+				{ headers },
+			)
+			.then((response) => {
+				const accessToken = response.headers.get('Authorization').split(' ')[1];
+				sessionStorage.setItem('accesstoken', accessToken);
+				sessionStorage.setItem(
+					'userInfoStorage',
+					JSON.stringify(response.data),
+				);
+				setIsLogin(true);
+				navigate('/');
+			})
+			.catch((err) => {
+				if (err.response.status === 401) {
+					setErrorMessage('The email or password is incorrect.');
+					setName('');
+					setEmail('');
+				}
+			});
+	};
 
 	return (
 		<>
@@ -163,7 +203,9 @@ const Login = () => {
 						alt='logo'
 					/>
 					<SocialLoginContainer>
-						<GoogleLogin>
+						<GoogleLogin
+							href={`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`}
+						>
 							<SocialLoginIcon src={google} />
 							<SocialLoginText>Login with Google</SocialLoginText>
 						</GoogleLogin>
@@ -182,7 +224,7 @@ const Login = () => {
 									<LoginInput />
 								</LoginInputInnerContainer>
 							</LoginInputContainer>
-							<LoginButton>Log in</LoginButton>
+							<LoginButton onClick={loginHandler}>Log in</LoginButton>
 						</LoginForm>
 						<Text>
 							Don’t have an account?
