@@ -36,6 +36,37 @@ const useAnsStore = create(
 			});
 			set({ ansList: await response.data });
 		},
+		postAnswer: async (URL, item) => {
+			const response = await axios.post(URL, {
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					Accept: 'application / json',
+				},
+				body: JSON.stringify(item),
+			});
+			set({ ansList: await response.data });
+		},
+		ansItem: {},
+		getAnswerItem: async (URL) => {
+			const response = await axios.get(URL, {
+				Accept: 'application / json',
+			});
+			set({ ansItem: await response.data });
+		},
+		ansDownList: {},
+		getAnsDown: async (URL) => {
+			const response = await axios.get(URL, {
+				Accept: 'application / json',
+			});
+			set({ ansDownList: await response.data });
+		},
+		comList: {},
+		getCom: async (URL) => {
+			const response = await axios.get(URL, {
+				Accept: 'application / json',
+			});
+			set({ comList: await response.data });
+		},
 	})),
 );
 

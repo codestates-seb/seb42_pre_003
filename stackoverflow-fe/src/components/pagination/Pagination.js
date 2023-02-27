@@ -42,7 +42,7 @@ const PagingButton = styled.button`
 	border-radius: 0.188rem;
 `;
 
-function Paging({ limit, total = 1 }) {
+function Pagination({ limit, total = 1 }) {
 	const [arr, setArr] = useState(
 		Array.from(
 			{ length: limit > total ? total : limit },
@@ -115,4 +115,4 @@ function Paging({ limit, total = 1 }) {
 	);
 }
 
-export default Paging;
+export default Pagination;

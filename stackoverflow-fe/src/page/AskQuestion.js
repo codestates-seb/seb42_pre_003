@@ -46,7 +46,7 @@ const DelButton = styled.button`
 function AskQuestion() {
 	const { setAbleData, setAskData, setActData, setBtnData } = useBoxStore();
 	const { page, initialAble, initialAsk } = useAskStore();
-	const { title, detail, expect, tag } = useAskStore();
+	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
 		useAskStore();
 
@@ -66,9 +66,8 @@ function AskQuestion() {
 
 		//askData 전송(api 부분)
 		const item = {
-			title,
-			body: detail + expect,
-			tag,
+			questionTitle: title,
+			questionContent: body,
 		};
 		console.log(item);
 
