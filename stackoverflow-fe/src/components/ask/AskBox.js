@@ -27,13 +27,16 @@ function AskBox({
 	review,
 	...rest
 }) {
-	const { ableData } = useBoxStore();
+	const { ableData, actData } = useBoxStore();
 	const base =
 		ableData[0][name] || ableData[0][name] === undefined ? true : false;
+	const act =
+		actData[0][name] || ableData[0][name] === undefined ? true : false;
 
 	return (
 		<AskBoxWrap able={base}>
 			<AskText
+				name={name}
 				value={value}
 				type={type}
 				label={inputLabel}
@@ -43,7 +46,7 @@ function AskBox({
 				review={review}
 				{...rest}
 			/>
-			<AskGuide able={base} title={guideTitle} description={guideDes} />
+			<AskGuide act={act} title={guideTitle} description={guideDes} />
 		</AskBoxWrap>
 	);
 }

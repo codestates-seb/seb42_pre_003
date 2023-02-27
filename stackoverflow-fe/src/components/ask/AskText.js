@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import AskEditor from './AskEditor';
 import AskSelector from './AskSelector';
 import AskInput from './AskInput';
+import { useBoxStore, useAskStore } from '../../store/askStore';
 
 const BREAK_POINT_PC = 1100;
 
 const InputBox = styled.div`
-	width: 70%;
+	width: calc(100% - 18rem);
 	padding: 1.5rem;
 	border: 1px solid #e3e6e8;
 	border-radius: 0.188rem;
@@ -26,6 +27,7 @@ const InputBox = styled.div`
 `;
 
 const InputButton = styled.button`
+	display: ${(props) => (props.act ? 'block' : 'none')};
 	margin-top: 0.4rem;
 	padding: 0.45rem 0.5rem;
 	color: #fff;
@@ -37,25 +39,28 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
-function AskText({ able, value, type, label, text, func, review, ...rest }) {
+function AskText({ name, able, value, type, label, text, func, ...rest }) {
 	const textBoxHandler = (type) => {
 		switch (type) {
 			case 'editor':
-				return <AskEditor able={able} value={value} func={func} />;
+				return <AskEditor able={able} value={value} func={func} name={name} />;
 			case 'selector':
-				return <AskSelector able={able} />;
+				return <AskSelector able={able} name={name} />;
 			default:
-				return <AskInput able={able} value={value} func={func} />;
+				return <AskInput able={able} value={value} func={func} name={name} />;
 		}
 	};
+
+	const { btnData } = useBoxStore();
+	const { page } = useAskStore();
 
 	return (
 		<InputBox able={able}>
 			<h4>{label}</h4>
 			<span className='inputText'>{text}</span>
 			{textBoxHandler(type)}
-			{!review ? (
-				<InputButton type='button' disabled={!able} {...rest}>
+			{page === 'ask' ? (
+				<InputButton type='button' act={btnData[0][name]} {...rest}>
 					{type === 'selector' ? 'Review your question' : 'Next'}
 				</InputButton>
 			) : null}

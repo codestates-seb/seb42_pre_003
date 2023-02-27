@@ -11,6 +11,27 @@ export const useBoxStore = create(
 					try: false,
 					tag: false,
 					review: false,
+					body: true,
+				},
+			],
+			actData: [
+				{
+					title: true,
+					detail: false,
+					try: false,
+					tag: false,
+					review: false,
+					body: false,
+				},
+			],
+			btnData: [
+				{
+					title: true,
+					detail: false,
+					try: false,
+					tag: false,
+					review: false,
+					body: false,
 				},
 			],
 			askData: [
@@ -19,10 +40,17 @@ export const useBoxStore = create(
 					detail: '',
 					expect: '',
 					tag: '',
+					body: '',
 				},
 			],
 			setAbleData: (select) => {
 				set((state) => ({ ...state, ableData: [select] }));
+			},
+			setActData: (select) => {
+				set((state) => ({ ...state, actData: [select] }));
+			},
+			setBtnData: (select) => {
+				set((state) => ({ ...state, btnData: [select] }));
 			},
 			setAskData: (select) => {
 				set((state) => ({ ...state, askData: [select] }));
@@ -43,12 +71,14 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
+			body: true,
 		},
 		initialAsk: {
 			title: '',
 			detail: '',
 			expect: '',
 			tag: '',
+			body: '',
 		},
 		title: `${data.title}`,
 		titleBind: (item) => set({ title: item }),

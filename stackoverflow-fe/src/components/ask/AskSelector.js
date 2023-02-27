@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { ArrowDownIcon, ArrowUpIcon } from './AskIcon';
+import { useBoxStore } from '../../store/askStore';
 
 const SelectBox = styled.div`
 	border: 1px solid hsl(210, 8%, 75%);
@@ -30,14 +31,27 @@ const SelectHeader = styled.h5`
 	}
 `;
 
-function AskSelector({ able }) {
+function AskSelector({ able, name }) {
+	const { actData, setActData } = useBoxStore();
 	const [active, setActive] = useState(false);
 	const handleSelect = () => {
 		setActive(!active);
 	};
 
+	const click = (item) => {
+		let obj = { ...actData[0] };
+		for (let el in obj) {
+			if (el === item) {
+				obj[el] = true;
+			} else {
+				obj[el] = false;
+			}
+		}
+		setActData(obj);
+	};
+
 	return (
-		<SelectBox>
+		<SelectBox onClick={() => click(name)}>
 			<SelectHeader able={!able} onClick={!able ? null : handleSelect}>
 				<strong>Do any of these posts answer your question?</strong>
 				{active ? <ArrowUpIcon /> : <ArrowDownIcon />}

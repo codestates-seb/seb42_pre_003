@@ -57,6 +57,7 @@ const Questions = styled.div`
 	}
 
 	.filterinfo {
+		margin-bottom: 15px;
 		height: 0;
 		opacity: 0;
 		transition: opacity 0.3s ease-in-out, height 0.3s 0.3s ease-in-out;
