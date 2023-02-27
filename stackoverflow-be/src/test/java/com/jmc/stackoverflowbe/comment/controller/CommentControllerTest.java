@@ -114,9 +114,7 @@ public class CommentControllerTest {
     void postCommentTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
-            .willReturn(new Comment());
-        given(commentService.createComment(Mockito.any(Comment.class)))
+        given(commentService.createComment(Mockito.any(CommentDto.Post.class)))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -168,9 +166,7 @@ public class CommentControllerTest {
     void patchCommentTest() throws Exception {
         String content = gson.toJson(patch);
 
-        given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
-            .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class)))
+        given(commentService.updateComment(Mockito.any(CommentDto.Patch.class), Mockito.anyLong()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -198,7 +194,7 @@ public class CommentControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용")
-                    ))
+                ))
             );
     }
 
@@ -206,8 +202,6 @@ public class CommentControllerTest {
     @Test
     void getCommentsTest() throws Exception {
         given(commentService.getComments(Mockito.anyString(), Mockito.anyLong()))
-            .willReturn(List.of(new Comment(), new Comment()));
-        given(mapper.commentsToResponseDtos(Mockito.anyList()))
             .willReturn(List.of(response1, response2));
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();

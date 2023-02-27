@@ -27,7 +27,7 @@ public class Comment extends Auditable {
     private String commentContent;
 
     @Column
-    private CommentState commentState = CommentState.ACTIVE;
+    private CommentState commentState;
 
     // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     // @JoinColumn(name = "MEMBER_ID")

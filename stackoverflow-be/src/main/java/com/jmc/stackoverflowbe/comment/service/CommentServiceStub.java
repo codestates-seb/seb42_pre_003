@@ -6,8 +6,7 @@ import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CommentServiceStub implements CommentService {
+public class CommentServiceStub {
 
     private final CommentBuilder stubComment1 = Comment.builder()
         .commentId(1L)
@@ -27,13 +26,13 @@ public class CommentServiceStub implements CommentService {
         .answerId(null)
         .commentState(CommentState.ACTIVE);
 
-    @Override
+//    @Override
     public Comment createComment(Comment comment) {
         return this.stubComment1
             .build();
     }
 
-    @Override
+//    @Override
     public Comment updateComment(Comment comment) {
         return Comment.builder()
             .commentId(comment.getCommentId())
@@ -41,12 +40,12 @@ public class CommentServiceStub implements CommentService {
             .build();
     }
 
-    @Override
+//    @Override
     public List<Comment> getComments(String qaType, Long qaId) {
         return List.of(stubComment1.build(), stubComment2.build());
     }
 
-    @Override
+//    @Override
     public void deleteComment(Long commentId) {
     }
 }
