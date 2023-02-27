@@ -312,25 +312,46 @@ const SignUp = () => {
 		}
 	}, [name, email, password]);
 
-	const signupHandler = () => {
-		if (emailState === true && nameState === true) {
-			axios
-				.post(
-					'http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/members',
-					{
-						name,
-						email,
-					},
-				)
-				.then((res) => res.data)
-				.then((res) => {
-					console.log(res);
-					if (res.signUp === true) {
-						navigate('/login');
-					} else {
-						console.log('이미 가입된 회원입니다.');
-					}
-				});
+	// const signupHandler = () => {
+	// 	if (emailState === true && nameState === true) {
+	// 		axios
+	// 			.post(
+	// 				'http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/members',
+	// 				{ withCredentials: true },
+	// 				{
+	// 					name,
+	// 					email,
+	// 				},
+	// 			)
+	// 			.then((res) => res.data)
+	// 			.then((res) => {
+	// 				console.log(res);
+	// 				if (res.signup === true) {
+	// 					navigate('/login');
+	// 				} else {
+	// 					console.log('이미 가입된 회원입니다.');
+	// 				}
+	// 			});
+	// 	}
+	// };
+
+	const signupHandler = async () => {
+		if (email === '' || name === '') {
+			console.log('회원가입 실패', '빈 칸이 없어야 합니다.', 'error');
+		} else {
+			try {
+				await axios
+					.post(
+						`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/members`,
+						{
+							email: email,
+							username: name,
+						},
+					)
+					.then(navigate('/login'));
+			} catch (error) {
+				alert(error);
+			}
 		}
 	};
 
@@ -390,8 +411,8 @@ const SignUp = () => {
 								Passwords must contain at least eight characters, including at
 								least 1 letter and 1 number.
 							</PasswordMessage>
-							<SignSubmit className='singup' onClick={signupHandler}>
-								Sing up
+							<SignSubmit className='signup' onClick={signupHandler}>
+								Sign up
 							</SignSubmit>
 							<SignupAgreeInfo>
 								By clicking “Sign up”, you agree to our
