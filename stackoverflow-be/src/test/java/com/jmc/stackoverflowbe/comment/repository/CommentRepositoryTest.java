@@ -57,9 +57,9 @@ public class CommentRepositoryTest {
         .answerId(1L)
         .answerContent("Test content.")
         .state(Answer.StateGroup.ACTIVE)
-        .votes(1L)
-        .memberId(1L)
-        .questionId(1L)
+        .votes(0L)
+        .member(member)
+        .question(question)
         .build();
 
     private final CommentBuilder commentBuild1 = Comment.builder()
