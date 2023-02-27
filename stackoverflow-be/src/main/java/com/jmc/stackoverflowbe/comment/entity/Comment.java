@@ -1,13 +1,17 @@
 package com.jmc.stackoverflowbe.comment.entity;
 
+import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.global.audit.Auditable;
 import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.question.entity.Question;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,50 +31,41 @@ public class Comment extends Auditable {
     private String commentContent;
 
     @Column
-    private CommentState commentState = CommentState.ACTIVE;
+    private CommentState commentState;
 
-    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    // @JoinColumn(name = "MEMBER_ID")
-    // private Member member;
-    @Column
-    private Long memberId; // Temporary column
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
-    @Column
-    private String memberName; // Temporary column
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
 
-    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    // @JoinColumn(name = "QUESTION_ID")
-    // private Question question;
-    private Long questionId; // Temporary column
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "ANSWER_ID")
+    private Answer answer;
 
-    // @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    // @JoinColumn(name = "ANSWER_ID")
-    // private ANSWER answer;
-    @Column
-    private Long answerId; // Temporary column
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
-    // public void setMember(Member member) {
-    // this.member = member;
-    // }
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 
-    // public void setQuestion(Question question) {
-    // this.question = question;
-    // }
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
 
-    // public void setAnswer(Answer answer) {
-    // this.answer = answer;
-    // }
-
-    @Builder // Temporary constructor
-    public Comment(Long commentId, String commentContent, CommentState commentState,
-        Long memberId, String memberName, Long questionId, Long answerId) {
+    @Builder
+    public Comment(Long commentId, String commentContent, CommentState commentState, Member member,
+        Question question, Answer answer) {
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentState = commentState;
-        this.memberId = memberId;
-        this.memberName = memberName;
-        this.questionId = questionId;
-        this.answerId = answerId;
+        this.member = member;
+        this.question = question;
+        this.answer = answer;
     }
 
     public enum CommentState {

@@ -68,7 +68,7 @@ const AddButton = styled.button`
 	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
 `;
 
-function AnsComment() {
+function AnsComment({ QaCom }) {
 	const [com, setCom] = useState(false);
 	const { comment, comBind, comReset } = useAnsStore();
 
@@ -83,10 +83,20 @@ function AnsComment() {
 		comReset();
 	};
 
+	// console.log(QaCom);
+
 	return (
 		<CommentWrap>
 			<CommentBox>
-				<CommentItem>
+				{QaCom &&
+					QaCom.map((el, idx) => (
+						<CommentItem key={QaCom.questionId || idx}>
+							{el.commentContent}
+							<span>{el.memberName}</span>
+							<em>{el.createdAt || ''}</em>
+						</CommentItem>
+					))}
+				{/* <CommentItem>
 					Could you please share one of your error handlers? Are these handlers
 					accept three parameters like error, doc, next?
 					<span>Mostafa Fakhraei</span>
@@ -97,7 +107,7 @@ function AnsComment() {
 					function. Indeed it uses the three arguments mentioned.
 					<span>Ayoub k</span>
 					<em>Feb 17 at 0:14</em>
-				</CommentItem>
+				</CommentItem> */}
 			</CommentBox>
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (

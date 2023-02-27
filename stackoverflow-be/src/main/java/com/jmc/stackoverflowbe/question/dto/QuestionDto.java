@@ -12,13 +12,11 @@ public class QuestionDto {
     @NoArgsConstructor
     public static class Post {
         private String questionTitle;
-        private Long memberId;
         private String questionContent;
 
         @Builder
-        public Post(String questionTitle, Long memberId, String questionContent) {
+        public Post(String questionTitle, String questionContent) {
             this.questionTitle = questionTitle;
-            this.memberId = memberId;
             this.questionContent = questionContent;
         }
     }
@@ -27,20 +25,14 @@ public class QuestionDto {
     @NoArgsConstructor
     public static class Patch {
 
-        private Long questionId;
         private String questionTitle;
         private String questionContent;
-        private StateGroup state;
-        private Boolean selection;
+
 
         @Builder
-        public Patch(String questionTitle, Long questionId, String questionContent,
-            StateGroup state, Boolean selection) {
+        public Patch(String questionTitle, String questionContent) {
             this.questionTitle = questionTitle;
-            this.questionId = questionId;
             this.questionContent = questionContent;
-            this.state = state;
-            this.selection = selection;
         }
     }
 

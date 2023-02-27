@@ -2,11 +2,13 @@ import styled from 'styled-components';
 import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
 import { useBoxStore, useAskStore } from '../store/askStore';
+import useAnsStore from '../store/ansStore';
 
 const BREAK_POINT_PC = 1100;
 
 const AskWrap = styled.form`
 	max-width: 1264px;
+	width: 100%;
 	margin: 0 auto;
 	padding: 2rem;
 	h3 {
@@ -43,17 +45,23 @@ const DelButton = styled.button`
 `;
 
 function AskQuestion() {
-	const { setAbleData, setAskData } = useBoxStore();
+	const { setAbleData, setAskData, setActData, setBtnData } = useBoxStore();
 	const { page, initialAble, initialAsk } = useAskStore();
-	const { title, detail, expect, tag } = useAskStore();
+	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
 		useAskStore();
+	const { ansList, addAnswer } = useAnsStore();
+
+	console.log(ansList);
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
+		setActData(initialAble);
+		setBtnData(initialAble);
+
 		window.location.reload();
 	};
 
@@ -62,14 +70,19 @@ function AskQuestion() {
 
 		//askData 전송(api 부분)
 		const item = {
-			title,
-			body: detail + expect,
-			tag,
+			questionTitle: title,
+			questionContent: body,
 		};
 		console.log(item);
+		addAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?_csrf=4481c2c3-9322-4c5f-8849-4630291fb6e6`,
+			item,
+		);
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
+		setActData(initialAble);
+		setBtnData(initialAble);
 
 		titleReset();
 		detailReset();
@@ -77,7 +90,7 @@ function AskQuestion() {
 		tagReset();
 		bodyReset();
 
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	return (

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
+import axios from 'axios';
 
 export const useBoxStore = create(
 	persist(
@@ -11,6 +12,27 @@ export const useBoxStore = create(
 					try: false,
 					tag: false,
 					review: false,
+					body: false,
+				},
+			],
+			actData: [
+				{
+					title: true,
+					detail: false,
+					try: false,
+					tag: false,
+					review: false,
+					body: false,
+				},
+			],
+			btnData: [
+				{
+					title: true,
+					detail: false,
+					try: false,
+					tag: false,
+					review: false,
+					body: false,
 				},
 			],
 			askData: [
@@ -19,10 +41,17 @@ export const useBoxStore = create(
 					detail: '',
 					expect: '',
 					tag: '',
+					body: '',
 				},
 			],
 			setAbleData: (select) => {
 				set((state) => ({ ...state, ableData: [select] }));
+			},
+			setActData: (select) => {
+				set((state) => ({ ...state, actData: [select] }));
+			},
+			setBtnData: (select) => {
+				set((state) => ({ ...state, btnData: [select] }));
 			},
 			setAskData: (select) => {
 				set((state) => ({ ...state, askData: [select] }));
@@ -43,12 +72,14 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
+			body: true,
 		},
 		initialAsk: {
 			title: '',
 			detail: '',
 			expect: '',
 			tag: '',
+			body: '',
 		},
 		title: `${data.title}`,
 		titleBind: (item) => set({ title: item }),
@@ -62,7 +93,7 @@ export const useAskStore = create(
 		tag: `${data.tag}`,
 		tagBind: (item) => set({ tag: item }),
 		tagReset: () => set({ tag: '' }),
-		body: `${data.detail + data.expect}`,
+		body: `${data.body}`,
 		bodyBind: (item) => set({ body: item }),
 		bodyReset: () => set({ body: '' }),
 		page: 'ask',

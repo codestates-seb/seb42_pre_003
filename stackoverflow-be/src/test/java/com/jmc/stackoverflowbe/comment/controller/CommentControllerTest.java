@@ -31,8 +31,11 @@ import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
-import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
+import com.jmc.stackoverflowbe.question.entity.Question;
+import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,13 +63,30 @@ public class CommentControllerTest {
 
     String BASE_URL = "/comments";
 
+    Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
+
+    Question question = Question.builder()
+        .questionId(1L)
+        .questionTitle("Question title for stub")
+        .memberId(1L)
+        .questionContent("Question contents for stub")
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(false)
+        .answers(0L)
+        .views(0L)
+        .build();
+
     private final Comment comment = Comment.builder()
         .commentId(1L)
         .commentContent("Sample comment.")
-        .memberId(1L)
-        .memberName("kimcoding")
-        .questionId(1L)
-        .answerId(null)
+        .member(member)
+        .question(question)
         .commentState(CommentState.ACTIVE)
         .build();
 
@@ -106,9 +126,6 @@ public class CommentControllerTest {
     @MockBean
     CommentService commentService;
 
-    @MockBean
-    CommentMapper mapper;
-
     @Autowired
     Gson gson;
 
@@ -117,9 +134,7 @@ public class CommentControllerTest {
     void postCommentTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
-            .willReturn(new Comment());
-        given(commentService.createComment(Mockito.any(Comment.class)))
+        given(commentService.createComment(Mockito.any(CommentDto.Post.class)))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -172,9 +187,7 @@ public class CommentControllerTest {
     void patchCommentTest() throws Exception {
         String content = gson.toJson(patch);
 
-        given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
-            .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class)))
+        given(commentService.updateComment(Mockito.any(CommentDto.Patch.class), Mockito.anyLong()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -203,7 +216,7 @@ public class CommentControllerTest {
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value(contentDescriptions))
                         .description("댓글 내용")
-                    ))
+                ))
             );
     }
 
@@ -211,8 +224,6 @@ public class CommentControllerTest {
     @Test
     void getCommentsTest() throws Exception {
         given(commentService.getComments(Mockito.anyString(), Mockito.anyLong()))
-            .willReturn(List.of(new Comment(), new Comment()));
-        given(mapper.commentsToResponseDtos(Mockito.anyList()))
             .willReturn(List.of(response1, response2));
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();

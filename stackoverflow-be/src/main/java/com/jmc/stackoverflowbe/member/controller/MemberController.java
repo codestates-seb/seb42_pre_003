@@ -10,6 +10,7 @@ import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -37,8 +39,8 @@ public class MemberController {
 
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(
-        @PathVariable("member-id") long memberId,
-        @RequestBody MemberDto.Patch patch) {
+            @PathVariable("member-id") long memberId,
+            @RequestBody MemberDto.Patch patch) {
         memberService.updateMember(mapper.patchDtoToMember(patch));
         return ResponseEntity.ok().build();
     }
@@ -49,8 +51,8 @@ public class MemberController {
         MemberDto.Response response = mapper.memberToResponseDto(member);
         response.setIsMine(false);
         return new ResponseEntity(
-            new SingleResponseDto<>(response),
-            HttpStatus.OK);
+                new SingleResponseDto<>(response),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{member-id}")

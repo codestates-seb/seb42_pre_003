@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/comments")
 @Validated
@@ -31,12 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentMapper mapper;
 
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post) {
-        Comment comment = commentService.createComment(
-                mapper.postDtoToComment(post));
+        Comment comment = commentService.createComment(post);
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -44,21 +44,18 @@ public class CommentController {
 
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
-            @Positive @PathVariable("comment-id") long commentId) {
-        Comment comment = mapper.patchDtoToComment(patch);
-        comment.setCommentId(commentId);
-        commentService.updateComment(comment);
+        @Positive @PathVariable("comment-id") long commentId) {
+        commentService.updateComment(patch, commentId);
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity getComments(@RequestParam String qaType, @RequestParam long qaId) {
-        List<Comment> comments = commentService.getComments(qaType, qaId);
+        List<CommentDto.Response> commentDtos = commentService.getComments(qaType, qaId);
 
-        return new ResponseEntity<>(new CommentMultiResponseDto<>(
-                mapper.commentsToResponseDtos(comments)),
-                HttpStatus.OK);
+        return new ResponseEntity<>(new CommentMultiResponseDto<>(commentDtos),
+            HttpStatus.OK);
     }
 
     @DeleteMapping("/{comment-id}")

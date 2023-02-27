@@ -3,25 +3,27 @@ import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import { Link } from 'react-router-dom';
+import Pagination from '../components/pagination/Pagination';
+import { useEffect } from 'react';
+import useAnsStore from '../store/ansStore';
 
 const Content = styled.div`
-	padding: 24px;
 	width: auto;
 	display: flex;
 	justify-content: center;
-	margin-top: 50px;
+	margin-top: 40px;
 `;
 
 const Questions = styled.div`
 	.Listheader {
 		display: flex;
-		padding: 16px;
+		justify-content: space-between;
 
 		h1 {
 			color: #333;
 			font-size: 27px;
 			font-weight: bold;
-			width: 650px;
+			margin-left: 20px;
 		}
 	}
 
@@ -118,6 +120,16 @@ const Questions = styled.div`
 `;
 
 const Contents = () => {
+	const { ansList, getAnswer } = useAnsStore();
+
+	useEffect(() => {
+		getAnswer(
+			`${process.env.REACT_APP_API_URL}/questions?page=1&sort=questionId`,
+		);
+	}, [getAnswer]);
+
+	const total = ansList.pageInfo && ansList.pageInfo.totalPages;
+
 	return (
 		<Content>
 			<Questions>
@@ -142,7 +154,7 @@ const Contents = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<Link to={'/answer'}>
+							<Link to={'/answer/1'}>
 								Why does Prestashop API not add a resource in XML
 							</Link>
 						</li>
@@ -182,6 +194,7 @@ const Contents = () => {
 						</ul>
 					</ul>
 				</div>
+				<Pagination limit={6} total={total} />
 			</Questions>
 			<RightMenu></RightMenu>
 		</Content>

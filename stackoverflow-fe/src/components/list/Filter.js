@@ -6,12 +6,12 @@ import SaveButton from './SavsButton';
 
 const FilterContainer = styled.section`
 	background-color: #f1f2f3;
-	margin: 10px;
+	margin: 0px 0px 15px 25px;
 	border-radius: 3px;
 	border: 1px solid #d6d9dc;
 
 	.filterlist {
-		padding: 10px;
+		padding: 15px 10px 0px;
 		display: flex;
 		font-size: 15px;
 	}
@@ -27,6 +27,14 @@ const FilterContainer = styled.section`
 
 	.filterlist li span {
 		font-weight: bold;
+	}
+
+	.taginput {
+		margin-left: 20px;
+		padding: 10px;
+		border: 1px solid #d6d9dc;
+		border-radius: 3px;
+		width: 200px;
 	}
 
 	.buttons {
@@ -58,32 +66,45 @@ const Filter = () => {
 					<span>Sorted by</span>
 					<ul>
 						<li>
-							<input type='radio' />
-							<label>Newest</label>
+							<label>
+								<input type='radio' name='sorted' checked />
+								Newest
+							</label>
 						</li>
 						<li>
-							<input type='radio' />
-							<label>Recent activity</label>
+							<label>
+								<input type='radio' name='sorted' />
+								Recent activity
+							</label>
 						</li>
 						<li>
-							<input type='radio' />
-							<label>Highest score</label>
+							<label>
+								<input type='radio' name='sorted' />
+								Highest score
+							</label>
 						</li>
 					</ul>
 				</li>
 				<li>
-					<span>Sorted by</span>
+					<span>Tagged with</span>
 					<ul>
 						<li>
-							<input type='radio' />
-							<label>My watched tags</label>
+							<label>
+								<input type='radio' name='tagged' />
+								My watched tags
+							</label>
 						</li>
 						<li>
-							<input type='radio' />
-							<label>The following tags:</label>
+							<label>
+								<input type='radio' name='tagged' checked />
+								The following tags:
+							</label>
 						</li>
-						<li className='Taginput'>
-							<input placeholder='e.g. javascript or python' />
+						<li>
+							<input
+								className='taginput'
+								placeholder='e.g. javascript or python'
+							/>
 						</li>
 					</ul>
 				</li>

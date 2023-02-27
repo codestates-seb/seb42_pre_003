@@ -6,7 +6,6 @@ import {
 	CountDownIcon,
 	BookMarkIcon,
 	BookFullIcon,
-	WillbeDelete,
 } from './AnsIcon';
 import useAnsStore from '../../store/ansStore';
 
@@ -30,6 +29,9 @@ const AnsSide = styled.div`
 	svg {
 		fill: hsl(210, 8%, 75%);
 		cursor: pointer;
+		&:hover {
+			fill: #00abbb;
+		}
 	}
 	svg.iconBookmark {
 		fill: #00abbb;
@@ -37,6 +39,7 @@ const AnsSide = styled.div`
 `;
 
 const AnsBox = styled.div`
+	width: 100%;
 	p {
 		padding-bottom: 1rem;
 		font-size: 0.75rem;
@@ -65,38 +68,48 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon({ type }) {
+function AnsCon({ type, data, QaCom }) {
 	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
 
+	// console.log(data);
+
 	return (
-		<ConWrap type={type}>
-			<AnsSide>
-				<CountUpIcon onClick={plusVote} />
-				{vote}
-				<CountDownIcon onClick={minusVote} />
-				{book ? (
-					<BookFullIcon onClick={handleBook} />
-				) : (
-					<BookMarkIcon onClick={handleBook} />
-				)}
-			</AnsSide>
-			<AnsBox>
-				<WillbeDelete />
-				{type === 'question' ? (
-					<AnsTag>
-						<ul>
-							{['javascript', 'node.js', 'mongodb', 'express', 'mongoose'].map(
-								(el, idx) => (
-									<li key={idx}>{el}</li>
-								),
-							)}
-						</ul>
-					</AnsTag>
-				) : null}
-				<AnsInfo />
-				<AnsComment />
-			</AnsBox>
-		</ConWrap>
+		<>
+			{data && (
+				<ConWrap type={type}>
+					<AnsSide>
+						<CountUpIcon onClick={plusVote} />
+						{vote}
+						<CountDownIcon onClick={minusVote} />
+						{book ? (
+							<BookFullIcon onClick={handleBook} />
+						) : (
+							<BookMarkIcon onClick={handleBook} />
+						)}
+					</AnsSide>
+					<AnsBox>
+						<p>{data.questionContent}</p>
+						{type === 'question' ? (
+							<AnsTag>
+								<ul>
+									{[
+										'javascript',
+										'node.js',
+										'mongodb',
+										'express',
+										'mongoose',
+									].map((el, idx) => (
+										<li key={idx}>{el}</li>
+									))}
+								</ul>
+							</AnsTag>
+						) : null}
+						<AnsInfo />
+						<AnsComment QaCom={QaCom} />
+					</AnsBox>
+				</ConWrap>
+			)}
+		</>
 	);
 }
 

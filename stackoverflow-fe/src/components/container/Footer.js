@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
+import footerlogo from '../../img/footerlogo.png';
 
 const Background = styled.div`
-	background-color: #323232;
+	background-color: #282828;
 	display: flex;
 	height: 30%;
 	padding: 20px;
@@ -73,10 +74,7 @@ const Footer = () => {
 		<footer>
 			<Background>
 				<div className='img-container'>
-					<Sfooterlogo
-						src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Stack_Overflow_icon.svg/768px-Stack_Overflow_icon.svg.png'
-						alt=' '
-					/>
+					<Sfooterlogo src={footerlogo} alt=' ' />
 				</div>
 				<div className='footer-container'>
 					<div className='List-container'>

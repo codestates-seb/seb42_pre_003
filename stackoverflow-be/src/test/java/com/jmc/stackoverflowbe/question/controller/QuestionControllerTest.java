@@ -100,9 +100,9 @@ public class QuestionControllerTest {
     @Test
     void postQuestionTest() throws Exception {
         QuestionDto.Post post = QuestionDto.Post.builder()
-                .questionTitle("Title for post")
-                .questionContent("Contents for post")
-                .build();
+            .questionTitle("Title for post")
+            .questionContent("Contents for post")
+            .build();
 
         String content = gson.toJson(post);
         given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
@@ -118,33 +118,34 @@ public class QuestionControllerTest {
                         .content(content));
 
         actions
-                .andExpect(status().isCreated())
-                .andExpect(header().string("Location", is(startsWith("/questions/"))))
-                .andDo(document("Post-Question",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                attributes(key("title").value("Fields for question creation")),
-                                fieldWithPath("questionTitle")
-                                        .type(JsonFieldType.STRING)
-                                        .attributes(key("constraints").value("제목"))
-                                        .description("질문 제목"),
-                                fieldWithPath("questionContent")
-                                        .type(JsonFieldType.STRING)
-                                        .attributes(key("constraints").value("내용"))
-                                        .description("질문 내용")),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION)
-                                        .description("Header Location, 리소스의 URL"))));
+            .andExpect(status().isCreated())
+            .andExpect(header().string("Location", is(startsWith("/questions/"))))
+            .andDo(document("Post-Question",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    attributes(key("title").value("Fields for question creation")),
+                    fieldWithPath("questionTitle")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("제목"))
+                        .description("질문 제목"),
+                    fieldWithPath("questionContent")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("내용"))
+                        .description("질문 내용")),
+                responseHeaders(
+                    headerWithName(HttpHeaders.LOCATION)
+                        .description("Header Location, 리소스의 URL")
+                )));
     }
 
     @DisplayName("질문 수정")
     @Test
     void patchQuestionTest() throws Exception {
         QuestionDto.Patch patch = QuestionDto.Patch.builder()
-                .questionTitle("title for patch")
-                .questionContent("contents for patch")
-                .build();
+            .questionTitle("title for patch")
+            .questionContent("contents for patch")
+            .build();
 
         String content = gson.toJson(patch);
         given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
@@ -153,30 +154,29 @@ public class QuestionControllerTest {
                 .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
-                patch(BASE_URL + "/{question-id}", 0L)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(content));
+            patch(BASE_URL+"/{question-id}", 0L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content));
 
         actions
-                .andExpect(status().isOk())
-                .andDo(document("Patch-Question",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("question-id")
-                                        .description("질문 식별자")),
-                        requestFields(
-                                attributes(key("title").value("Fields for Question revision")),
-                                fieldWithPath("questionTitle")
-                                        .type(JsonFieldType.STRING)
-                                        .attributes(key("constraints").value("제목"))
-                                        .description("수정한 제목"),
-                                fieldWithPath("questionContent")
-                                        .type(JsonFieldType.STRING)
-                                        .attributes(key("constraints").value("내용"))
-                                        .description("수정한 내용"))));
+            .andExpect(status().isOk())
+            .andDo(document("Patch-Question",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("question-id")
+                        .description("질문 식별자")),
+                requestFields(
+                    attributes(key("title").value("Fields for Question revision")),
+                    fieldWithPath("questionTitle")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("제목"))
+                        .description("수정한 제목"),
+                    fieldWithPath("questionContent")
+                        .type(JsonFieldType.STRING)
+                        .attributes(key("constraints").value("내용"))
+                        .description("수정한 내용"))));
     }
 
     @DisplayName("질문 상세 조회")
@@ -265,9 +265,9 @@ public class QuestionControllerTest {
     void getQuestionsTest() throws Exception {
         String page = "1";
         String sort = "questionId";
-        List<Question> questionList = List.of(question, question2);
+        List<Question> questionList = List.of(question,question2);
         Page<Question> questionPage = new PageImpl<>(questionList,
-                PageRequest.of(0, 15, Sort.by(sort).descending()), 2);
+            PageRequest.of(0,15, Sort.by(sort).descending()), 2);
 
         given(mapper.questionsToQuestionResponses(Mockito.any(List.class)))
                 .willReturn(questionList);
