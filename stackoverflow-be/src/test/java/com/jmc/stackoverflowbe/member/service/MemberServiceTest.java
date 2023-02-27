@@ -3,6 +3,8 @@ package com.jmc.stackoverflowbe.member.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
@@ -81,7 +83,7 @@ public class MemberServiceTest {
     @Test
     void createMember() {
         given(mapper.postDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(member);
-        assertDoesNotThrow(() -> memberService.verifyExistEmail(member.getEmail()));
+        given(memberRepository.findByEmail(Mockito.anyString())).willReturn(Optional.ofNullable(null));
         given(memberRepository.save(Mockito.any(Member.class))).willReturn(savedmember);
         assertDoesNotThrow(() -> memberService.createMember(post));
     }
