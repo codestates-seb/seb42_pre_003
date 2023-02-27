@@ -8,10 +8,12 @@ import RightMenu from '../components/list/RightMenu';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
+const BREAK_POINT_PC = 1100;
+
 const AnsWrap = styled.div`
 	max-width: 830px;
 	width: 100%;
-	padding: 3rem 1.66rem;
+	padding: 3rem 1.33rem;
 `;
 
 const ConTitle = styled.h4`
@@ -31,31 +33,35 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
+const SideWrap = styled.div`
+	margin-top: 3rem;
+	@media only screen and (max-width: ${BREAK_POINT_PC}px) {
+		display: none;
+	}
+`;
+
 function Answer() {
-	const {
-		page,
-		answer,
-		answerBind,
-		answerReset,
-		edTitle,
-		edBody,
-		edTag,
-		edTitleBind,
-		edBodyBind,
-		edTagBind,
-		ansItem,
-		getAnswerItem,
-		ansDownList,
-		getAnsDown,
-		getCom,
-		comList,
-	} = useAnsStore();
+	const { page, answer } = useAnsStore();
+	const { edTitle, edBody, edTag } = useAnsStore();
+	const { answerBind, answerReset, edTitleBind, edBodyBind, edTagBind } =
+		useAnsStore();
+	const { ansItem, ansDownList, comList } = useAnsStore();
+	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
 
-		console.log(answer);
-		answerReset();
+		const item = {
+			questionId: ansDownList.length + 1,
+			answerContent: answer,
+		};
+
+		addDown(
+			`${process.env.REACT_APP_API_URL}/answers?_csrf=8eae838f-62c9-4aaa-bff2-c80ca10b2213`,
+			item,
+		);
+
+		answerReset(ansDownList);
 	};
 
 	const handleEdit = (e) => {
@@ -80,7 +86,7 @@ function Answer() {
 		);
 	}, [getAnswerItem, getAnsDown, getCom, id]);
 
-	// console.log(comList.data);
+	console.log(ansDownList.data);
 
 	return (
 		<>
@@ -120,9 +126,9 @@ function Answer() {
 							</>
 						)}
 					</AnsWrap>
-					<div style={{ marginTop: '3rem' }}>
+					<SideWrap>
 						<RightMenu />
-					</div>
+					</SideWrap>
 				</>
 			)}
 		</>

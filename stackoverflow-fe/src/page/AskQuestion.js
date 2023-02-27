@@ -68,7 +68,6 @@ function AskQuestion() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		//askData 전송(api 부분)
 		const item = {
 			questionTitle: title,
 			questionContent: body,
