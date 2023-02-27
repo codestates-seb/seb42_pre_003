@@ -30,6 +30,9 @@ const AnsSide = styled.div`
 	svg {
 		fill: hsl(210, 8%, 75%);
 		cursor: pointer;
+		&:hover {
+			fill: #00abbb;
+		}
 	}
 	svg.iconBookmark {
 		fill: #00abbb;
