@@ -45,6 +45,18 @@ public class QuestionServiceTest {
         .answers(0L)
         .build();
 
+    private final Question question2 = Question.builder()
+        .questionId(1L)
+        .questionContent("contents for service test")
+        .memberId(1L)
+        .questionTitle("service test")
+        .views(1L)
+        .votes(1)
+        .state(StateGroup.ACTIVE)
+        .selection(false)
+        .answers(1L)
+        .build();
+
     private final QuestionDto.Post post = QuestionDto.Post.builder()
         .questionTitle("title for service test post")
         .questionContent("contents for service test post")
@@ -123,6 +135,11 @@ public class QuestionServiceTest {
     @DisplayName("질문 리스트 조회 service test")
     @Test
     public void getQuestionsTest(){
+        given(questionRepository.findAll())
+            .willReturn(List.of(question,question2));
+        given(mapper.questionsToQuestionResponses(Mockito.anyList()))
+            .willReturn(List.of(response,response2));
+
 
         Executable executable = () -> questionService.getQuestions(0, "questionId");
         assertDoesNotThrow(executable);

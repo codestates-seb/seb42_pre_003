@@ -63,12 +63,15 @@ public class QuestionServiceImpl implements QuestionService{
     //질문 전체 조회
     @Override
     public Page<Response> getQuestions(int page, String sort){
+        //모든 질문 리스트로 받기
         List<Question> questions = questionRepository.findAll();
+        //질문리스트 response 리스트로 매핑
         List<QuestionDto.Response> questionResponses =
             mapper.questionsToQuestionResponses(questions);
+        //페이지네이션 적용
         Page<Response> responsePage = new PageImpl<>(questionResponses,
             PageRequest.of(0,15, Sort.by(sort).descending()), 2);
-        //전체를 찾아서 페이지네이션 적용 후 반환
+        //반환
         return responsePage;
     }
     //질문 삭제
