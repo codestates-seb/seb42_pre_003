@@ -9,16 +9,19 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
 public class Member extends Auditable {
 
     @Id
@@ -28,7 +31,7 @@ public class Member extends Auditable {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(length = 210)
@@ -38,6 +41,7 @@ public class Member extends Auditable {
     private String about;
 
     @Column
+    @Builder.Default
     @Enumerated(value = EnumType.STRING)
     private MemberState state = MemberState.ACTIVE;
 
@@ -46,14 +50,12 @@ public class Member extends Auditable {
     private LocalDateTime lastLoginTime;
 
     @Builder
-    public Member(Long memberId, String email, String name, String location, String about,
-            MemberState state) {
+    public Member(Long memberId, String email, String name, String location, String about) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
         this.location = location;
         this.about = about;
-        this.state = state;
     }
 
     public static enum MemberState {
