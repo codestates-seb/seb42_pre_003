@@ -81,6 +81,29 @@ public class QuestionControllerTest {
         .answers(1L)
         .views(1L)
         .build();
+    QuestionDto.Response response = QuestionDto.Response.builder()
+        .questionId(0L)
+        .questionTitle("title for get")
+        .questionContent("content for get")
+        .memberId(0L)
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(true)
+        .answers(1L)
+        .views(1L)
+        .build();
+
+    QuestionDto.Response response2 = QuestionDto.Response.builder()
+        .questionId(0L)
+        .questionTitle("title for get")
+        .questionContent("content for get")
+        .memberId(0L)
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(true)
+        .answers(1L)
+        .views(1L)
+        .build();
 
     @Autowired
     MockMvc mockMvc;
@@ -105,7 +128,7 @@ public class QuestionControllerTest {
         String content = gson.toJson(post);
         given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
             .willReturn(question);
-        given(questionService.createQuestion(Mockito.any(Question.class)))
+        given(questionService.createQuestion(Mockito.any(QuestionDto.Post.class)))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
@@ -147,7 +170,7 @@ public class QuestionControllerTest {
         String content = gson.toJson(patch);
         given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
             .willReturn(new Question());
-        given(questionService.updateQuestion(Mockito.any(Question.class)))
+        given(questionService.updateQuestion(Mockito.any(QuestionDto.Patch.class), Mockito.anyLong()))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
@@ -179,20 +202,9 @@ public class QuestionControllerTest {
     @DisplayName("질문 상세 조회")
     @Test
     void getQuestionTest() throws Exception{
-        QuestionDto.Response response = QuestionDto.Response.builder()
-            .questionId(0L)
-            .questionTitle("title for get")
-            .questionContent("content for get")
-            .memberId(0L)
-            .state(StateGroup.ACTIVE)
-            .votes(0)
-            .selection(true)
-            .answers(1L)
-            .views(1L)
-            .build();
 
         given(questionService.getQuestion(Mockito.anyLong()))
-            .willReturn(new Question());
+            .willReturn(response);
         given(mapper.questionToResponseDto(Mockito.any(Question.class)))
             .willReturn(response);
 
@@ -256,19 +268,20 @@ public class QuestionControllerTest {
                         .description("질문 수정 시간"))));
 
     }
-    @DisplayName("질문 상세 조회")
+    @DisplayName("질문 리스트 조회")
     @Test
     void getQuestionsTest() throws Exception{
         String page = "1";
         String sort = "questionId";
-        List<Question> questionList = List.of(question,question2);
-        Page<Question> questionPage = new PageImpl<>(questionList,
+        List<QuestionDto.Response> questionResponses =
+            List.of(response,response2);
+        Page<QuestionDto.Response> responsePage = new PageImpl<>(questionResponses,
             PageRequest.of(0,15, Sort.by(sort).descending()), 2);
 
         given(mapper.questionsToQuestionResponses(Mockito.any(List.class)))
-            .willReturn(questionList);
+            .willReturn(questionResponses);
         given(questionService.getQuestions(Mockito.any(Integer.class),Mockito.any(String.class)))
-            .willReturn(questionPage);
+            .willReturn(responsePage);
 
         ResultActions actions = mockMvc.perform(
             get(BASE_URL)

@@ -1,7 +1,10 @@
 package com.jmc.stackoverflowbe.question.service;
 
+import com.jmc.stackoverflowbe.question.dto.QuestionDto;
+import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
+import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceStub implements QuestionService {
     private Question stubQuestion1;
     private Question stubQuestion2;
+    private  QuestionMapper mapper;
     @PostConstruct
     public void init(){
         stubQuestion1 = Question.builder()
@@ -41,12 +45,12 @@ public class QuestionServiceStub implements QuestionService {
 
     }
     //@Override
-    public Question createQuestion(Question question){return null;}
+    public Question createQuestion(QuestionDto.Post post){return null;}
     //@Override
-    public Question updateQuestion(Question question){return null;}
+    public Question updateQuestion(QuestionDto.Patch patch, Long questionId){return null;}
     //@Override
-    public Question getQuestion(Long id){
-        return Question.builder()
+    public QuestionDto.Response getQuestion(Long id){
+        return QuestionDto.Response.builder()
             .questionId(0L)
             .questionTitle("Question title for stub")
             .memberId(0L)
@@ -57,11 +61,15 @@ public class QuestionServiceStub implements QuestionService {
             .answers(0L)
             .views(0L)
             .build();
+
     }
 
     //@Override
-    public Page<Question> getQuestions(int page, String sort){
-        return new PageImpl<>(List.of(stubQuestion1,stubQuestion2),
+    public Page<Response> getQuestions(int page, String sort){
+        return new PageImpl<>(
+            List.of(
+                mapper.questionToResponseDto(stubQuestion1),
+                mapper.questionToResponseDto(stubQuestion2)),
             PageRequest.of(0,15, Sort.by(sort).descending()),2);
     }
 

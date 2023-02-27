@@ -4,6 +4,7 @@ import com.jmc.stackoverflowbe.global.common.MultiResponseDto;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
+import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import com.jmc.stackoverflowbe.question.service.QuestionService;
@@ -36,7 +37,7 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post) {
-        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post));
+        Question question = questionService.createQuestion(post);
         URI location = UriCreator.createURI("/questions", question.getQuestionId());
         return ResponseEntity.created(location).build();
     }
@@ -45,8 +46,7 @@ public class QuestionController {
     public ResponseEntity patchQuestion(
             @PathVariable("question-id") long questionId,
             @RequestBody QuestionDto.Patch patch) {
-        patch.setQuestionId(questionId);
-        Question question =  questionService.updateQuestion(mapper.patchDtoToQuestion(patch));
+        Question question =  questionService.updateQuestion(patch, questionId);
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.questionToResponseDto(question)),
             HttpStatus.OK
@@ -55,19 +55,19 @@ public class QuestionController {
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") long questionId) {
-        Question question = questionService.getQuestion(questionId);
+        QuestionDto.Response response = questionService.getQuestion(questionId);
         return new ResponseEntity(new SingleResponseDto<>(
-                mapper.questionToResponseDto(question)),
+                response),
                 HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam String sort, @Positive @RequestParam int page) {
-        Page<Question> questionPage = questionService.getQuestions(page - 1, sort);
-        List<Question> questionList = questionPage.getContent();
+        Page<Response> questionResponsePage = questionService.getQuestions(page - 1, sort);
+        List<Response> questionResponseList = questionResponsePage.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.questionsToQuestionResponses(questionList),
-                        questionPage),
+                new MultiResponseDto<>(questionResponseList,
+                        questionResponsePage),
                 HttpStatus.OK);
 
     }

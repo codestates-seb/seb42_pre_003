@@ -3,6 +3,7 @@ package com.jmc.stackoverflowbe.question.service;
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
+import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
 import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
@@ -26,18 +27,22 @@ public class QuestionServiceImpl implements QuestionService{
 
     //질문 생성
     @Override
-    public Question createQuestion(Question question){
-        //질문 아이디로 검증이 필요할시 추가
+    public Question createQuestion(QuestionDto.Post post){
+        //질문 식별자로 검증이 필요할시 추가
         //verifyExistQuestion(question.getQuestionId());
+        //포스트 객체 엔티티로 매핑
+        Question question = mapper.postDtoToQuestion(post);
+
         //질문 db에 저장
         return questionRepository.save(question);
     }
 
     //질문 수정
     @Override
-    public Question updateQuestion(Question question){
+    public Question updateQuestion(QuestionDto.Patch patch, Long questionId){
+        Question question = mapper.patchDtoToQuestion(patch);
         //db에 저장된 질문인지 확인
-        Question findQuestion = findExistQuestionById(question.getQuestionId());
+        Question findQuestion = findExistQuestionById(questionId);
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
             .ifPresent(title -> findQuestion.setQuestionTitle(title));
@@ -48,17 +53,23 @@ public class QuestionServiceImpl implements QuestionService{
     }
     //질문 조회
     @Override
-    public Question getQuestion(Long questionId){
+    public QuestionDto.Response getQuestion(Long questionId){
         //Id로 질문 조회
-        return findExistQuestionById(questionId);
+        QuestionDto.Response response =
+            mapper.questionToResponseDto(findExistQuestionById(questionId));
+        return response;
     }
 
     //질문 전체 조회
     @Override
-    public Page<Question> getQuestions(int page, String sort){
+    public Page<Response> getQuestions(int page, String sort){
+        List<Question> questions = questionRepository.findAll();
+        List<QuestionDto.Response> questionResponses =
+            mapper.questionsToQuestionResponses(questions);
+        Page<Response> responsePage = new PageImpl<>(questionResponses,
+            PageRequest.of(0,15, Sort.by(sort).descending()), 2);
         //전체를 찾아서 페이지네이션 적용 후 반환
-        return questionRepository.findAll(
-            PageRequest.of(page, 15, Sort.by(sort).descending()));
+        return responsePage;
     }
     //질문 삭제
     @Override
