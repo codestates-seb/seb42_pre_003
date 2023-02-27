@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.BDDMockito.given;
 
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
@@ -33,10 +35,17 @@ public class QuestionServiceTest {
     @InjectMocks
     private QuestionServiceImpl questionService;
 
+    private final Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
+
     private final Question question = Question.builder()
         .questionId(0L)
         .questionContent("contents for service test")
-        .memberId(0L)
+        .member(member)
         .questionTitle("service test")
         .views(0L)
         .votes(0)
@@ -48,7 +57,7 @@ public class QuestionServiceTest {
     private final Question question2 = Question.builder()
         .questionId(1L)
         .questionContent("contents for service test")
-        .memberId(1L)
+        .member(member)
         .questionTitle("service test")
         .views(1L)
         .votes(1)

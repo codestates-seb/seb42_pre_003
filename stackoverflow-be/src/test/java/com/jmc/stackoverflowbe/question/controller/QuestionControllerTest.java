@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
@@ -59,10 +61,16 @@ import org.springframework.test.web.servlet.ResultActions;
 public class QuestionControllerTest {
     String BASE_URL = "/questions";
 
+    Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
     Question question = Question.builder()
         .questionId(0L)
         .questionTitle("Question1 title for test")
-        .memberId(0L)
+        .member(member)
         .questionContent("Question1 contents for test")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -73,7 +81,7 @@ public class QuestionControllerTest {
     Question question2 = Question.builder()
         .questionId(1L)
         .questionTitle("Question2 title for test")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question2 contents for test")
         .state(StateGroup.ACTIVE)
         .votes(1)

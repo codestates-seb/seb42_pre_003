@@ -1,11 +1,15 @@
 package com.jmc.stackoverflowbe.question.entity;
 
 import com.jmc.stackoverflowbe.global.audit.Auditable;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +27,11 @@ public class Question extends Auditable {
     @Column(nullable = false)
     private String questionTitle;
 
-    @Column
-    private Long memberId;
+//    @Column
+//    private Long memberId;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Column
     private String questionContent;
@@ -45,11 +52,11 @@ public class Question extends Auditable {
     private Long views;
 
     @Builder
-    public Question(Long questionId, String questionTitle, Long memberId, String questionContent,
+    public Question(Long questionId, String questionTitle, Member member, String questionContent,
         StateGroup state, Integer votes, Boolean selection, Long answers, Long views) {
         this.questionId = questionId;
         this.questionTitle = questionTitle;
-        this.memberId = memberId;
+        this.member = member;
         this.questionContent = questionContent;
         this.state = state;
         this.votes = votes;

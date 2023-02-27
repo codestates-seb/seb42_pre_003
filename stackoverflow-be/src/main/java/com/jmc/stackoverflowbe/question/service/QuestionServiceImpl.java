@@ -70,7 +70,7 @@ public class QuestionServiceImpl implements QuestionService{
             mapper.questionsToQuestionResponses(questions);
         //페이지네이션 적용
         Page<Response> responsePage = new PageImpl<>(questionResponses,
-            PageRequest.of(0,15, Sort.by(sort).descending()), 2);
+            PageRequest.of(0,15, Sort.by(sort).descending()),4);
         //반환
         return responsePage;
     }
