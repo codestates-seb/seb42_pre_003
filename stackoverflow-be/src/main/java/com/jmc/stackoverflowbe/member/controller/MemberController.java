@@ -31,7 +31,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
-        memberService.createMember(mapper.postDtoToMember(post));
+        memberService.createMember(post);
         URI location = UriCreator.createURI("/members", 1L);
 
         return ResponseEntity.created(location).build();
@@ -41,7 +41,7 @@ public class MemberController {
     public ResponseEntity patchMember(
             @PathVariable("member-id") long memberId,
             @RequestBody MemberDto.Patch patch) {
-        memberService.updateMember(mapper.patchDtoToMember(patch));
+        memberService.updateMember(patch, memberId);
         return ResponseEntity.ok().build();
     }
 

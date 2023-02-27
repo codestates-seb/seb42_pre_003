@@ -1,19 +1,20 @@
 package com.jmc.stackoverflowbe.member.service;
 
+import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class MemberServiceStub implements MemberService {
 
     @Override
-    public Member createMember(Member member) {
+    public Member createMember(MemberDto.Post post) {
         return null;
     }
 
     @Override
-    public Member updateMember(Member member) {
+    public Member updateMember(MemberDto.Patch patch, long memberId) {
         return null;
     }
 
@@ -33,12 +34,12 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public void verifyExistName(String Name) {
+    public void verifyExistEmail(String email) {
 
     }
 
     @Override
-    public Member findExistId(Long memberId) {
+    public Member findExistMemberById(Long memberId) {
         return null;
     }
 }
