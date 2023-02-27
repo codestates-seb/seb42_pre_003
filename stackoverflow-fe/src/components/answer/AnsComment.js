@@ -164,18 +164,6 @@ function AnsComment({ QaCom }) {
 							) : null}
 						</CommentItem>
 					))}
-				{/* <CommentItem>
-					Could you please share one of your error handlers? Are these handlers
-					accept three parameters like error, doc, next?
-					<span>Mostafa Fakhraei</span>
-					<em>Feb 16 at 13:45</em>
-				</CommentItem>
-				<CommentItem own>
-					@MostafaFakhraei I edit my question to include the error handler
-					function. Indeed it uses the three arguments mentioned.
-					<span>Ayoub k</span>
-					<em>Feb 17 at 0:14</em>
-				</CommentItem> */}
 			</CommentBox>
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (
