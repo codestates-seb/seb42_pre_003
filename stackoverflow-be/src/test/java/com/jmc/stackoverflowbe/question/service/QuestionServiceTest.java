@@ -45,39 +45,39 @@ public class QuestionServiceTest {
         .answers(0L)
         .build();
 
-    private final QuestionDto.Post post = QuestionDto.Post.builder()
-        .questionTitle("title for service test post")
-        .questionContent("contents for service test post")
-        .build();
-
-    private final QuestionDto.Patch patch = QuestionDto.Patch.builder()
-        .questionTitle("title for service test patch")
-        .questionTitle("contents for service test patch")
-        .build();
-
-    private final QuestionDto.Response response = QuestionDto.Response.builder()
-        .questionId(0L)
-        .questionTitle("title for service test response")
-        .questionContent("content for service test response")
-        .memberId(0L)
-        .state(StateGroup.ACTIVE)
-        .votes(0)
-        .selection(false)
-        .answers(0L)
-        .views(0L)
-        .build();
-
-    private final QuestionDto.Response response2 = QuestionDto.Response.builder()
-        .questionId(1L)
-        .questionTitle("title for service test response")
-        .questionContent("content for service test response")
-        .memberId(1L)
-        .state(StateGroup.ACTIVE)
-        .votes(1)
-        .selection(true)
-        .answers(1L)
-        .views(1L)
-        .build();
+//    private final QuestionDto.Post post = QuestionDto.Post.builder()
+//        .questionTitle("title for service test post")
+//        .questionContent("contents for service test post")
+//        .build();
+//
+//    private final QuestionDto.Patch patch = QuestionDto.Patch.builder()
+//        .questionTitle("title for service test patch")
+//        .questionTitle("contents for service test patch")
+//        .build();
+//
+//    private final QuestionDto.Response response = QuestionDto.Response.builder()
+//        .questionId(0L)
+//        .questionTitle("title for service test response")
+//        .questionContent("content for service test response")
+//        .memberId(0L)
+//        .state(StateGroup.ACTIVE)
+//        .votes(0)
+//        .selection(false)
+//        .answers(0L)
+//        .views(0L)
+//        .build();
+//
+//    private final QuestionDto.Response response2 = QuestionDto.Response.builder()
+//        .questionId(1L)
+//        .questionTitle("title for service test response")
+//        .questionContent("content for service test response")
+//        .memberId(1L)
+//        .state(StateGroup.ACTIVE)
+//        .votes(1)
+//        .selection(true)
+//        .answers(1L)
+//        .views(1L)
+//        .build();
 
 
     @DisplayName("질문 생성 service test")
