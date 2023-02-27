@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import axios from 'axios';
 
 const useAnsStore = create(
 	devtools((set) => ({
@@ -28,6 +29,13 @@ const useAnsStore = create(
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),
+		ansList: {},
+		getAnswer: async (URL) => {
+			const response = await axios.get(URL, {
+				Accept: 'application / json',
+			});
+			set({ ansList: await response.data });
+		},
 	})),
 );
 

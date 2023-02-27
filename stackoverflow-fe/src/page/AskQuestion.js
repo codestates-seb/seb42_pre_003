@@ -7,6 +7,7 @@ const BREAK_POINT_PC = 1100;
 
 const AskWrap = styled.form`
 	max-width: 1264px;
+	width: 100%;
 	margin: 0 auto;
 	padding: 2rem;
 	h3 {
@@ -43,7 +44,7 @@ const DelButton = styled.button`
 `;
 
 function AskQuestion() {
-	const { setAbleData, setAskData } = useBoxStore();
+	const { setAbleData, setAskData, setActData, setBtnData } = useBoxStore();
 	const { page, initialAble, initialAsk } = useAskStore();
 	const { title, detail, expect, tag } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
@@ -54,6 +55,9 @@ function AskQuestion() {
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
+		setActData(initialAble);
+		setBtnData(initialAble);
+
 		window.location.reload();
 	};
 
@@ -70,6 +74,8 @@ function AskQuestion() {
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
+		setActData(initialAble);
+		setBtnData(initialAble);
 
 		titleReset();
 		detailReset();

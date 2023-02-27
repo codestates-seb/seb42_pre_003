@@ -5,12 +5,12 @@ import { useAskStore } from '../../store/askStore';
 function AskReview() {
 	const { titleBind, bodyBind, tagBind } = useAskStore();
 	const { title, body, tag } = useAskStore();
+
 	return (
 		<>
 			<h3>Review your question</h3>
-			<AskNotice review />
+			<AskNotice />
 			<AskBox
-				review
 				name={'title'}
 				value={title}
 				func={titleBind}
@@ -23,7 +23,6 @@ function AskReview() {
 				You might find that you have a better idea of your title after writing out the rest of the question.`}
 			/>
 			<AskBox
-				review
 				name={'body'}
 				value={body}
 				type={'editor'}
@@ -37,7 +36,6 @@ function AskReview() {
         Add any details you missed and read through it again. Now is a good time to make sure that your title still describes the problem!`}
 			/>
 			<AskBox
-				review
 				name={'tag'}
 				value={tag}
 				func={tagBind}

@@ -5,7 +5,7 @@ const BREAK_POINT_PC = 1100;
 
 const GuideBox = styled.div`
 	display: ${(props) => (props.able ? 'none' : 'block')};
-	width: 30%;
+	width: 17rem;
 	margin-left: 0.85rem;
 	border: 1px solid hsl(210, 8%, 85%);
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.05),
@@ -42,9 +42,9 @@ const GuideCon = styled.div`
 	}
 `;
 
-function AskGuide({ able, title, description, type }) {
+function AskGuide({ act, title, description, type }) {
 	return (
-		<GuideBox able={!able}>
+		<GuideBox able={!act}>
 			<strong>{title}</strong>
 			<GuideCon>
 				{type === 'selector' ? <BellIcon /> : <WriteIcon />}
