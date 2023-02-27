@@ -38,11 +38,11 @@ const HeaderInfo = styled.ul`
 	}
 `;
 
-function AnsHeader() {
+function AnsHeader({ data }) {
 	return (
 		<HeaderWrap>
 			<h3>
-				How to handle mongoose errors globaly
+				{data.questionTitle || 'How to handle mongoose errors globaly'}
 				<AskButton />
 			</h3>
 
@@ -57,7 +57,7 @@ function AnsHeader() {
 				</li>
 				<li>
 					<strong>Viewed</strong>
-					<span>141 times</span>
+					<span>{`${data.views || '141'} times`}</span>
 				</li>
 			</HeaderInfo>
 		</HeaderWrap>

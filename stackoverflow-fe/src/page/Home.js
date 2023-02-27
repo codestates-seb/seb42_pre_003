@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
 import { Link } from 'react-router-dom';
-import Paging from '../components/pagination/Paging';
+import Pagination from '../components/pagination/Pagination';
 import { useEffect } from 'react';
 import useAnsStore from '../store/ansStore';
 
@@ -194,7 +194,7 @@ const Contents = () => {
 						</ul>
 					</ul>
 				</div>
-				<Paging limit={6} total={total} />
+				<Pagination limit={6} total={total} />
 			</Questions>
 			<RightMenu></RightMenu>
 		</Content>
