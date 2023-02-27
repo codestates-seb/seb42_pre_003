@@ -43,8 +43,12 @@ function Answer() {
 		edTitleBind,
 		edBodyBind,
 		edTagBind,
-		ansList,
-		getAnswer,
+		ansItem,
+		getAnswerItem,
+		ansDownList,
+		getAnsDown,
+		getCom,
+		comList,
 	} = useAnsStore();
 
 	const handleAnswer = (e) => {
@@ -69,48 +73,58 @@ function Answer() {
 	let { id } = useParams();
 
 	useEffect(() => {
-		getAnswer(
-			`${process.env.REACT_APP_API_URL}/questions?page=1&sort=questionId`,
+		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
+		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
+		getCom(
+			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
 		);
-	}, [getAnswer]);
+	}, [getAnswerItem, getAnsDown, getCom, id]);
 
-	const ansItem =
-		ansList.data && ansList.data.filter((el) => el.questionId === Number(id));
-
-	console.log(ansItem);
+	// console.log(comList.data);
 
 	return (
 		<>
-			<AnsWrap>
-				{page === 'read' ? (
-					<>
-						<AnsHeader />
-						<AnsCon type={'question'} />
-						<ConTitle>{`2 Answers`}</ConTitle>
-						{[0, 1].map((el, idx) => (
-							<AnsCon key={idx} />
-						))}
-						<>
-							<ConTitle>Your Answer</ConTitle>
-							<AnsEditor func={answerBind} />
-							<InputButton onClick={handleAnswer}>post your answer</InputButton>
-						</>
-					</>
-				) : (
-					<>
-						<ConTitle>Title</ConTitle>
-						<AnsInput func={edTitleBind} />
-						<ConTitle>Body</ConTitle>
-						<AnsEditor func={edBodyBind} />
-						<ConTitle>Tags</ConTitle>
-						<AnsInput func={edTagBind} />
-						<InputButton onClick={handleEdit}>Save Edits</InputButton>
-					</>
-				)}
-			</AnsWrap>
-			<div style={{ marginTop: '3rem' }}>
-				<RightMenu />
-			</div>
+			{ansItem.data && (
+				<>
+					<AnsWrap>
+						{page === 'read' ? (
+							<>
+								<AnsHeader data={ansItem.data} />
+								<AnsCon
+									type={'question'}
+									data={ansItem.data}
+									QaCom={comList.data}
+								/>
+								<ConTitle>{`${ansItem.data.answers} Answers`}</ConTitle>
+								{ansDownList.data &&
+									ansDownList.data.map((el, idx) => (
+										<AnsCon key={ansDownList.data.answerId || idx} />
+									))}
+								<>
+									<ConTitle>Your Answer</ConTitle>
+									<AnsEditor func={answerBind} />
+									<InputButton onClick={handleAnswer}>
+										post your answer
+									</InputButton>
+								</>
+							</>
+						) : (
+							<>
+								<ConTitle>Title</ConTitle>
+								<AnsInput func={edTitleBind} />
+								<ConTitle>Body</ConTitle>
+								<AnsEditor func={edBodyBind} />
+								<ConTitle>Tags</ConTitle>
+								<AnsInput func={edTagBind} />
+								<InputButton onClick={handleEdit}>Save Edits</InputButton>
+							</>
+						)}
+					</AnsWrap>
+					<div style={{ marginTop: '3rem' }}>
+						<RightMenu />
+					</div>
+				</>
+			)}
 		</>
 	);
 }

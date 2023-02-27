@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
+import axios from 'axios';
 
 export const useBoxStore = create(
 	persist(
@@ -11,7 +12,7 @@ export const useBoxStore = create(
 					try: false,
 					tag: false,
 					review: false,
-					body: true,
+					body: false,
 				},
 			],
 			actData: [
@@ -92,7 +93,7 @@ export const useAskStore = create(
 		tag: `${data.tag}`,
 		tagBind: (item) => set({ tag: item }),
 		tagReset: () => set({ tag: '' }),
-		body: `${data.detail + data.expect}`,
+		body: `${data.body}`,
 		bodyBind: (item) => set({ body: item }),
 		bodyReset: () => set({ body: '' }),
 		page: 'ask',
