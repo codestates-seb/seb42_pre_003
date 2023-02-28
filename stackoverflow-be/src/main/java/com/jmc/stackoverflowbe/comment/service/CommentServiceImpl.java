@@ -1,12 +1,8 @@
 package com.jmc.stackoverflowbe.comment.service;
 
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
-import com.jmc.stackoverflowbe.comment.dto.CommentDto.Patch;
-import com.jmc.stackoverflowbe.comment.dto.CommentDto.Post;
-import com.jmc.stackoverflowbe.comment.dto.CommentDto.Response;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
-import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.repository.CommentRepository;
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
@@ -23,17 +19,13 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final CommentMapper mapper;
     private final MemberService memberService;
     private final QuestionService questionService;
     private final AnswerService answerService;
 
     // 댓글 생성 로직
     @Override
-    public Comment createComment(Post post) {
-        // Service단에서 dto를 entity로 변경.
-        Comment comment = mapper.postDtoToComment(post);
-
+    public Comment createComment(Comment comment) {
         // 댓글 생성 전 DB에 존재하는 멤버인지 확인하고 없으면 예외 처리.
         // memberService.findExistMemberById(comment.getMember().getMemberId());
         // 댓글 생성 전 DB에 존재하는 질문 혹은 답변인지 확인하고 없으면 예외 처리.
@@ -47,9 +39,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 수정 로직
     @Override
-    public Comment updateComment(Patch patch, Long commentId) {
-        // Service단에서 dto를 entity로 변경.
-        Comment comment = mapper.patchDtoToComment(patch);
+    public Comment updateComment(Comment comment, Long commentId) {
         // DB에 존재하는 댓글인지 확인 후 있으면 obtainedComment 변수에 저장.
         Comment obtainedComment = findExistCommentById(commentId);
 
@@ -63,12 +53,11 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 리스트 조회 로직
     @Override
-    public List<Response> getComments(String qaType, Long qaId) {
+    public List<Comment> getComments(String qaType, Long qaId) {
         // 지정된 타입(질문/답변)의 식별자로 DB에서 식별자와 연결된 모든 댓글들을 가져온다.
         List<Comment> comments = findExistCommentsByQAId(qaType, qaId);
 
-        // Service단에서 entity를 dto로 변경하여 return.
-        return mapper.commentsToResponseDtos(comments);
+        return comments;
     }
 
     // 댓글 삭제 로직
@@ -90,6 +79,11 @@ public class CommentServiceImpl implements CommentService {
         // 확인 후 없으면 예외 처리.
         Comment obtainedComment = optionalComment.orElseThrow(() ->
             new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+
+        if (obtainedComment.getCommentState() == CommentState.INACTIVE ||
+            obtainedComment.getCommentState() == CommentState.DELETED) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
+        }
 
         return obtainedComment;
     }
@@ -118,7 +112,7 @@ public class CommentServiceImpl implements CommentService {
 
         // Java stream으로 CommentState가 ACTIVE인 것만 분리.
         List<Comment> sortedComments = comments.stream()
-            .filter(comment -> comment.getCommentState().equals(CommentState.ACTIVE))
+            .filter(comment -> comment.getCommentState() == CommentState.ACTIVE)
             .collect(Collectors.toList());
 
         return sortedComments;
