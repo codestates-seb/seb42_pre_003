@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface AnswerService {
     Answer createAnswer(Answer answer);
-    Answer updateAnswer(Answer answer);
+    Answer updateAnswer(Answer answer, Long answerId);
     List<Answer> getAnswers(Long questionId);
     void deleteAnswer(Long answerId);
-    Answer findExistId(Long answerId);
+    Answer findExistAnswerById(Long answerId);
 
 }

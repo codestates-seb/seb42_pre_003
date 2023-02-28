@@ -8,9 +8,12 @@ import com.jmc.stackoverflowbe.answer.service.AnswerService;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +28,27 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping("/answers")
+@Validated
 @RequiredArgsConstructor
 public class AnswerController {
+
     private final AnswerService answerService;
+
     private final AnswerMapper mapper;
 
     @PostMapping
-    public ResponseEntity postAnswer(@RequestBody AnswerDto.Post post) {
-        answerService.createAnswer(mapper.postDtoToAnswer(post));
-        URI location = UriCreator.createURI("/answers", 1L);
+    public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post post) {
+        Answer answer = answerService.createAnswer(mapper.postDtoToAnswer(post));
+        URI location = UriCreator.createURI("/answers", answer.getAnswerId());
+
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{answer-id}")
-    public ResponseEntity patchAnswer(
-            @PathVariable("answer-id") long answerId,
-            @RequestBody AnswerDto.Patch patch) {
-        answerService.updateAnswer(mapper.patchDtoToAnswer(patch));
+    public ResponseEntity patchAnswer(@Valid @RequestBody AnswerDto.Patch patch,
+        @Positive @PathVariable("answer-id") long answerId) {
+        answerService.updateAnswer(mapper.patchDtoToAnswer(patch), answerId);
+
         return ResponseEntity.ok().build();
     }
 
@@ -50,13 +57,13 @@ public class AnswerController {
         List<Answer> answers = answerService.getAnswers(questionId);
 
         return new ResponseEntity<>(new AnswerMultiResponseDto<>(
-                mapper.answersToResponseDtos(answers)),
-                HttpStatus.OK);
+            mapper.answersToResponseDtos(answers)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long answerId) {
+    public ResponseEntity deleteAnswer(@Positive @PathVariable("answer-id") long answerId) {
         answerService.deleteAnswer(answerId);
+
         return ResponseEntity.noContent().build();
     }
 }
