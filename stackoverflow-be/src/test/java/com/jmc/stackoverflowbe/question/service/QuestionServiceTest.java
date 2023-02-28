@@ -103,7 +103,7 @@ public class QuestionServiceTest {
 
     @DisplayName("질문 생성 service test")
     @Test
-    public void createQuestionTest(){
+    public void createQuestionTest() {
         given(questionRepository.save(Mockito.any(Question.class)))
             .willReturn(question);
 
@@ -113,7 +113,7 @@ public class QuestionServiceTest {
 
     @DisplayName("질문 수정 service test")
     @Test
-    public void updateQuestionTest(){
+    public void updateQuestionTest() {
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.ofNullable(question));
         given(questionRepository.save(Mockito.any(Question.class)))
@@ -127,7 +127,7 @@ public class QuestionServiceTest {
 
     @DisplayName("질문 상세 조회 service test")
     @Test
-    public void getQuestionTest(){
+    public void getQuestionTest() {
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
 
@@ -135,12 +135,12 @@ public class QuestionServiceTest {
 
         assertDoesNotThrow(executable);
     }
+
     @DisplayName("질문 리스트 조회 service test")
     @Test
-    public void getQuestionsTest(){
+    public void getQuestionsTest() {
         given(questionRepository.findAll())
-            .willReturn(List.of(question,question2));
-
+            .willReturn(List.of(question, question2));
 
         Executable executable = () -> questionService.getQuestions(0, "questionId");
         assertDoesNotThrow(executable);
@@ -148,14 +148,13 @@ public class QuestionServiceTest {
 
     @DisplayName("질문 삭제 service test")
     @Test
-    public void deleteQuestionTest(){
+    public void deleteQuestionTest() {
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
         Executable executable = () -> questionService.deleteQuestion(question.getQuestionId());
 
         assertDoesNotThrow(executable);
     }
-
 
 
 }

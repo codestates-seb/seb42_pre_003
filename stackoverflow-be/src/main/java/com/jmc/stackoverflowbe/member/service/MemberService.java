@@ -1,6 +1,5 @@
 package com.jmc.stackoverflowbe.member.service;
 
-import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +8,13 @@ public interface MemberService {
 
     Member createMember(Member member);
 
+    Member createMemberByOauth2(Member member);
+
     Member updateMember(Member memeber);
 
     Member getMember(Long memberId);
+
+    Member getMember(String email);
 
     void deleteMember(Long memberId);
 

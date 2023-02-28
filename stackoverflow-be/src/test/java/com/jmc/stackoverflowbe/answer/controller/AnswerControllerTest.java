@@ -1,6 +1,5 @@
 package com.jmc.stackoverflowbe.answer.controller;
 
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
@@ -23,6 +22,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,12 +48,14 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(AnswerController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
+@WithMockUser(username = "kimcoding@gmail.com", roles = {"USER"})
 public class AnswerControllerTest {
 
     String BASE_URL = "/answers";
@@ -137,6 +139,7 @@ public class AnswerControllerTest {
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -159,8 +162,7 @@ public class AnswerControllerTest {
                         .description("답변 내용")),
                 responseHeaders(
                     headerWithName(HttpHeaders.LOCATION)
-                        .description("Header Location, 리소스의 URL")
-                )));
+                        .description("Header Location, 리소스의 URL"))));
     }
 
     @DisplayName("답변 수정")
@@ -175,6 +177,7 @@ public class AnswerControllerTest {
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{answer-id}", answer.getAnswerId())
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -225,8 +228,7 @@ public class AnswerControllerTest {
             .andDo(document("Get-Answers",
                 preprocessResponse(prettyPrint()),
                 requestParameters(
-                    parameterWithName("questionId").description("불러올 답변 리스트들의 질문")
-                ),
+                    parameterWithName("questionId").description("불러올 답변 리스트들의 질문")),
                 responseFields(
                     fieldWithPath("data")
                         .type(JsonFieldType.ARRAY)
@@ -265,6 +267,7 @@ public class AnswerControllerTest {
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{answer-id}", answer.getAnswerId())
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
@@ -272,8 +275,6 @@ public class AnswerControllerTest {
             .andExpect(jsonPath("$.data").doesNotExist())
             .andDo(document("Delete-Answer",
                 pathParameters(
-                    parameterWithName("answer-id").description("답변 아이디")
-                ))
-            );
+                    parameterWithName("answer-id").description("답변 아이디"))));
     }
 }
