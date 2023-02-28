@@ -166,9 +166,9 @@ const Login = () => {
 			setErrorMessage('');
 		}
 
-		return axios
+		axios
 			.post(
-				`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`,
+				`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`,
 				{ name, email },
 				{ headers },
 			)
@@ -204,7 +204,7 @@ const Login = () => {
 					/>
 					<SocialLoginContainer>
 						<GoogleLogin
-							href={`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`}
+							href={`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`}
 						>
 							<SocialLoginIcon src={google} />
 							<SocialLoginText>Login with Google</SocialLoginText>

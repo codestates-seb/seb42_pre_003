@@ -10,6 +10,8 @@ import AskQuestion from './page/AskQuestion';
 import Answer from './page/Answer';
 import Mypage from './page/Mypage';
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { useIsLoginStore } from './store/loginstore';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Oauth from './page/Oauth';
@@ -22,6 +24,14 @@ const Contents = styled.div`
 `;
 
 function App() {
+	// const { setIsLogin } = useIsLoginStore((state) => state);
+
+	// useEffect(() => {
+	// 	if (sessionStorage.getItem('accesstoken')) {
+	// 		return setIsLogin(true);
+	// 	}
+	// }, []);
+
 	return (
 		<>
 			<Router>
