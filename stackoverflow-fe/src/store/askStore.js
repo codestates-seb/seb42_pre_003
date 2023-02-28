@@ -71,7 +71,7 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
-			body: true,
+			body: false,
 		},
 		initialAsk: {
 			title: '',

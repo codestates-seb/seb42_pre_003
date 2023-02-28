@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import AnsHeader from '../components/answer/AnsHeader';
 import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
-import AnsInput from '../components/answer/AnsInput';
 import useAnsStore from '../store/ansStore';
 import RightMenu from '../components/list/RightMenu';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import AnsEdit from '../components/answer/AnsEdit';
 
 const BREAK_POINT_PC = 1100;
 
@@ -41,12 +41,15 @@ const SideWrap = styled.div`
 `;
 
 function Answer() {
+	let { id } = useParams();
 	const { page, answer } = useAnsStore();
-	const { edTitle, edBody, edTag } = useAnsStore();
-	const { answerBind, answerReset, edTitleBind, edBodyBind, edTagBind } =
-		useAnsStore();
+	const { answerBind, answerReset } = useAnsStore();
 	const { ansItem, ansDownList, comList } = useAnsStore();
 	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
+
+	useEffect(() => {
+		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
+	}, [getAnswerItem, id]);
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
@@ -56,37 +59,22 @@ function Answer() {
 			answerContent: answer,
 		};
 
-		addDown(
-			`${process.env.REACT_APP_API_URL}/answers?_csrf=8eae838f-62c9-4aaa-bff2-c80ca10b2213`,
-			item,
-		);
+		addDown(`${process.env.REACT_APP_API_URL}/answers`, item);
 
 		answerReset(ansDownList);
 	};
 
-	const handleEdit = (e) => {
-		e.preventDefault();
-
-		const item = {
-			title: edTitle,
-			body: edBody,
-			tag: edTag,
-		};
-
-		console.log(item);
-	};
-
-	let { id } = useParams();
+	useEffect(() => {
+		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
+	}, [getAnsDown, id]);
 
 	useEffect(() => {
-		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
-		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
 		getCom(
 			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
 		);
-	}, [getAnswerItem, getAnsDown, getCom, id]);
+	}, [getCom, id]);
 
-	console.log(ansDownList.data);
+	console.log(ansItem.data);
 
 	return (
 		<>
@@ -116,13 +104,7 @@ function Answer() {
 							</>
 						) : (
 							<>
-								<ConTitle>Title</ConTitle>
-								<AnsInput func={edTitleBind} />
-								<ConTitle>Body</ConTitle>
-								<AnsEditor func={edBodyBind} />
-								<ConTitle>Tags</ConTitle>
-								<AnsInput func={edTagBind} />
-								<InputButton onClick={handleEdit}>Save Edits</InputButton>
+								<AnsEdit data={ansItem.data} />
 							</>
 						)}
 					</AnsWrap>

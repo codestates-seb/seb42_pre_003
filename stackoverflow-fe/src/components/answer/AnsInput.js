@@ -14,7 +14,9 @@ const Input = styled.input`
 	}
 `;
 
-function AnsInput({ func }) {
-	return <Input onChange={({ target: { value } }) => func(value)} />;
+function AnsInput({ value, func }) {
+	return (
+		<Input value={value} onChange={({ target: { value } }) => func(value)} />
+	);
 }
 export default AnsInput;
