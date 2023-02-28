@@ -1,5 +1,6 @@
 package com.jmc.stackoverflowbe.question.service;
 
+import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceStub implements QuestionService {
     private Question stubQuestion1;
     private Question stubQuestion2;
-    private  QuestionMapper mapper;
     @PostConstruct
     public void init(){
         stubQuestion1 = Question.builder()
@@ -43,15 +43,15 @@ public class QuestionServiceStub implements QuestionService {
 
     }
     //@Override
-    public Question createQuestion(QuestionDto.Post post){return null;}
+    public Question createQuestion(Question question){return null;}
     //@Override
-    public Question updateQuestion(QuestionDto.Patch patch, Long questionId){return null;}
+    public Question updateQuestion(Question question){return null;}
     //@Override
-    public QuestionDto.Response getQuestion(Long id){
-        return QuestionDto.Response.builder()
+    public Question getQuestion(Long id){
+        return Question.builder()
             .questionId(0L)
             .questionTitle("Question title for stub")
-            .memberId(0L)
+            .member(new Member())
             .questionContent("Question contents for stub")
             .state(StateGroup.ACTIVE)
             .votes(0)
@@ -63,11 +63,9 @@ public class QuestionServiceStub implements QuestionService {
     }
 
     //@Override
-    public Page<Response> getQuestions(int page, String sort){
+    public Page<Question> getQuestions(int page, String sort){
         return new PageImpl<>(
-            List.of(
-                mapper.questionToResponseDto(stubQuestion1),
-                mapper.questionToResponseDto(stubQuestion2)),
+            List.of( stubQuestion1, stubQuestion2),
             PageRequest.of(0,15, Sort.by(sort).descending()),2);
     }
 

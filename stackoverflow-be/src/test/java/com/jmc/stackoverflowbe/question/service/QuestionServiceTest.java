@@ -44,9 +44,9 @@ public class QuestionServiceTest {
 
     private final Question question = Question.builder()
         .questionId(0L)
-        .questionContent("contents for service test")
+        .questionContent("contents1 for service test")
         .member(member)
-        .questionTitle("service test")
+        .questionTitle("service1 test")
         .views(0L)
         .votes(0)
         .state(StateGroup.ACTIVE)
@@ -56,9 +56,9 @@ public class QuestionServiceTest {
 
     private final Question question2 = Question.builder()
         .questionId(1L)
-        .questionContent("contents for service test")
+        .questionContent("contents2 for service test")
         .member(member)
-        .questionTitle("service test")
+        .questionTitle("service2 test")
         .views(1L)
         .votes(1)
         .state(StateGroup.ACTIVE)
@@ -104,27 +104,23 @@ public class QuestionServiceTest {
     @DisplayName("질문 생성 service test")
     @Test
     public void createQuestionTest(){
-        given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
-            .willReturn(new Question());
         given(questionRepository.save(Mockito.any(Question.class)))
             .willReturn(question);
 
-        Executable executable = () -> questionService.createQuestion(post);
+        Executable executable = () -> questionService.createQuestion(question);
         assertDoesNotThrow(executable);
     }
 
     @DisplayName("질문 수정 service test")
     @Test
     public void updateQuestionTest(){
-        given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
-            .willReturn(new Question());
         given(questionRepository.findById(Mockito.anyLong()))
-            .willReturn(Optional.of(question));
+            .willReturn(Optional.ofNullable(question));
         given(questionRepository.save(Mockito.any(Question.class)))
-            .willReturn(question);
+            .willReturn(question2);
 
         Executable executable =
-            () -> questionService.updateQuestion(patch, question.getQuestionId());
+            () -> questionService.updateQuestion(question2);
 
         assertDoesNotThrow(executable);
     }
@@ -134,8 +130,6 @@ public class QuestionServiceTest {
     public void getQuestionTest(){
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
-        given(mapper.questionToResponseDto(Mockito.any(Question.class)))
-            .willReturn(response);
 
         Executable executable = () -> questionService.getQuestion(question.getQuestionId());
 
@@ -146,8 +140,6 @@ public class QuestionServiceTest {
     public void getQuestionsTest(){
         given(questionRepository.findAll())
             .willReturn(List.of(question,question2));
-        given(mapper.questionsToQuestionResponses(Mockito.anyList()))
-            .willReturn(List.of(response,response2));
 
 
         Executable executable = () -> questionService.getQuestions(0, "questionId");

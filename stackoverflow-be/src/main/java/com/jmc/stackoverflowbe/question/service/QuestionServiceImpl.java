@@ -25,15 +25,14 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceImpl implements QuestionService{
 
     private final QuestionRepository questionRepository;
-    private final QuestionMapper mapper;
 
     //질문 생성
     @Override
-    public Question createQuestion(QuestionDto.Post post){
+    public Question createQuestion(Question question){
         //질문 식별자로 검증이 필요할시 추가
         //verifyExistQuestion(question.getQuestionId());
         //포스트 객체 엔티티로 매핑
-        Question question = mapper.postDtoToQuestion(post);
+        //Question question = mapper.postDtoToQuestion(post);
         //state 상태설정
         question.setState(StateGroup.ACTIVE);
         //질문 db에 저장
@@ -41,10 +40,9 @@ public class QuestionServiceImpl implements QuestionService{
     }
     //질문 수정
     @Override
-    public Question updateQuestion(QuestionDto.Patch patch, Long questionId){
-        Question question = mapper.patchDtoToQuestion(patch);
+    public Question updateQuestion(Question question){
         //db에 저장된 질문인지 확인
-        Question obtainedQuestion = findExistQuestionById(questionId);
+        Question obtainedQuestion = findExistQuestionById(question.getQuestionId());
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
             .ifPresent(title -> obtainedQuestion.setQuestionTitle(title));
@@ -55,16 +53,16 @@ public class QuestionServiceImpl implements QuestionService{
     }
     //질문 조회
     @Override
-    public QuestionDto.Response getQuestion(Long questionId){
-        //Id로 질문 조회
-        QuestionDto.Response response =
-            mapper.questionToResponseDto(findExistQuestionById(questionId));
-        return response;
+    public Question getQuestion(Long questionId){
+        //질문 존재하는지 확인
+        Question obtainedQuestion = findExistQuestionById(questionId);
+        //있으면 반환
+        return obtainedQuestion;
     }
 
     //질문 전체 조회
     @Override
-    public Page<Response> getQuestions(int page, String sort){
+    public Page<Question> getQuestions(int page, String sort){
         //모든 질문 리스트로 받기
         List<Question> questions = questionRepository.findAll();
         //활성된 질문만 리스트로
@@ -72,14 +70,9 @@ public class QuestionServiceImpl implements QuestionService{
             if(currentQuestion.getState() != StateGroup.ACTIVE)
                 questions.remove(currentQuestion);
         }
-        //질문리스트 response 리스트로 매핑
-        List<QuestionDto.Response> questionResponses =
-            mapper.questionsToQuestionResponses(questions);
-        //페이지네이션 적용
-        Page<Response> responsePage = new PageImpl<>(questionResponses,
-            PageRequest.of(0,15, Sort.by(sort).descending()),4);
-        //반환
-        return responsePage;
+        //페이지네이션 적용 &반환
+        return new PageImpl<>(questions,
+            PageRequest.of(page, 15, Sort.by(sort).descending()), 2);
     }
     //질문 삭제
     @Override
@@ -90,9 +83,7 @@ public class QuestionServiceImpl implements QuestionService{
         question.setState(StateGroup.DELETED);
         questionRepository.save(question);
     }
-    //조회수 증가, 투표기능, 선택 기능 추가해야할지?
 
-    //질문이 존재하는지 확인
     @Override
     public Question findExistQuestionById(Long questionId){
         //질문id로 존재하는지 확인

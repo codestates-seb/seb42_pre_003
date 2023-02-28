@@ -136,7 +136,7 @@ public class QuestionControllerTest {
         String content = gson.toJson(post);
         given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
             .willReturn(question);
-        given(questionService.createQuestion(Mockito.any(QuestionDto.Post.class)))
+        given(questionService.createQuestion(Mockito.any(Question.class)))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
@@ -178,7 +178,7 @@ public class QuestionControllerTest {
         String content = gson.toJson(patch);
         given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
             .willReturn(new Question());
-        given(questionService.updateQuestion(Mockito.any(QuestionDto.Patch.class), Mockito.anyLong()))
+        given(questionService.updateQuestion(Mockito.any(Question.class)))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
@@ -212,7 +212,7 @@ public class QuestionControllerTest {
     void getQuestionTest() throws Exception{
 
         given(questionService.getQuestion(Mockito.anyLong()))
-            .willReturn(response);
+            .willReturn(question);
         given(mapper.questionToResponseDto(Mockito.any(Question.class)))
             .willReturn(response);
 
@@ -281,15 +281,17 @@ public class QuestionControllerTest {
     void getQuestionsTest() throws Exception{
         String page = "1";
         String sort = "questionId";
-        List<QuestionDto.Response> questionResponses =
+        List<Question> questions =
+            List.of(question,question2);
+        List<QuestionDto.Response> responses=
             List.of(response,response2);
-        Page<QuestionDto.Response> responsePage = new PageImpl<>(questionResponses,
+        Page<Question> questionPage = new PageImpl<>(questions,
             PageRequest.of(0,15, Sort.by(sort).descending()), 2);
 
         given(mapper.questionsToQuestionResponses(Mockito.any(List.class)))
-            .willReturn(questionResponses);
+            .willReturn(responses);
         given(questionService.getQuestions(Mockito.any(Integer.class),Mockito.any(String.class)))
-            .willReturn(responsePage);
+            .willReturn(questionPage);
 
         ResultActions actions = mockMvc.perform(
             get(BASE_URL)

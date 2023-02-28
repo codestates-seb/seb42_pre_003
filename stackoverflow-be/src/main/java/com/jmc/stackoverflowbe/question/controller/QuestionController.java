@@ -37,7 +37,8 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post) {
-        Question question = questionService.createQuestion(post);
+
+        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post));
         URI location = UriCreator.createURI("/questions", question.getQuestionId());
         return ResponseEntity.created(location).build();
     }
@@ -46,13 +47,16 @@ public class QuestionController {
     public ResponseEntity patchQuestion(
             @PathVariable("question-id") long questionId,
             @RequestBody QuestionDto.Patch patch) {
-        questionService.updateQuestion(patch, questionId);
+        Question question = mapper.patchDtoToQuestion(patch);
+        question.setQuestionId(questionId);
+        questionService.updateQuestion(question);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") long questionId) {
-        QuestionDto.Response response = questionService.getQuestion(questionId);
+        Question question = questionService.getQuestion(questionId);
+        QuestionDto.Response response = mapper.questionToResponseDto(question);
         return new ResponseEntity(new SingleResponseDto<>(
                 response),
                 HttpStatus.OK);
@@ -60,11 +64,11 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam String sort, @Positive @RequestParam int page) {
-        Page<Response> questionResponsePage = questionService.getQuestions(page - 1, sort);
-        List<Response> questionResponseList = questionResponsePage.getContent();
+        Page<Question> questionPage = questionService.getQuestions(page - 1, sort);
+        List<Question> questionList = questionPage.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(questionResponseList,
-                        questionResponsePage),
+                new MultiResponseDto<>(mapper.questionsToQuestionResponses(questionList),
+                        questionPage),
                 HttpStatus.OK);
 
     }
