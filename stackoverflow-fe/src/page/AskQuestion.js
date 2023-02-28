@@ -3,6 +3,7 @@ import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
 import { useBoxStore, useAskStore } from '../store/askStore';
 import useAnsStore from '../store/ansStore';
+import { useNavigate } from 'react-router-dom';
 
 const BREAK_POINT_PC = 1100;
 
@@ -51,9 +52,9 @@ function AskQuestion() {
 	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
 		useAskStore();
-	const { ansList, addAnswer } = useAnsStore();
+	const { addAnswer } = useAnsStore();
 
-	console.log(ansList);
+	const navigate = useNavigate();
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
@@ -73,7 +74,7 @@ function AskQuestion() {
 			questionTitle: title,
 			questionContent: body === '' ? askData[0].body : body,
 		};
-		console.log(item);
+
 		addAnswer(`${process.env.REACT_APP_API_URL}/questions`, item);
 
 		setAbleData(initialAble);
@@ -87,7 +88,7 @@ function AskQuestion() {
 		tagReset();
 		bodyReset();
 
-		window.location.reload();
+		navigate(`/`);
 	};
 
 	return (

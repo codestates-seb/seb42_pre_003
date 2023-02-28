@@ -55,14 +55,14 @@ function AnsEdit({ data }) {
 
 		console.log(item);
 		editAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`, item);
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleDel = (e) => {
 		e.preventDefault();
 
-		delAnswer(`${process.env.REACT_APP_API_URL}questions/${id}`);
-		window.location.reload();
+		delAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`);
+		// window.location.reload();
 	};
 
 	const handleClose = (e) => {

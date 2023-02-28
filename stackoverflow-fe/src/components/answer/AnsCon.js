@@ -40,7 +40,7 @@ const AnsSide = styled.div`
 
 const AnsBox = styled.div`
 	width: 100%;
-	p {
+	.con {
 		padding-bottom: 1rem;
 		font-size: 0.75rem;
 		font-weight: 500;
@@ -86,7 +86,12 @@ function AnsCon({ type, data, QaCom }) {
 						)}
 					</AnsSide>
 					<AnsBox>
-						<p>{data.questionContent}</p>
+						<div
+							className='con'
+							dangerouslySetInnerHTML={{
+								__html: data.questionContent,
+							}}
+						></div>
 						{type === 'question' ? (
 							<AnsTag>
 								<ul>

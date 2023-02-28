@@ -32,7 +32,7 @@ const useAnsStore = create(
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),
-		ansList: {},
+		ansList: [],
 		getAnswer: async (URL) => {
 			const response = await axios.get(URL, {
 				Accept: 'application / json',
@@ -40,29 +40,22 @@ const useAnsStore = create(
 			set({ ansList: await response.data });
 		},
 		addAnswer: async (URL, item) => {
-			const response = await axios.post(URL, {
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-					Accept: 'application / json',
-					withCredentials: true,
-				},
-				body: JSON.stringify(item),
+			const response = await axios.post(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({ ...state, ansList: { ...state.ansList, data } }));
 		},
 		editAnswer: async (URL, item) => {
-			const response = await axios.patch(URL, {
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-					Accept: 'application / json',
-				},
-				body: JSON.stringify(item),
+			const response = await axios.patch(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({
 				...state,
-				comList: state.ansList.map((el) => {
+				ansList: state.ansList.map((el) => {
 					if (el.questionId === data.questionId) {
 						return data;
 					} else {
@@ -73,9 +66,7 @@ const useAnsStore = create(
 		},
 		delAnswer: async (URL) => {
 			const response = await axios.delete(URL, {
-				headers: {
-					Accept: 'application / json',
-				},
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({
