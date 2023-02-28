@@ -52,7 +52,13 @@ public class MemberServiceTest {
         .state(MemberState.ACTIVE)
         .build();
 
+    Member posthmember = Member.builder()
+        .email("kcs@gmail.com")
+        .name("김철수")
+        .build();
+
     Member patchmember = Member.builder()
+        .memberId(1L)
         .name("홍길동")
         .location("서울")
         .about("안녕하세요")
@@ -89,33 +95,29 @@ public class MemberServiceTest {
     @DisplayName("회원 생성")
     @Test
     void createMember() {
-        // mapper.postDtoToMember()가 member 반환.
-        given(mapper.postDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(member);
-
         // memberRepository.findByEmail()가 Optional null을 반환.
-        given(memberRepository.findByEmail(Mockito.anyString())).willReturn(Optional.ofNullable(null));
+        given(memberRepository.findByEmail(Mockito.anyString())).willReturn(
+            Optional.ofNullable(null));
 
         // memberRepository.save()가 savedmember를 반환.
         given(memberRepository.save(Mockito.any(Member.class))).willReturn(savedmember);
 
         // createMember()가 예외를 발생하지 않아야 함.
-        assertDoesNotThrow(() -> memberService.createMember(post));
+        assertDoesNotThrow(() -> memberService.createMember(posthmember));
     }
 
     @DisplayName("회원 수정")
     @Test
     void updateMember() {
         // memberRepository.findById()가 Optional savedmember를 반환
-        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(savedmember));
-
-        // mapper.patchDtoToMember()가 patchmember를 반환.
-        given(mapper.patchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(patchmember);
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(
+            Optional.ofNullable(savedmember));
 
         // memberRepository.save()가 updatedMember를 반환.
         given(memberRepository.save(Mockito.any(Member.class))).willReturn(updatedMember);
 
         // updateMember()가 예외를 발생하지 않아야 함.
-        assertDoesNotThrow(() -> memberService.updateMember(patch, 1L));
+        assertDoesNotThrow(() -> memberService.updateMember(patchmember));
     }
 
     @DisplayName("회원 조회")
@@ -123,9 +125,6 @@ public class MemberServiceTest {
     void getMember() {
         // memberRepository.findById()가 Optional savedmember를 반환.
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(savedmember));
-
-        // mapper.memberToResponseDto()가 response를 반환.
-        given(mapper.memberToResponseDto(Mockito.any(Member.class))).willReturn(response);
 
         // getMember()가 예외를 발생하지 않아야 함.
         assertDoesNotThrow(() -> memberService.getMember(1L));

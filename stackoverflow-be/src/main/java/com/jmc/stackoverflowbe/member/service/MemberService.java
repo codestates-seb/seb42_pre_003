@@ -7,15 +7,17 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MemberService {
 
-    Member createMember(MemberDto.Post post);
+    Member createMember(Member member);
 
-    Member updateMember(MemberDto.Patch patch, long memberId);
+    Member updateMember(Member memeber);
 
-    MemberDto.Response getMember(Long memberId);
+    Member getMember(Long memberId);
 
     void deleteMember(Long memberId);
 
     void verifyExistEmail(String email);
 
     Member findExistMemberById(Long memberId);
+
+    Member findExistMemberByEmail(String email);
 }
