@@ -25,6 +25,13 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member);
     }
 
+    public Member createMemberByOauth2(Member member) {
+        // 동일한 이메일이 존재하는지 확인.
+        verifyExistEmail(member.getEmail());
+
+        return memberRepository.save(member);
+    }
+
     @Override
     public Member updateMember(Member member) {
         // 변경할 회원 정보가 존재하는지 검증.
@@ -45,6 +52,12 @@ public class MemberServiceImpl implements MemberService {
     public Member getMember(Long memberId) {
 
         return findExistMemberById(memberId);
+    }
+
+    @Override
+    public Member getMember(String email) {
+
+        return findExistMemberByEmail(email);
     }
 
     @Override

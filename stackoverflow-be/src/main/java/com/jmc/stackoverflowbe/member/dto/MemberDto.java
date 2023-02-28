@@ -51,6 +51,22 @@ public class MemberDto {
     @Getter
     @Setter
     @NoArgsConstructor
+    public static class meResponse {
+        private Long memberId;
+        private String email;
+        private String name;
+
+        @Builder
+        public meResponse(Long memberId, String email, String name) {
+            this.memberId = memberId;
+            this.email = email;
+            this.name = name;
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class Response extends Auditable {
         private Long memberId;
         private String email;

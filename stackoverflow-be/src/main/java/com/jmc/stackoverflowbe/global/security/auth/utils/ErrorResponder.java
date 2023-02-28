@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.auth.oauth.utils;
+package com.jmc.stackoverflowbe.global.security.auth.utils;
 
 import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.global.common.ErrorResponse;

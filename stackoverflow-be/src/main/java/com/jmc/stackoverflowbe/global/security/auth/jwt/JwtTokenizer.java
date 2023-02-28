@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.auth.oauth.jwt;
+package com.jmc.stackoverflowbe.global.security.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -35,29 +35,29 @@ public class JwtTokenizer {
     }
 
     public String generateAccessToken(Map<String, Object> claims,
-            String subject,
-            Date expiration,
-            String base64EncodedSecretKey) {
+        String subject,
+        Date expiration,
+        String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(expiration)
-                .signWith(key)
-                .compact();
+            .setClaims(claims)
+            .setSubject(subject)
+            .setIssuedAt(Calendar.getInstance().getTime())
+            .setExpiration(expiration)
+            .signWith(key)
+            .compact();
     }
 
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
-                .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(expiration)
-                .signWith(key)
-                .compact();
+            .setSubject(subject)
+            .setIssuedAt(Calendar.getInstance().getTime())
+            .setExpiration(expiration)
+            .signWith(key)
+            .compact();
     }
 
     // 검증 후, Claims을 반환 하는 용도
@@ -65,9 +65,9 @@ public class JwtTokenizer {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(jws);
         return claims;
     }
 
@@ -76,9 +76,9 @@ public class JwtTokenizer {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jws);
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(jws);
     }
 
     public Date getTokenExpiration(int expirationMinutes) {

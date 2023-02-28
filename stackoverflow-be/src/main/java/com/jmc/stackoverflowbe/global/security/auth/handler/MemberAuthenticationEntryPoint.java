@@ -1,6 +1,6 @@
-package com.jmc.stackoverflowbe.auth.oauth.handler;
+package com.jmc.stackoverflowbe.global.security.auth.handler;
 
-import com.jmc.stackoverflowbe.auth.oauth.utils.ErrorResponder;
+import com.jmc.stackoverflowbe.global.security.auth.utils.ErrorResponder;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.auth.oauth.utils;
+package com.jmc.stackoverflowbe.global.security.auth.utils;
 
 import java.util.List;
 import java.util.stream.Collectors;

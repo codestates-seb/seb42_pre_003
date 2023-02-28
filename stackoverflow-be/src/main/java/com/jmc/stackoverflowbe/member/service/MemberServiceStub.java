@@ -18,6 +18,11 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
+    public Member createMemberByOauth2(Member member) {
+        return null;
+    }
+
+    @Override
     public Member updateMember(Member member) {
         return null;
     }
@@ -30,6 +35,11 @@ public class MemberServiceStub implements MemberService {
                 .name("홍길동")
                 .state(MemberState.ACTIVE)
                 .build();
+    }
+
+    @Override
+    public Member getMember(String email) {
+        return null;
     }
 
     @Override

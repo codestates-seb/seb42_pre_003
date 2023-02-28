@@ -1,4 +1,4 @@
-package com.jmc.stackoverflowbe.auth.oauth.config;
+package com.jmc.stackoverflowbe.global.security.auth.config;
 
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,10 @@ public class CorsConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:80", "http://localhost:8080"));
+        // config.setAllowedOrigins(Arrays.asList("http://localhost:3000",
+        // "http://localhost:80", "http://localhost:8080"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        config.addAllowedOriginPattern("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);

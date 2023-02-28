@@ -1,9 +1,10 @@
-package com.jmc.stackoverflowbe.auth.oauth.handler;
+package com.jmc.stackoverflowbe.global.security.auth.handler;
 
-import com.jmc.stackoverflowbe.auth.oauth.jwt.JwtTokenizer;
-import com.jmc.stackoverflowbe.auth.oauth.utils.CustomAuthorityUtils;
+import com.jmc.stackoverflowbe.global.security.auth.jwt.JwtTokenizer;
+import com.jmc.stackoverflowbe.global.security.auth.utils.CustomAuthorityUtils;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,56 +22,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler { // (1)
+@RequiredArgsConstructor
+public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {   // (1)
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
 
-    // (2)
-    public OAuth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
-            CustomAuthorityUtils authorityUtils,
-            MemberService memberService) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-        this.memberService = memberService;
-    }
-
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
-        var oAuth2User = (OAuth2User) authentication.getPrincipal();
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email")); // (3)
         String name = String.valueOf(oAuth2User.getAttributes().get("name")); // (3)
-        List<String> authorities = authorityUtils.createRoles(email); // (4)
+        List<String> authorities = authorityUtils.createRoles(email);           // (4)
 
-        saveMember(email, name); // (5)
-        redirect(request, response, email, authorities); // (6)
+        Member member = saveMember(email, name);  // (5)
+        redirect(request, response, member, authorities);  // (6)
     }
 
-    private void saveMember(String email, String name) {
+    private Member saveMember(String email, String name) {
         Member member = Member.builder()
-                .email(email)
-                .name(name)
-                .build();
+            .email(email)
+            .name(name)
+            .build();
 
-        memberService.createMember(member);
+        return memberService.createMemberByOauth2(member);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, String username,
-            List<String> authorities) throws IOException {
-        String accessToken = delegateAccessToken(username, authorities); // (6-1)
-        String refreshToken = delegateRefreshToken(username); // (6-2)
+    private void redirect(HttpServletRequest request, HttpServletResponse response, Member member, List<String> authorities) throws IOException {
+        String accessToken = delegateAccessToken(member, authorities);  // (6-1)
+        String refreshToken = delegateRefreshToken(member);     // (6-2)
 
-        String uri = createURI(accessToken, refreshToken).toString(); // (6-3)
-        getRedirectStrategy().sendRedirect(request, response, uri); // (6-4)
+        String uri = createURI(accessToken, refreshToken).toString();   // (6-3)
+        getRedirectStrategy().sendRedirect(request, response, uri);   // (6-4)
     }
 
-    private String delegateAccessToken(String username, List<String> authorities) {
+    private String delegateAccessToken(Member member, List<String> authorities) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", username);
+        claims.put("memberId", member.getMemberId());
+        claims.put("email", member.getEmail());
         claims.put("roles", authorities);
 
-        String subject = username;
+        String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
@@ -80,8 +72,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return accessToken;
     }
 
-    private String delegateRefreshToken(String username) {
-        String subject = username;
+    private String delegateRefreshToken(Member member) {
+        String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
@@ -96,13 +88,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         queryParams.add("refresh_token", refreshToken);
 
         return UriComponentsBuilder
-                .newInstance()
-                .scheme("http")
-                .host("localhost")
-                .path("/")
-                .queryParams(queryParams)
-                .build()
-                .toUri();
+            .newInstance()
+            .scheme("http")
+            .host("localhost")
+            .port(3000)
+            .path("/auth/google/callback")
+            .queryParams(queryParams)
+            .build()
+            .toUri();
     }
-
 }
