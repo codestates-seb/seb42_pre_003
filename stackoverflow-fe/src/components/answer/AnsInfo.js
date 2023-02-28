@@ -57,9 +57,15 @@ const InfoAva = styled.div`
 function AnsInfo() {
 	const { handlePage } = useAnsStore();
 
+	const addItemData = (e) => {
+		e.preventDefault();
+
+		handlePage('edit');
+	};
+
 	return (
 		<InfoWrap>
-			<InfoButton onClick={handlePage}>Edit</InfoButton>
+			<InfoButton onClick={addItemData}>Edit</InfoButton>
 			<span>edited Feb 17 at 0:13</span>
 			<InfoUser>
 				<span>asked Feb 12 at 21:42</span>

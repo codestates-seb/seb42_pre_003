@@ -3,6 +3,7 @@ import AnsHeader from '../components/answer/AnsHeader';
 import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
 import useAnsStore from '../store/ansStore';
+import { useBoxStore } from '../store/askStore';
 import RightMenu from '../components/list/RightMenu';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -42,6 +43,7 @@ const SideWrap = styled.div`
 
 function Answer() {
 	let { id } = useParams();
+	const { setEditData } = useBoxStore();
 	const { page, answer } = useAnsStore();
 	const { answerBind, answerReset } = useAnsStore();
 	const { ansItem, ansDownList, comList } = useAnsStore();
@@ -50,6 +52,11 @@ function Answer() {
 	useEffect(() => {
 		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
 	}, [getAnswerItem, id]);
+
+	useEffect(() => {
+		const obj = { ...ansItem.data };
+		setEditData(obj);
+	}, [setEditData, ansItem]);
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
@@ -74,8 +81,6 @@ function Answer() {
 		);
 	}, [getCom, id]);
 
-	console.log(ansItem.data);
-
 	return (
 		<>
 			{ansItem.data && (
@@ -96,7 +101,7 @@ function Answer() {
 									))}
 								<>
 									<ConTitle>Your Answer</ConTitle>
-									<AnsEditor func={answerBind} />
+									<AnsEditor value={answer} func={answerBind} />
 									<InputButton onClick={handleAnswer}>
 										post your answer
 									</InputButton>

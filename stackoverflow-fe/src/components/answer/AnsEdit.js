@@ -2,6 +2,7 @@ import AnsInput from './AnsInput';
 import AnsEditor from './AnsEditor';
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
+import { useParams } from 'react-router-dom';
 
 const InputBtnBox = styled.div`
 	display: flex;
@@ -13,6 +14,9 @@ const InputBtnBox = styled.div`
 		font-size: 0.65rem;
 		border-radius: 0.188rem;
 		border: 1px solid #d7d8d9;
+		&:last-child {
+			margin-left: auto;
+		}
 	}
 `;
 
@@ -34,27 +38,37 @@ const ConTitle = styled.h4`
 `;
 
 function AnsEdit({ data }) {
-	console.log(data);
+	let { id } = useParams();
 
-	const { edTitleBind, edBodyBind, edTagBind } = useAnsStore();
-	const { edTitle, edBody, edTag } = useAnsStore();
+	const { edTitleBind, edBodyBind, edTagBind, editAnswer, delAnswer } =
+		useAnsStore();
+	const { edTitle, edBody } = useAnsStore();
+	const { handlePage } = useAnsStore();
 
 	const handleEdit = (e) => {
 		e.preventDefault();
 
 		const item = {
-			title: edTitle,
-			body: edBody,
-			tag: edTag,
+			questionTitle: edTitle,
+			questionContent: edBody,
 		};
 
 		console.log(item);
+		editAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`, item);
+		window.location.reload();
 	};
 
 	const handleDel = (e) => {
 		e.preventDefault();
 
-		console.log('check');
+		delAnswer(`${process.env.REACT_APP_API_URL}questions/${id}`);
+		window.location.reload();
+	};
+
+	const handleClose = (e) => {
+		e.preventDefault();
+
+		handlePage('read');
 	};
 
 	return (
@@ -68,7 +82,7 @@ function AnsEdit({ data }) {
 			<InputBtnBox>
 				<InputButton onClick={handleEdit}>Save Edits</InputButton>
 				<button onClick={handleDel}>Delete</button>
-				<button>close</button>
+				<button onClick={handleClose}>Close</button>
 			</InputBtnBox>
 		</>
 	);

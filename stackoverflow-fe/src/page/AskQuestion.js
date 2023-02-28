@@ -87,7 +87,7 @@ function AskQuestion() {
 		tagReset();
 		bodyReset();
 
-		// window.location.reload();
+		window.location.reload();
 	};
 
 	return (

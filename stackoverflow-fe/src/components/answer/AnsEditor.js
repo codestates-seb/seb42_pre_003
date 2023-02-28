@@ -45,7 +45,7 @@ function AnsEditor({ value, func }) {
 				modules={modules}
 				formats={formats}
 				theme='snow'
-				value={value}
+				value={value === '' ? '' : value}
 				onChange={(value) => func(value)}
 			/>
 
