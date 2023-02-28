@@ -31,7 +31,9 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
-        memberService.createMember(mapper.postDtoToMember(post));
+        memberService.createMember(post);
+
+        // Location 헤더에 추가할 URI를 생성.
         URI location = UriCreator.createURI("/members", 1L);
 
         return ResponseEntity.created(location).build();
@@ -41,17 +43,14 @@ public class MemberController {
     public ResponseEntity patchMember(
             @PathVariable("member-id") long memberId,
             @RequestBody MemberDto.Patch patch) {
-        memberService.updateMember(mapper.patchDtoToMember(patch));
+        memberService.updateMember(patch, memberId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") long memberId) {
-        Member member = memberService.getMember(memberId);
-        MemberDto.Response response = mapper.memberToResponseDto(member);
-        response.setIsMine(false);
         return new ResponseEntity(
-                new SingleResponseDto<>(response),
+                new SingleResponseDto<>(memberService.getMember(memberId)),
                 HttpStatus.OK);
     }
 
