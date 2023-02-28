@@ -12,14 +12,16 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService{
 
     private final QuestionRepository questionRepository;
@@ -32,7 +34,8 @@ public class QuestionServiceImpl implements QuestionService{
         //verifyExistQuestion(question.getQuestionId());
         //포스트 객체 엔티티로 매핑
         Question question = mapper.postDtoToQuestion(post);
-
+        //state 상태설정
+        question.setState(StateGroup.ACTIVE);
         //질문 db에 저장
         return questionRepository.save(question);
     }
