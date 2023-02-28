@@ -1,16 +1,15 @@
 package com.jmc.stackoverflowbe.comment.service;
 
-import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import java.util.List;
 
 public interface CommentService {
 
-    Comment createComment(CommentDto.Post post);
+    Comment createComment(Comment comment);
 
-    Comment updateComment(CommentDto.Patch patch, Long commentId);
+    Comment updateComment(Comment comment, Long commentId);
 
-    List<CommentDto.Response> getComments(String qaType, Long qaId);
+    List<Comment> getComments(String qaType, Long qaId);
 
     void deleteComment(Long commentId);
 
