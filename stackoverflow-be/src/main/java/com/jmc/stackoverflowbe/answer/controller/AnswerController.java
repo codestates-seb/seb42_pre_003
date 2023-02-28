@@ -34,9 +34,11 @@ public class AnswerController {
 
     private final AnswerService answerService;
 
+    private final AnswerMapper mapper;
+
     @PostMapping
     public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post post) {
-        Answer answer = answerService.createAnswer(post);
+        Answer answer = answerService.createAnswer(mapper.postDtoToAnswer(post));
         URI location = UriCreator.createURI("/answers", answer.getAnswerId());
 
         return ResponseEntity.created(location).build();
@@ -45,17 +47,17 @@ public class AnswerController {
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@Valid @RequestBody AnswerDto.Patch patch,
         @Positive @PathVariable("answer-id") long answerId) {
-        answerService.updateAnswer(patch, answerId);
+        answerService.updateAnswer(mapper.patchDtoToAnswer(patch), answerId);
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity getAnswers(@RequestParam long questionId) {
-        List<AnswerDto.Response> answerDtos = answerService.getAnswers(questionId);
+        List<Answer> answers = answerService.getAnswers(questionId);
 
-        return new ResponseEntity<>(new AnswerMultiResponseDto<>(answerDtos),
-            HttpStatus.OK);
+        return new ResponseEntity<>(new AnswerMultiResponseDto<>(
+            mapper.answersToResponseDtos(answers)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{answer-id}")

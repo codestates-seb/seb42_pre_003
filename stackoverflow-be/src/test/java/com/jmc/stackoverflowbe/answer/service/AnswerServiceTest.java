@@ -4,20 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-import com.jmc.stackoverflowbe.answer.dto.AnswerDto;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.entity.Answer.StateGroup;
-import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.repository.AnswerRepository;
-import com.jmc.stackoverflowbe.comment.dto.CommentDto;
-import com.jmc.stackoverflowbe.comment.entity.Comment;
-import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.service.MemberService;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.service.QuestionService;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,38 +64,8 @@ public class AnswerServiceTest {
         .question(question)
         .build();
 
-    private final AnswerDto.Post post = AnswerDto.Post.builder()
-        .questionId(1L)
-        .answerContent("post testing content")
-        .build();
-
-    private final AnswerDto.Patch patch = AnswerDto.Patch.builder()
-        .answerContent("patch testing content")
-        .build();
-
-    private final AnswerDto.Response response1 = AnswerDto.Response.builder()
-        .answerId(1L)
-        .questionId(1L)
-        .memberId(1L)
-        .answerContent("get testing content")
-        .votes(0)
-        .state(StateGroup.ACTIVE)
-        .build();
-
-    private final AnswerDto.Response response2 = AnswerDto.Response.builder()
-        .answerId(2L)
-        .questionId(1L)
-        .memberId(1L)
-        .answerContent("get testing content 2")
-        .votes(0)
-        .state(StateGroup.ACTIVE)
-        .build();
-
     @Mock
     private AnswerRepository answerRepository;
-
-    @Mock
-    private AnswerMapper mapper;
 
     @Mock
     private MemberService memberService;
@@ -116,8 +80,6 @@ public class AnswerServiceTest {
     @DisplayName("Service단 답변 생성 로직")
     @Test
     public void createAnswerTest() {
-        given(mapper.postDtoToAnswer(Mockito.any(AnswerDto.Post.class)))
-            .willReturn(new Answer());
 //        given(memberService.findExistMemberById(Mockito.anyLong()))
 //            .willReturn(new Member());
 //        given(questionService.findExistQuestionById(Mockito.anyLong()))
@@ -126,7 +88,7 @@ public class AnswerServiceTest {
         given(answerRepository.save(Mockito.any(Answer.class)))
             .willReturn(answer);
 
-        Executable executable = () -> answerService.createAnswer(post);
+        Executable executable = () -> answerService.createAnswer(answer);
 
         assertDoesNotThrow(executable);
     }
@@ -134,14 +96,12 @@ public class AnswerServiceTest {
     @DisplayName("Service단 답변 수정 로직")
     @Test
     public void updateAnswerTest() {
-        given(mapper.patchDtoToAnswer(Mockito.any(AnswerDto.Patch.class)))
-            .willReturn(new Answer());
         given(answerRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(answer));
         given(answerRepository.save(Mockito.any(Answer.class)))
             .willReturn(answer);
 
-        Executable executable = () -> answerService.updateAnswer(patch, answer.getAnswerId());
+        Executable executable = () -> answerService.updateAnswer(answer, answer.getAnswerId());
 
         assertDoesNotThrow(executable);
     }
@@ -151,8 +111,6 @@ public class AnswerServiceTest {
     public void getAnswersTest() {
         ReflectionTestUtils.invokeMethod(answerService, "findExistAnswersByQuestionId",
             answer.getQuestion().getQuestionId());
-        given(mapper.answersToResponseDtos(Mockito.anyList()))
-            .willReturn(List.of(response1, response2));
 
         Executable executable = () -> answerService.getAnswers(answer.getAnswerId());
 

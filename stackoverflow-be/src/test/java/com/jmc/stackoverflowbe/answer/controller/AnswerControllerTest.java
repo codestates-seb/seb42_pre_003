@@ -119,6 +119,9 @@ public class AnswerControllerTest {
     @MockBean
     AnswerService answerService;
 
+    @MockBean
+    AnswerMapper mapper;
+
     @Autowired
     Gson gson;
 
@@ -127,7 +130,9 @@ public class AnswerControllerTest {
     void postAnswerTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(answerService.createAnswer(Mockito.any(AnswerDto.Post.class)))
+        given(mapper.postDtoToAnswer(Mockito.any(AnswerDto.Post.class)))
+            .willReturn(new Answer());
+        given(answerService.createAnswer(Mockito.any(Answer.class)))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
@@ -163,7 +168,9 @@ public class AnswerControllerTest {
     void patchAnswerTest() throws Exception {
         String content = gson.toJson(patch);
 
-        given(answerService.updateAnswer(Mockito.any(AnswerDto.Patch.class), Mockito.anyLong()))
+        given(mapper.patchDtoToAnswer(Mockito.any(AnswerDto.Patch.class)))
+            .willReturn(new Answer());
+        given(answerService.updateAnswer(Mockito.any(Answer.class), Mockito.anyLong()))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
@@ -192,6 +199,8 @@ public class AnswerControllerTest {
     @Test
     void getAnswerListTest() throws Exception {
         given(answerService.getAnswers(Mockito.anyLong()))
+            .willReturn(List.of(new Answer(), new Answer()));
+        given(mapper.answersToResponseDtos(Mockito.anyList()))
             .willReturn(List.of(response1, response2));
 
         ResultActions actions = mockMvc.perform(

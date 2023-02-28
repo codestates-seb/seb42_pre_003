@@ -1,11 +1,7 @@
 package com.jmc.stackoverflowbe.answer.service;
 
-import com.jmc.stackoverflowbe.answer.dto.AnswerDto.Patch;
-import com.jmc.stackoverflowbe.answer.dto.AnswerDto.Post;
-import com.jmc.stackoverflowbe.answer.dto.AnswerDto.Response;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.entity.Answer.StateGroup;
-import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.repository.AnswerRepository;
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
@@ -22,16 +18,12 @@ import org.springframework.stereotype.Service;
 public class AnswerServiceImpl implements AnswerService {
 
     private final AnswerRepository answerRepository;
-    private final AnswerMapper mapper;
     private final MemberService memberService;
     private final QuestionService questionService;
 
     // 답변 생성 로직
     @Override
-    public Answer createAnswer(Post post) {
-        // Service단에서 dto를 entity로 변경.
-        Answer answer = mapper.postDtoToAnswer(post);
-
+    public Answer createAnswer(Answer answer) {
         // 답변 생성 전 DB에 존재하는 멤버인지 확인하고 없으면 예외 처리.
         // memberService.findExistMemberById(comment.getMember().getMemberId());
         // 답변 생성 전 DB에 존재하는 질문인지 확인하고 없으면 예외 처리.
@@ -44,9 +36,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     // 답변 수정 로직
     @Override
-    public Answer updateAnswer(Patch patch, Long answerId) {
-        // Service단에서 dto를 entity로 변경.
-        Answer answer = mapper.patchDtoToAnswer(patch);
+    public Answer updateAnswer(Answer answer, Long answerId) {
         // DB에 존재하는 답변인지 확인 후 있으면 obtainedAnswer 변수에 저장.
         Answer obtainedAnswer = findExistAnswerById(answerId);
 
@@ -60,12 +50,11 @@ public class AnswerServiceImpl implements AnswerService {
 
     // 답변 리스트 조회 로직
     @Override
-    public List<Response> getAnswers(Long questionId) {
+    public List<Answer> getAnswers(Long questionId) {
         // 질문 식별자로 DB에서 식별자와 연결된 모든 댓글들을 가져온다.
         List<Answer> answers = findExistAnswersByQuestionId(questionId);
 
-        // Service단에서 entity를 dto로 변경하여 return.
-        return mapper.answersToResponseDtos(answers);
+        return answers;
     }
 
     // 답변 삭제 로직
@@ -88,6 +77,11 @@ public class AnswerServiceImpl implements AnswerService {
         Answer obtainedAnswer = optionalAnswer.orElseThrow(() ->
             new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
 
+        if (obtainedAnswer.getState() == StateGroup.INACTIVE ||
+            obtainedAnswer.getState() == StateGroup.DELETED) {
+            throw new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND);
+        }
+
         return obtainedAnswer;
     }
 
@@ -104,7 +98,7 @@ public class AnswerServiceImpl implements AnswerService {
 
         // Java stream으로 StateGroup이 ACTIVE인 것만 분리.
         List<Answer> sortedAnswers = answers.stream()
-            .filter(answer -> answer.getState().equals(StateGroup.ACTIVE))
+            .filter(answer -> answer.getState() == StateGroup.ACTIVE)
             .collect(Collectors.toList());
 
         return sortedAnswers;
