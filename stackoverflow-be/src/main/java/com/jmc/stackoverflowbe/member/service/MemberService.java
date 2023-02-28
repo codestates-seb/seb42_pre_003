@@ -1,21 +1,23 @@
 package com.jmc.stackoverflowbe.member.service;
 
+import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public interface MemberService {
 
     Member createMember(Member member);
 
-    Member updateMember(Member member);
+    Member updateMember(Member memeber);
 
-    Member getMember(Long id);
+    Member getMember(Long memberId);
 
-    void deleteMember(Long id);
+    void deleteMember(Long memberId);
 
-    void verifyExistName(String Name);
+    void verifyExistEmail(String email);
 
-    Member findExistId(Long id);
+    Member findExistMemberById(Long memberId);
+
+    Member findExistMemberByEmail(String email);
 }

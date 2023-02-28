@@ -1,11 +1,16 @@
 package com.jmc.stackoverflowbe.member.service;
 
+import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
+import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
+@RequiredArgsConstructor
 public class MemberServiceStub implements MemberService {
+    private final MemberMapper mapper;
 
     @Override
     public Member createMember(Member member) {
@@ -20,11 +25,11 @@ public class MemberServiceStub implements MemberService {
     @Override
     public Member getMember(Long memberId) {
         return Member.builder()
-            .memberId(memberId)
-            .email("hgd@gmail.com")
-            .name("홍길동")
-            .state(MemberState.ACTIVE)
-            .build();
+                .memberId(memberId)
+                .email("hgd@gmail.com")
+                .name("홍길동")
+                .state(MemberState.ACTIVE)
+                .build();
     }
 
     @Override
@@ -33,12 +38,17 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public void verifyExistName(String Name) {
+    public void verifyExistEmail(String email) {
 
     }
 
     @Override
-    public Member findExistId(Long memberId) {
+    public Member findExistMemberById(Long memberId) {
+        return null;
+    }
+
+    @Override
+    public Member findExistMemberByEmail(String email) {
         return null;
     }
 }
