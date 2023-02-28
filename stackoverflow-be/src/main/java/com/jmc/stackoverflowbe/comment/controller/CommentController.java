@@ -5,6 +5,7 @@ import com.jmc.stackoverflowbe.comment.dto.CommentMultiResponseDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
+import com.jmc.stackoverflowbe.global.security.auth.dto.Oauth2MemberDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,8 +39,11 @@ public class CommentController {
     private final CommentMapper mapper;
 
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post) {
-        Comment comment = commentService.createComment(mapper.postDtoToComment(post));
+    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
+        Authentication authentication) {
+        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
+        Comment comment = commentService.createComment(mapper.postDtoToComment(post),
+            oAuth2User.getMemberId());
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -46,8 +51,11 @@ public class CommentController {
 
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
-        @Positive @PathVariable("comment-id") long commentId) {
-        commentService.updateComment(mapper.patchDtoToComment(patch), commentId);
+        @Positive @PathVariable("comment-id") long commentId,
+        Authentication authentication) {
+        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
+        commentService.updateComment(mapper.patchDtoToComment(patch), commentId,
+            oAuth2User.getMemberId());
 
         return ResponseEntity.ok().build();
     }
@@ -61,8 +69,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@Positive @PathVariable("comment-id") long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity deleteComment(@Positive @PathVariable("comment-id") long commentId,
+        Authentication authentication) {
+        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
+        commentService.deleteComment(commentId, oAuth2User.getMemberId());
 
         return ResponseEntity.noContent().build();
     }
