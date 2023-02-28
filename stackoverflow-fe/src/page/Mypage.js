@@ -253,7 +253,7 @@ const Mypage = () => {
 					<ProfileHeaderButtonContainer>
 						<ProfileHeaderButton
 							onClick={() => {
-								navigate('/');
+								navigate('/mypage/editprofile');
 							}}
 						>
 							<Penicon src={pen} />

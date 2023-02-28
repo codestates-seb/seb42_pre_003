@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import stacklogo from '../../img/stacklogo.png';
 import search from '../../img/search.png';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+
+import { useIsLoginStore } from '../../store/loginstore';
+
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const HeaderWrap = styled.div`
 	top: 0;
@@ -34,12 +37,6 @@ const MenuHeader = styled.div`
 
 const LogoImg = styled.img`
 	width: 150px;
-`;
-
-const Menu = styled.div`
-	color: #525960;
-	font-size: 14px;
-	margin-top: 4px;
 `;
 
 const SearchWrap = styled.div`
@@ -137,7 +134,7 @@ const Header = () => {
 						<OrangeBg />
 						<MenuHeader>
 							<LogoImg onClick={() => navigate('/')} src={stacklogo} />
-							<Menu>Products</Menu>
+
 							<SearchWrap>
 								<SearchBox placeholder='Search...' />
 								<SearchImg src={search} />
