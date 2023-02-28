@@ -1,11 +1,15 @@
 package com.jmc.stackoverflowbe.answer.entity;
 
 import com.jmc.stackoverflowbe.global.audit.Auditable;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.question.entity.Question;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,19 +25,13 @@ public class Answer extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
-    @Column
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
-    @Column
-    private Long questionId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "QUESTION_ID")
-//    private Question question;
+    @ManyToOne
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
 
     @Column
     private String answerContent;
@@ -45,12 +43,11 @@ public class Answer extends Auditable {
     private Long votes;
 
     @Builder
-    public Answer(Long answerId, Long memberId, Long questionId, String answerContent,
-        StateGroup state,
-        Long votes) {
+    public Answer(Long answerId, Member member, Question question, String answerContent,
+        StateGroup state, Long votes) {
         this.answerId = answerId;
-        this.memberId = memberId;
-        this.questionId = questionId;
+        this.member = member;
+        this.question = question;
         this.answerContent = answerContent;
         this.state = state;
         this.votes = votes;

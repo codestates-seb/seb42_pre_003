@@ -59,13 +59,14 @@ public class MemberDto {
         private String location;
         private String about;
         private MemberState state;
-
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
         private LocalDateTime lastLoginTime;
 
         @Builder
-
         public Response(Long memberId, String email, String name, Boolean isMine, String location,
-            String about, MemberState state, LocalDateTime lastLoginTime) {
+            String about, MemberState state, LocalDateTime createdAt, LocalDateTime modifiedAt,
+            LocalDateTime lastLoginTime) {
             this.memberId = memberId;
             this.email = email;
             this.name = name;
@@ -73,6 +74,8 @@ public class MemberDto {
             this.location = location;
             this.about = about;
             this.state = state;
+            this.createdAt = createdAt;
+            this.modifiedAt = modifiedAt;
             this.lastLoginTime = lastLoginTime;
         }
     }
