@@ -13,6 +13,7 @@ import styled from 'styled-components';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Oauth from './page/Oauth';
+import EditProrile from './page/EditProrile';
 
 const Contents = styled.div`
 	display: flex;
@@ -39,6 +40,7 @@ function App() {
 							<Route path='/allQuestion/answer/:id' element={<Answer />} />
 							<Route path='/answer/:id' element={<Answer />} />
 							<Route path='/mypage' element={<Mypage />} />
+							<Route path='/mypage/editprofile' element={<EditProrile />} />
 							<Route path='/auth/google/callback' element={<Oauth />} />
 						</Routes>
 					</Contents>

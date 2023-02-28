@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import AskButton from '../components/list/AskButton';
 import RightMenu from '../components/list/RightMenu';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Pagination from '../components/pagination/Pagination';
 import { useEffect } from 'react';
 import useAnsStore from '../store/ansStore';
+import axios from 'axios';
 
 const Content = styled.div`
 	width: auto;
@@ -121,6 +122,25 @@ const Questions = styled.div`
 
 const Contents = () => {
 	const { ansList, getAnswer } = useAnsStore();
+	const { qTitle, setQtitle } = useState();
+
+	useEffect(() => {
+		const questionTitleData = async () => {
+			try {
+				const response = await axios.get(
+					'http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/questions?page=1&sort=questionId',
+				);
+				const { data } = response;
+				console.log(data.data[0].questionTitle);
+				if (data) {
+					console.log(data);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		questionTitleData();
+	}, []);
 
 	useEffect(() => {
 		getAnswer(
@@ -154,9 +174,7 @@ const Contents = () => {
 					</ul>
 					<ul className='qlist-contents'>
 						<li className='contents-title'>
-							<Link to={'/answer/1'}>
-								Why does Prestashop API not add a resource in XML
-							</Link>
+							<Link to={'/answer'}>ddd</Link>
 						</li>
 						<ul className='tags'>
 							<li>
