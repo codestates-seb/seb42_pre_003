@@ -27,7 +27,11 @@ public class MemberServiceImpl implements MemberService {
 
     public Member createMemberByOauth2(Member member) {
         // 동일한 이메일이 존재하는지 확인.
-        verifyExistEmail(member.getEmail());
+        Optional<Member> optionalMember = memberRepository.findByEmail(member.getEmail());
+
+        // Optional Member에 값이 존재하다면 예외 발생.
+        if (optionalMember.isPresent())
+            return optionalMember.get();
 
         return memberRepository.save(member);
     }
