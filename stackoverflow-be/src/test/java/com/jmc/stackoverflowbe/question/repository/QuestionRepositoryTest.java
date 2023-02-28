@@ -20,7 +20,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 @TestInstance(Lifecycle.PER_CLASS)
-public class  QuestionRepositoryTest {
+public class QuestionRepositoryTest {
+
     @Autowired
     QuestionRepository questionRepository;
 
@@ -58,25 +59,27 @@ public class  QuestionRepositoryTest {
         .build();
 
     @BeforeAll
-    public void init(){
+    public void init() {
         memberRepository.save(member);
         questionRepository.save(question1);
     }
+
     @DisplayName("질문 저장")
     @Test
-    public void saveQuestionTest(){
+    public void saveQuestionTest() {
         Question savedQuestion = questionRepository.save(question2);
 
         assertNotNull(savedQuestion);
-        assertTrue(question2.getQuestionId().equals(savedQuestion.getQuestionId()));    // savedMember와 member3의 필드가 동일한지 검증.
+        assertTrue(question2.getQuestionId()
+            .equals(savedQuestion.getQuestionId()));    // savedMember와 member3의 필드가 동일한지 검증.
         assertTrue(question2.getQuestionTitle().equals(savedQuestion.getQuestionTitle()));
         assertTrue(question2.getQuestionContent().equals(savedQuestion.getQuestionContent()));
     }
 
     @DisplayName("작성자로 질문 찾기")
     @Test
-    public void findAllByMemberMemberIdTest(){
-        List<Question> questions = List.of(question1,question2);
+    public void findAllByMemberMemberIdTest() {
+        List<Question> questions = List.of(question1, question2);
         questionRepository.saveAll(questions);
         List<Question> obtainQuestions =
             questionRepository.findAllByMemberMemberId(member.getMemberId());
