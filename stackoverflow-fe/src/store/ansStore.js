@@ -41,10 +41,12 @@ const useAnsStore = create(
 				headers: {
 					'Content-Type': 'application/json;charset=UTF-8',
 					Accept: 'application / json',
+					withCredentials: true,
 				},
 				body: JSON.stringify(item),
 			});
-			set({ ansList: await response.data });
+			const data = await response.data;
+			set((state) => ({ ...state, ansList: { ...state.ansList, data } }));
 		},
 		ansItem: {},
 		getAnswerItem: async (URL) => {
@@ -60,12 +62,72 @@ const useAnsStore = create(
 			});
 			set({ ansDownList: await response.data });
 		},
+		addDown: async (URL, item) => {
+			const response = await axios.post(URL, {
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					Accept: 'application / json',
+				},
+				body: JSON.stringify(item),
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				ansDownList: { ...state.ansDownList, data },
+			}));
+		},
 		comList: {},
 		getCom: async (URL) => {
 			const response = await axios.get(URL, {
 				Accept: 'application / json',
 			});
 			set({ comList: await response.data });
+		},
+		addCom: async (URL, item) => {
+			const response = await axios.post(URL, {
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					Accept: 'application / json',
+				},
+				body: JSON.stringify(item),
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				comList: { ...state.comList, data },
+			}));
+		},
+		editCom: async (URL, item) => {
+			const response = await axios.patch(URL, {
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					Accept: 'application / json',
+				},
+				body: JSON.stringify(item),
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				comList: state.comList.map((el) => {
+					if (el.answerId === data.answerId) {
+						return data;
+					} else {
+						return el;
+					}
+				}),
+			}));
+		},
+		delCom: async (URL) => {
+			const response = await axios.delete(URL, {
+				headers: {
+					Accept: 'application / json',
+				},
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				comList: state.comList.filter((el) => el.answerId !== data.answerId),
+			}));
 		},
 	})),
 );

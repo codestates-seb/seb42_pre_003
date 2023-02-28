@@ -2,7 +2,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../../style/quill-custom.css';
 
-function AnsEditor({ func }) {
+function AnsEditor({ value, func }) {
 	const modules = {
 		toolbar: [
 			[{ header: '1' }, { header: '2' }, { font: [] }],
@@ -38,11 +38,14 @@ function AnsEditor({ func }) {
 		'image',
 		'video',
 	];
+
 	return (
 		<div>
 			<ReactQuill
 				modules={modules}
 				formats={formats}
+				theme='snow'
+				value={value}
 				onChange={(value) => func(value)}
 			/>
 

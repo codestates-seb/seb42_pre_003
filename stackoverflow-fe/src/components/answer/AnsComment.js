@@ -68,22 +68,72 @@ const AddButton = styled.button`
 	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
 `;
 
+const CommentEdit = styled.ul`
+	display: flex;
+	gap: 0.3rem;
+	li {
+		font-size: 0.55rem;
+		color: #62666c;
+		cursor: pointer;
+	}
+`;
+
 function AnsComment({ QaCom }) {
 	const [com, setCom] = useState(false);
-	const { comment, comBind, comReset } = useAnsStore();
+	const [ed, setEd] = useState(
+		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [false, false],
+	);
+	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
 
 	const handleActive = () => {
 		setCom(!com);
 	};
 
+	const handleEd = (num) => {
+		const array = [...ed];
+
+		setEd(
+			array.map((el, idx) => {
+				if (idx === num) {
+					return !el;
+				} else {
+					return el;
+				}
+			}),
+		);
+	};
+
 	const handleComment = (e) => {
 		e.preventDefault();
 
+		const item = {
+			commentContent: comment,
+			questionId: 1,
+			answerId: 1,
+		};
+
+		addCom(`${process.env.REACT_APP_API_URL}/comments`, item);
 		console.log(comment);
 		comReset();
 	};
 
-	// console.log(QaCom);
+	const handleEdit = (e) => {
+		e.preventDefault();
+
+		const item = {
+			commentContent: comment,
+		};
+
+		editCom(`${process.env.REACT_APP_API_URL}/comments/1`, item);
+		console.log(comment);
+		comReset();
+	};
+
+	const handleDel = (e) => {
+		e.preventDefault();
+
+		delCom(`${process.env.REACT_APP_API_URL}/comments/1`);
+	};
 
 	return (
 		<CommentWrap>
@@ -93,21 +143,19 @@ function AnsComment({ QaCom }) {
 						<CommentItem key={QaCom.questionId || idx}>
 							{el.commentContent}
 							<span>{el.memberName}</span>
-							<em>{el.createdAt || ''}</em>
+							<em>{el.createdAt || 'Feb 16 at 13:45'}</em>
+							<CommentEdit>
+								<li onClick={() => handleEd(idx)}>Edit</li>
+								<li onClick={handleDel}>Delete</li>
+							</CommentEdit>
+							{ed[idx] ? (
+								<Comment>
+									<AnsInput func={comBind} />
+									<AddButton onClick={handleEdit}>Enter</AddButton>
+								</Comment>
+							) : null}
 						</CommentItem>
 					))}
-				{/* <CommentItem>
-					Could you please share one of your error handlers? Are these handlers
-					accept three parameters like error, doc, next?
-					<span>Mostafa Fakhraei</span>
-					<em>Feb 16 at 13:45</em>
-				</CommentItem>
-				<CommentItem own>
-					@MostafaFakhraei I edit my question to include the error handler
-					function. Indeed it uses the three arguments mentioned.
-					<span>Ayoub k</span>
-					<em>Feb 17 at 0:14</em>
-				</CommentItem> */}
 			</CommentBox>
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (
