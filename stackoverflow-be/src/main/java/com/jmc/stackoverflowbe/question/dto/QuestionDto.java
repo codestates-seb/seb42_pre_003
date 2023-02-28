@@ -24,11 +24,8 @@ public class QuestionDto {
     @Getter
     @NoArgsConstructor
     public static class Patch {
-
         private String questionTitle;
         private String questionContent;
-
-
         @Builder
         public Patch(String questionTitle, String questionContent) {
             this.questionTitle = questionTitle;

@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
@@ -59,10 +61,16 @@ import org.springframework.test.web.servlet.ResultActions;
 public class QuestionControllerTest {
     String BASE_URL = "/questions";
 
+    Member member = Member.builder()
+        .memberId(1L)
+        .email("hgd@gmail.com")
+        .name("홍길동")
+        .state(MemberState.ACTIVE)
+        .build();
     Question question = Question.builder()
         .questionId(0L)
         .questionTitle("Question1 title for test")
-        .memberId(0L)
+        .member(member)
         .questionContent("Question1 contents for test")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -73,11 +81,34 @@ public class QuestionControllerTest {
     Question question2 = Question.builder()
         .questionId(1L)
         .questionTitle("Question2 title for test")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question2 contents for test")
         .state(StateGroup.ACTIVE)
         .votes(1)
         .selection(false)
+        .answers(1L)
+        .views(1L)
+        .build();
+    QuestionDto.Response response = QuestionDto.Response.builder()
+        .questionId(0L)
+        .questionTitle("title for get")
+        .questionContent("content for get")
+        .memberId(0L)
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(true)
+        .answers(1L)
+        .views(1L)
+        .build();
+
+    QuestionDto.Response response2 = QuestionDto.Response.builder()
+        .questionId(0L)
+        .questionTitle("title for get")
+        .questionContent("content for get")
+        .memberId(0L)
+        .state(StateGroup.ACTIVE)
+        .votes(0)
+        .selection(true)
         .answers(1L)
         .views(1L)
         .build();
@@ -179,20 +210,9 @@ public class QuestionControllerTest {
     @DisplayName("질문 상세 조회")
     @Test
     void getQuestionTest() throws Exception{
-        QuestionDto.Response response = QuestionDto.Response.builder()
-            .questionId(0L)
-            .questionTitle("title for get")
-            .questionContent("content for get")
-            .memberId(0L)
-            .state(StateGroup.ACTIVE)
-            .votes(0)
-            .selection(true)
-            .answers(1L)
-            .views(1L)
-            .build();
 
         given(questionService.getQuestion(Mockito.anyLong()))
-            .willReturn(new Question());
+            .willReturn(question);
         given(mapper.questionToResponseDto(Mockito.any(Question.class)))
             .willReturn(response);
 
@@ -256,17 +276,20 @@ public class QuestionControllerTest {
                         .description("질문 수정 시간"))));
 
     }
-    @DisplayName("질문 상세 조회")
+    @DisplayName("질문 리스트 조회")
     @Test
     void getQuestionsTest() throws Exception{
         String page = "1";
         String sort = "questionId";
-        List<Question> questionList = List.of(question,question2);
-        Page<Question> questionPage = new PageImpl<>(questionList,
+        List<Question> questions =
+            List.of(question,question2);
+        List<QuestionDto.Response> responses=
+            List.of(response,response2);
+        Page<Question> questionPage = new PageImpl<>(questions,
             PageRequest.of(0,15, Sort.by(sort).descending()), 2);
 
         given(mapper.questionsToQuestionResponses(Mockito.any(List.class)))
-            .willReturn(questionList);
+            .willReturn(responses);
         given(questionService.getQuestions(Mockito.any(Integer.class),Mockito.any(String.class)))
             .willReturn(questionPage);
 
