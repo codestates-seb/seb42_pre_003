@@ -36,20 +36,19 @@ public class QuestionServiceImpl implements QuestionService{
         //질문 db에 저장
         return questionRepository.save(question);
     }
-
     //질문 수정
     @Override
     public Question updateQuestion(QuestionDto.Patch patch, Long questionId){
         Question question = mapper.patchDtoToQuestion(patch);
         //db에 저장된 질문인지 확인
-        Question findQuestion = findExistQuestionById(questionId);
+        Question obtainedQuestion = findExistQuestionById(questionId);
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
-            .ifPresent(title -> findQuestion.setQuestionTitle(title));
+            .ifPresent(title -> obtainedQuestion.setQuestionTitle(title));
         Optional.ofNullable(question.getQuestionContent())
-            .ifPresent(content -> findQuestion.setQuestionContent(content));
+            .ifPresent(content -> obtainedQuestion.setQuestionContent(content));
         //변경 사항 db에 적용
-        return questionRepository.save(findQuestion);
+        return questionRepository.save(obtainedQuestion);
     }
     //질문 조회
     @Override
@@ -65,6 +64,11 @@ public class QuestionServiceImpl implements QuestionService{
     public Page<Response> getQuestions(int page, String sort){
         //모든 질문 리스트로 받기
         List<Question> questions = questionRepository.findAll();
+        //활성된 질문만 리스트로
+        for(Question currentQuestion : questions){
+            if(currentQuestion.getState() != StateGroup.ACTIVE)
+                questions.remove(currentQuestion);
+        }
         //질문리스트 response 리스트로 매핑
         List<QuestionDto.Response> questionResponses =
             mapper.questionsToQuestionResponses(questions);
@@ -80,7 +84,8 @@ public class QuestionServiceImpl implements QuestionService{
         //db에 존재하는 질문인지 확인
         Question question = findExistQuestionById(questionId);
         //있으면 삭제
-        questionRepository.delete(question);
+        question.setState(StateGroup.DELETED);
+        questionRepository.save(question);
     }
     //조회수 증가, 투표기능, 선택 기능 추가해야할지?
 
@@ -90,12 +95,18 @@ public class QuestionServiceImpl implements QuestionService{
         //질문id로 존재하는지 확인
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         //질문이 존재하지 않으면 예외 처리
-        Question findQuestion =
+        Question obtainedQuestion =
             optionalQuestion.orElseThrow(()->
                 new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        //질문의 상태가 삭제됨, 비활성화됨이면 예외 처리
+        if(obtainedQuestion.getState() == StateGroup.DELETED ||
+            obtainedQuestion.getState() == StateGroup.INACTIVE) {
+            throw new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND);
+        }
         //존재하면 해당 질문 반환
-        return findQuestion;
+        return obtainedQuestion;
     }
+}
 // 질문 식별자로 존재하는지 확인하는 로직 필요할시 만들어 씀
 //    private void verifyExistQuestion(long questionId){
 //        Optional<Question> question = questionRepository.findById(questionId);
@@ -103,4 +114,3 @@ public class QuestionServiceImpl implements QuestionService{
 //            throw new BusinessLogicException(ExceptionCode.QUESTION_EXISTS);
 //    }
 
-}
