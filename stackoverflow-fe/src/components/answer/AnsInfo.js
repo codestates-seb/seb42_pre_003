@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
+import { useBoxStore } from '../../store/askStore';
 
 const BREAK_POINT_MO = 576;
 
@@ -54,12 +55,30 @@ const InfoAva = styled.div`
 	}
 `;
 
-function AnsInfo() {
+function AnsInfo({ data }) {
 	const { handlePage } = useAnsStore();
+	const { setEditData } = useBoxStore();
 
 	const addItemData = (e) => {
 		e.preventDefault();
 
+		let obj;
+		if (data.answerId) {
+			const { answerContent } = data;
+			obj = {
+				name: 'answer',
+				title: '',
+				body: answerContent,
+			};
+		} else {
+			const { questionTitle, questionContent } = data;
+			obj = {
+				name: 'question',
+				title: questionTitle,
+				body: questionContent,
+			};
+		}
+		setEditData(obj);
 		handlePage('edit');
 	};
 

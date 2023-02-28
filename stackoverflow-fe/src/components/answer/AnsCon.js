@@ -39,6 +39,7 @@ const AnsSide = styled.div`
 `;
 
 const AnsBox = styled.div`
+	overflow: hidden;
 	width: 100%;
 	.con {
 		padding-bottom: 1rem;
@@ -89,7 +90,10 @@ function AnsCon({ type, data, QaCom }) {
 						<div
 							className='con'
 							dangerouslySetInnerHTML={{
-								__html: data.questionContent,
+								__html:
+									type === 'question'
+										? data.questionContent
+										: data.answerContent,
 							}}
 						></div>
 						{type === 'question' ? (
@@ -107,7 +111,7 @@ function AnsCon({ type, data, QaCom }) {
 								</ul>
 							</AnsTag>
 						) : null}
-						<AnsInfo />
+						<AnsInfo data={data} />
 						<AnsComment QaCom={QaCom} />
 					</AnsBox>
 				</ConWrap>

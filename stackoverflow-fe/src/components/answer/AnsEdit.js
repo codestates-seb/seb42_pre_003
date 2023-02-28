@@ -2,7 +2,9 @@ import AnsInput from './AnsInput';
 import AnsEditor from './AnsEditor';
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
+import { useBoxStore } from '../../store/askStore';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const InputBtnBox = styled.div`
 	display: flex;
@@ -37,13 +39,14 @@ const ConTitle = styled.h4`
 	font-weight: 500;
 `;
 
-function AnsEdit({ data }) {
+function AnsEdit() {
 	let { id } = useParams();
-
-	const { edTitleBind, edBodyBind, edTagBind, editAnswer, delAnswer } =
-		useAnsStore();
+	const { editData } = useBoxStore();
+	const { edTitleBind, edBodyBind, edTagBind } = useAnsStore();
+	const { editAnswer, delAnswer, editDown, delDown } = useAnsStore();
 	const { edTitle, edBody } = useAnsStore();
 	const { handlePage } = useAnsStore();
+	const navigate = useNavigate();
 
 	const handleEdit = (e) => {
 		e.preventDefault();
@@ -55,14 +58,38 @@ function AnsEdit({ data }) {
 
 		console.log(item);
 		editAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`, item);
-		// window.location.reload();
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
+	};
+
+	const handleEditDown = (e) => {
+		e.preventDefault();
+
+		const item = {
+			answerContent: edBody,
+		};
+
+		console.log(item);
+		editDown(`${process.env.REACT_APP_API_URL}/answers/${id}`, item);
+		// setTimeout(() => {
+		// 	window.location.reload();
+		// }, 300);
 	};
 
 	const handleDel = (e) => {
 		e.preventDefault();
 
 		delAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`);
-		// window.location.reload();
+		setTimeout(() => {
+			navigate(`/`);
+		}, 300);
+	};
+
+	const handleDelDown = (e) => {
+		e.preventDefault();
+
+		delDown(`${process.env.REACT_APP_API_URL}/answers/${id}`);
 	};
 
 	const handleClose = (e) => {
@@ -80,8 +107,18 @@ function AnsEdit({ data }) {
 			<ConTitle>Tags</ConTitle>
 			<AnsInput func={edTagBind} />
 			<InputBtnBox>
-				<InputButton onClick={handleEdit}>Save Edits</InputButton>
-				<button onClick={handleDel}>Delete</button>
+				<InputButton
+					onClick={
+						editData[0].name === 'question' ? handleEdit : handleEditDown
+					}
+				>
+					Save Edits
+				</InputButton>
+				<button
+					onClick={editData[0].name === 'question' ? handleDel : handleDelDown}
+				>
+					Delete
+				</button>
 				<button onClick={handleClose}>Close</button>
 			</InputBtnBox>
 		</>

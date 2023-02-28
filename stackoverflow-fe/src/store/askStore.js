@@ -45,6 +45,7 @@ export const useBoxStore = create(
 			],
 			editData: [
 				{
+					name: '',
 					title: '',
 					body: '',
 				},

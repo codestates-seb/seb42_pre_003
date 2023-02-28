@@ -26,9 +26,9 @@ const useAnsStore = create(
 		comment: '',
 		comBind: (item) => set({ comment: item }),
 		comReset: () => set({ comment: '' }),
-		edTitle: `${data.questionTitle}`,
+		edTitle: `${data.title}`,
 		edTitleBind: (item) => set({ edTitle: item }),
-		edBody: `${data.questionContent}`,
+		edBody: `${data.body}`,
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),
@@ -45,7 +45,7 @@ const useAnsStore = create(
 				Accept: 'application / json',
 			});
 			const data = await response.data;
-			set((state) => ({ ...state, ansList: { ...state.ansList, data } }));
+			set((state) => ({ ...state, ansList: [...state.ansList, data] }));
 		},
 		editAnswer: async (URL, item) => {
 			const response = await axios.patch(URL, item, {
@@ -83,7 +83,7 @@ const useAnsStore = create(
 			});
 			set({ ansItem: await response.data });
 		},
-		ansDownList: {},
+		ansDownList: [],
 		getAnsDown: async (URL) => {
 			const response = await axios.get(URL, {
 				Accept: 'application / json',
@@ -91,20 +91,46 @@ const useAnsStore = create(
 			set({ ansDownList: await response.data });
 		},
 		addDown: async (URL, item) => {
-			const response = await axios.post(URL, {
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-					Accept: 'application / json',
-				},
-				body: JSON.stringify(item),
+			const response = await axios.post(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({
 				...state,
-				ansDownList: { ...state.ansDownList, data },
+				ansDownList: [...state.ansDownList, data],
 			}));
 		},
-		comList: {},
+		editDown: async (URL, item) => {
+			const response = await axios.patch(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				ansDownList: state.ansDownList.map((el) => {
+					if (el.answerId === data.answerId) {
+						return data;
+					} else {
+						return el;
+					}
+				}),
+			}));
+		},
+		delDown: async (URL) => {
+			const response = await axios.delete(URL, {
+				Accept: 'application / json',
+			});
+			const data = await response.data;
+			set((state) => ({
+				...state,
+				ansDownList: state.ansDownList.filter(
+					(el) => el.answerId !== data.answerId,
+				),
+			}));
+		},
+		comList: [],
 		getCom: async (URL) => {
 			const response = await axios.get(URL, {
 				Accept: 'application / json',
@@ -112,26 +138,20 @@ const useAnsStore = create(
 			set({ comList: await response.data });
 		},
 		addCom: async (URL, item) => {
-			const response = await axios.post(URL, {
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-					Accept: 'application / json',
-				},
-				body: JSON.stringify(item),
+			const response = await axios.post(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({
 				...state,
-				comList: { ...state.comList, data },
+				comList: [...state.comList, data],
 			}));
 		},
 		editCom: async (URL, item) => {
-			const response = await axios.patch(URL, {
-				headers: {
-					'Content-Type': 'application/json;charset=UTF-8',
-					Accept: 'application / json',
-				},
-				body: JSON.stringify(item),
+			const response = await axios.patch(URL, item, {
+				'Content-Type': 'application/json;charset=UTF-8',
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({
@@ -147,9 +167,7 @@ const useAnsStore = create(
 		},
 		delCom: async (URL) => {
 			const response = await axios.delete(URL, {
-				headers: {
-					Accept: 'application / json',
-				},
+				Accept: 'application / json',
 			});
 			const data = await response.data;
 			set((state) => ({

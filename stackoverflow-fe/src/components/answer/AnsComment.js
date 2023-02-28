@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AnsInput from './AnsInput';
 import useAnsStore from '../../store/ansStore';
+import { useParams } from 'react-router-dom';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -79,6 +80,7 @@ const CommentEdit = styled.ul`
 `;
 
 function AnsComment({ QaCom }) {
+	let { id } = useParams();
 	const [com, setCom] = useState(false);
 	const [ed, setEd] = useState(
 		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [false, false],
@@ -108,7 +110,7 @@ function AnsComment({ QaCom }) {
 
 		const item = {
 			commentContent: comment,
-			questionId: 1,
+			questionId: id,
 			answerId: 1,
 		};
 

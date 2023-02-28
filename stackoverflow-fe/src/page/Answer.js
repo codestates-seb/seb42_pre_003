@@ -54,21 +54,25 @@ function Answer() {
 	}, [getAnswerItem, id]);
 
 	useEffect(() => {
-		const obj = { ...ansItem.data };
-		setEditData(obj);
+		setEditData({
+			title: '',
+			body: '',
+		});
 	}, [setEditData, ansItem]);
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
 
 		const item = {
-			questionId: ansDownList.length + 1,
+			questionId: id,
 			answerContent: answer,
 		};
 
 		addDown(`${process.env.REACT_APP_API_URL}/answers`, item);
-
 		answerReset(ansDownList);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	useEffect(() => {
@@ -80,6 +84,8 @@ function Answer() {
 			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
 		);
 	}, [getCom, id]);
+
+	console.log(ansDownList.data);
 
 	return (
 		<>
@@ -94,10 +100,10 @@ function Answer() {
 									data={ansItem.data}
 									QaCom={comList.data}
 								/>
-								<ConTitle>{`${ansItem.data.answers} Answers`}</ConTitle>
+								<ConTitle>{`${ansItem.data.answers || 0} Answers`}</ConTitle>
 								{ansDownList.data &&
 									ansDownList.data.map((el, idx) => (
-										<AnsCon key={ansDownList.data.answerId || idx} />
+										<AnsCon key={ansDownList.data.answerId || idx} data={el} />
 									))}
 								<>
 									<ConTitle>Your Answer</ConTitle>
@@ -109,7 +115,7 @@ function Answer() {
 							</>
 						) : (
 							<>
-								<AnsEdit data={ansItem.data} />
+								<AnsEdit />
 							</>
 						)}
 					</AnsWrap>
