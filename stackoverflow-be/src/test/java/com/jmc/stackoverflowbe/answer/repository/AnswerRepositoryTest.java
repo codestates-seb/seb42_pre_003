@@ -40,7 +40,7 @@ public class AnswerRepositoryTest {
     private final Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(StateGroup.ACTIVE)
         .votes(0)
