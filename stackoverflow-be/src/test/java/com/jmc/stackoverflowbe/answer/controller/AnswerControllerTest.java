@@ -208,7 +208,6 @@ public class AnswerControllerTest {
 
         ResultActions actions = mockMvc.perform(
                 get(BASE_URL)
-                        .with(csrf())
                         .param("questionId", "1")
                         .accept(MediaType.APPLICATION_JSON));
 
