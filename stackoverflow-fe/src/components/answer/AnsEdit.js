@@ -56,7 +56,6 @@ function AnsEdit() {
 			questionContent: edBody,
 		};
 
-		console.log(item);
 		editAnswer(`${process.env.REACT_APP_API_URL}/questions/${id}`, item);
 		setTimeout(() => {
 			window.location.reload();
@@ -70,11 +69,13 @@ function AnsEdit() {
 			answerContent: edBody,
 		};
 
-		console.log(item);
-		editDown(`${process.env.REACT_APP_API_URL}/answers/${id}`, item);
-		// setTimeout(() => {
-		// 	window.location.reload();
-		// }, 300);
+		editDown(
+			`${process.env.REACT_APP_API_URL}/answers/${editData[0].id}`,
+			item,
+		);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	const handleDel = (e) => {
