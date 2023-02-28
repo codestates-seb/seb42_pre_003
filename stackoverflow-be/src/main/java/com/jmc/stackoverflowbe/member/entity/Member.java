@@ -18,7 +18,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -33,6 +32,9 @@ public class Member extends Auditable {
 
     @Column(nullable = false)
     private String name;
+
+    @Column
+    private  String picture;
 
     @Column(length = 210)
     private String location;
@@ -50,12 +52,16 @@ public class Member extends Auditable {
     private LocalDateTime lastLoginTime;
 
     @Builder
-    public Member(Long memberId, String email, String name, String location, String about) {
+    public Member(Long memberId, String email, String name, String picture, String location,
+        String about, MemberState state, LocalDateTime lastLoginTime) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
+        this.picture = picture;
         this.location = location;
         this.about = about;
+        this.state = state;
+        this.lastLoginTime = lastLoginTime;
     }
 
     public static enum MemberState {

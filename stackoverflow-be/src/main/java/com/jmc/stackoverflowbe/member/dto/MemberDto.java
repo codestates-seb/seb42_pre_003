@@ -51,16 +51,18 @@ public class MemberDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class meResponse {
+    public static class MeResponse {
         private Long memberId;
         private String email;
         private String name;
+        private  String picture;
 
         @Builder
-        public meResponse(Long memberId, String email, String name) {
+        public MeResponse(Long memberId, String email, String name, String picture) {
             this.memberId = memberId;
             this.email = email;
             this.name = name;
+            this.picture = picture;
         }
     }
 

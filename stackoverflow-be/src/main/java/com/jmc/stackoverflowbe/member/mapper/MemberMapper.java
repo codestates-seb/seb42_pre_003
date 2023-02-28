@@ -13,5 +13,5 @@ public interface MemberMapper {
 
     MemberDto.Response memberToResponseDto(Member member);
 
-    MemberDto.meResponse memberToMeResponseDto(Member member);
+    MemberDto.MeResponse memberToMeResponseDto(Member member);
 }

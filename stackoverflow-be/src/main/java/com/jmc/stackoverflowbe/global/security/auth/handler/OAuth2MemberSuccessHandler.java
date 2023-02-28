@@ -33,16 +33,19 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email")); // (3)
         String name = String.valueOf(oAuth2User.getAttributes().get("name")); // (3)
+        String picture = (String) oAuth2User.getAttributes().get("picture");
+        
         List<String> authorities = authorityUtils.createRoles(email);           // (4)
 
-        Member member = saveMember(email, name);  // (5)
+        Member member = saveMember(email, name, picture);  // (5)
         redirect(request, response, member, authorities);  // (6)
     }
 
-    private Member saveMember(String email, String name) {
+    private Member saveMember(String email, String name, String picture) {
         Member member = Member.builder()
             .email(email)
             .name(name)
+            .picture(picture)
             .build();
 
         return memberService.createMemberByOauth2(member);
