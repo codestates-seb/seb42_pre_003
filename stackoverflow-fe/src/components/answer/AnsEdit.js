@@ -89,7 +89,10 @@ function AnsEdit() {
 	const handleDelDown = (e) => {
 		e.preventDefault();
 
-		delDown(`${process.env.REACT_APP_API_URL}/answers/${id}`);
+		delDown(`${process.env.REACT_APP_API_URL}/answers/${editData[0].id}`);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	const handleClose = (e) => {

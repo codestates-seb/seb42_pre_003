@@ -64,16 +64,18 @@ function AnsInfo({ data }) {
 
 		let obj;
 		if (data.answerId) {
-			const { answerContent } = data;
+			const { answerId, answerContent } = data;
 			obj = {
 				name: 'answer',
+				id: answerId,
 				title: '',
 				body: answerContent,
 			};
 		} else {
-			const { questionTitle, questionContent } = data;
+			const { questionId, questionTitle, questionContent } = data;
 			obj = {
 				name: 'question',
+				id: questionId,
 				title: questionTitle,
 				body: questionContent,
 			};
