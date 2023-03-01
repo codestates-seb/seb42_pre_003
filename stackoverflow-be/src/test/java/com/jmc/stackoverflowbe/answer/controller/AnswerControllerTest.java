@@ -155,8 +155,12 @@ public class AnswerControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     attributes(key("title").value("Fields for answer creation")),
@@ -202,8 +206,12 @@ public class AnswerControllerTest {
                     parameterWithName("answer-id")
                         .description("답변 식별자")),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     attributes(key("title").value("Fields for answer revision")),
@@ -295,8 +303,12 @@ public class AnswerControllerTest {
                     parameterWithName("answer-id").description("답변 아이디")
                 ),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
                 ))
             );
     }

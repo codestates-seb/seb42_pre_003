@@ -170,8 +170,12 @@ public class CommentControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     attributes(key("title").value("Fields for comment creation")),
@@ -230,8 +234,12 @@ public class CommentControllerTest {
                     parameterWithName("comment-id").description("댓글 식별자")
                 ),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
                 ),
                 requestFields(
                     attributes(key("title").value("Fields for comment revision")),
@@ -339,9 +347,13 @@ public class CommentControllerTest {
                     parameterWithName("comment-id").description("댓글 식별자")
                 ),
                 requestHeaders(
-                    headerWithName(HttpHeaders.AUTHORIZATION)
-                        .description("Header Authorization, 리소스의 토큰 정보")
-                ))
-            );
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
+                )
+            ));
     }
 }
