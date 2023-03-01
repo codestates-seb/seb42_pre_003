@@ -140,7 +140,7 @@ public class CommentControllerTest {
 
         given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
             .willReturn(new Comment());
-        given(commentService.createComment(Mockito.any(Comment.class)))
+        given(commentService.createComment(Mockito.any(Comment.class), Mockito.anyString()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -195,7 +195,8 @@ public class CommentControllerTest {
 
         given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
             .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class), Mockito.anyLong()))
+        given(commentService.updateComment(Mockito.any(Comment.class), Mockito.anyLong(),
+            Mockito.anyString()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
@@ -306,7 +307,7 @@ public class CommentControllerTest {
     @DisplayName("댓글 삭제")
     @Test
     void deleteCommentTest() throws Exception {
-        doNothing().when(commentService).deleteComment(comment.getCommentId());
+        doNothing().when(commentService).deleteComment(comment.getCommentId(), member.getEmail());
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{comment-id}", comment.getCommentId())

@@ -76,13 +76,13 @@ public class CommentServiceTest {
     @DisplayName("Service단 댓글 생성 로직")
     @Test
     public void createCommentTest() {
-        given(memberService.findExistMemberById(Mockito.anyLong()))
+        given(memberService.findExistMemberByEmail(Mockito.anyString()))
             .willReturn(new Member());
         doNothing().when(commentService).verifyExistQAIdByEntity(comment);
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(comment);
 
-        Executable executable = () -> commentService.createComment(comment, member.getMemberId());
+        Executable executable = () -> commentService.createComment(comment, member.getEmail());
 
         assertDoesNotThrow(executable);
     }
@@ -93,12 +93,12 @@ public class CommentServiceTest {
         given(commentRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(new Comment()));
         doNothing().when(commentService)
-            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyLong());
+            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyString());
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(comment);
 
         Executable executable = () ->
-            commentService.updateComment(comment, comment.getCommentId(), member.getMemberId());
+            commentService.updateComment(comment, comment.getCommentId(), member.getEmail());
 
         assertDoesNotThrow(executable);
     }
@@ -121,12 +121,12 @@ public class CommentServiceTest {
         given(commentRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(new Comment()));
         doNothing().when(commentService)
-            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyLong());
+            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyString());
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(deletedComment);
 
         Executable executable = () -> commentService.deleteComment(comment.getCommentId(),
-            member.getMemberId());
+            member.getEmail());
 
         assertEquals(deletedComment.getCommentState(), CommentState.DELETED);
         assertDoesNotThrow(executable);

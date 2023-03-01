@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 생성 로직
     @Override
-    public Comment createComment(Comment comment, Long memberId) {
+    public Comment createComment(Comment comment, String email) {
         // 댓글 생성 전 DB에 존재하는 멤버인지 확인하고 없으면 예외 처리.
-        Member obtainedMember = memberService.findExistMemberById(memberId);
+        Member obtainedMember = memberService.findExistMemberByEmail(email);
         // 댓글에 member 저장.
         comment.setMember(obtainedMember);
         // 댓글 생성 전 DB에 존재하는 질문 혹은 답변인지 확인하고 없으면 예외 처리.
@@ -43,12 +43,12 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 수정 로직
     @Override
-    public Comment updateComment(Comment comment, Long commentId, Long memberId) {
+    public Comment updateComment(Comment comment, Long commentId, String email) {
         // DB에 존재하는 댓글인지 확인 후 있으면 obtainedComment 변수에 저장.
         Comment obtainedComment = findExistCommentById(commentId);
 
         // 해당 댓글을 수정할 권한이 있는 멤버(작성자)인지 확인.
-        verifyAuthorizedMemberForComment(obtainedComment, memberId);
+        verifyAuthorizedMemberForComment(obtainedComment, email);
 
         // 댓글 내용 수정 후 obtainedComment에 저장.
         Optional.ofNullable(comment.getCommentContent())
@@ -69,12 +69,12 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 삭제 로직
     @Override
-    public void deleteComment(Long commentId, Long memberId) {
+    public void deleteComment(Long commentId, String email) {
         // DB에 존재하는 댓글인지 확인 후 있으면 obtainedComment 변수에 저장.
         Comment obtainedComment = findExistCommentById(commentId);
 
         // 해당 댓글을 삭제할 권한이 있는 멤버(작성자)인지 확인.
-        verifyAuthorizedMemberForComment(obtainedComment, memberId);
+        verifyAuthorizedMemberForComment(obtainedComment, email);
 
         // 댓글 상태 삭제로 변경.
         obtainedComment.setCommentState(CommentState.DELETED);
@@ -131,8 +131,8 @@ public class CommentServiceImpl implements CommentService {
         return sortedComments;
     }
 
-    void verifyAuthorizedMemberForComment(Comment comment, Long memberId) {
-        if (memberId != comment.getMember().getMemberId()) {
+    void verifyAuthorizedMemberForComment(Comment comment, String email) {
+        if (email != comment.getMember().getEmail()) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_AUTHORIZED);
         }
     }

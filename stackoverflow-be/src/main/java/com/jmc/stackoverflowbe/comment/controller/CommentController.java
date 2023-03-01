@@ -5,7 +5,6 @@ import com.jmc.stackoverflowbe.comment.dto.CommentMultiResponseDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
-import com.jmc.stackoverflowbe.global.security.auth.dto.Oauth2MemberDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
 import java.util.List;
@@ -41,9 +40,10 @@ public class CommentController {
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
         Authentication authentication) {
-        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
+        System.out.println(authentication.getName());
+        System.out.println(authentication.getPrincipal());
         Comment comment = commentService.createComment(mapper.postDtoToComment(post),
-            oAuth2User.getMemberId());
+            authentication.getName());
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -53,9 +53,8 @@ public class CommentController {
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
         @Positive @PathVariable("comment-id") long commentId,
         Authentication authentication) {
-        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
         commentService.updateComment(mapper.patchDtoToComment(patch), commentId,
-            oAuth2User.getMemberId());
+            authentication.getName());
 
         return ResponseEntity.ok().build();
     }
@@ -71,8 +70,7 @@ public class CommentController {
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@Positive @PathVariable("comment-id") long commentId,
         Authentication authentication) {
-        Oauth2MemberDto oAuth2User = (Oauth2MemberDto) authentication.getPrincipal();
-        commentService.deleteComment(commentId, oAuth2User.getMemberId());
+        commentService.deleteComment(commentId, authentication.getName());
 
         return ResponseEntity.noContent().build();
     }
