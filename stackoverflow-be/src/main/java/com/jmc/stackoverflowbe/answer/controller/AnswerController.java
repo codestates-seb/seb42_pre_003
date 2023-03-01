@@ -5,6 +5,8 @@ import com.jmc.stackoverflowbe.answer.dto.AnswerDto.AnswerMultiResponseDto;
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.resolver.LoginMember;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
 import java.util.List;
@@ -37,8 +39,10 @@ public class AnswerController {
     private final AnswerMapper mapper;
 
     @PostMapping
-    public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post post) {
-        Answer answer = answerService.createAnswer(mapper.postDtoToAnswer(post));
+    public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post post,
+        @LoginMember LogInMemberDto loginMember) {
+        Answer answer = answerService.createAnswer(mapper.postDtoToAnswer(post),
+            loginMember.getMemberId());
         URI location = UriCreator.createURI("/answers", answer.getAnswerId());
 
         return ResponseEntity.created(location).build();
@@ -46,8 +50,10 @@ public class AnswerController {
 
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@Valid @RequestBody AnswerDto.Patch patch,
-        @Positive @PathVariable("answer-id") long answerId) {
-        answerService.updateAnswer(mapper.patchDtoToAnswer(patch), answerId);
+        @Positive @PathVariable("answer-id") long answerId,
+        @LoginMember LogInMemberDto loginMember) {
+        answerService.updateAnswer(mapper.patchDtoToAnswer(patch), answerId,
+            loginMember.getMemberId());
 
         return ResponseEntity.ok().build();
     }
@@ -61,8 +67,9 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@Positive @PathVariable("answer-id") long answerId) {
-        answerService.deleteAnswer(answerId);
+    public ResponseEntity deleteAnswer(@Positive @PathVariable("answer-id") long answerId,
+        @LoginMember LogInMemberDto loginMember) {
+        answerService.deleteAnswer(answerId, loginMember.getMemberId());
 
         return ResponseEntity.noContent().build();
     }
