@@ -151,6 +151,9 @@ include::{snippets}/Post-Answer/curl-request.adoc[]
 .http-request
 include::{snippets}/Post-Answer/http-request.adoc[]
 
+.request-header
+include::{snippets}/Post-Answer/request-headers.adoc[]
+
 .request-fields
 include::{snippets}/Post-Answer/request-fields.adoc[]
 
@@ -169,6 +172,9 @@ include::{snippets}/Patch-Answer/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Answer/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Patch-Answer/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Answer/request-fields.adoc[]
@@ -201,6 +207,9 @@ include::{snippets}/Delete-Answer/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Delete-Answer/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Delete-Answer/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Delete-Answer/http-response.adoc[]
