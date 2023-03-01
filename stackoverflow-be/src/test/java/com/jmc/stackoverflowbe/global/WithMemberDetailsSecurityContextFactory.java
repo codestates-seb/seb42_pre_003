@@ -4,14 +4,15 @@ import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 public class WithMemberDetailsSecurityContextFactory implements WithSecurityContextFactory<WithMockCustomMember> {
     @Override
-    public org.springframework.security.core.context.SecurityContext createSecurityContext(
+    public SecurityContext createSecurityContext(
         WithMockCustomMember customUser) {
-        org.springframework.security.core.context.SecurityContext context = SecurityContextHolder.createEmptyContext();
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
 
         LogInMemberDto principal = LogInMemberDto.builder()
             .memberId(customUser.first())
