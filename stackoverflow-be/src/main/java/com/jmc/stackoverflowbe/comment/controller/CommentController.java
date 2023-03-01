@@ -5,6 +5,8 @@ import com.jmc.stackoverflowbe.comment.dto.CommentMultiResponseDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.resolver.LoginMember;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import java.net.URI;
 import java.util.List;
@@ -39,11 +41,9 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
-        Authentication authentication) {
-        System.out.println(authentication.getName());
-        System.out.println(authentication.getPrincipal());
+        @LoginMember LogInMemberDto loginMember) {
         Comment comment = commentService.createComment(mapper.postDtoToComment(post),
-            authentication.getName());
+            loginMember.getMemberId());
         URI location = UriCreator.createURI("/comments", comment.getCommentId());
 
         return ResponseEntity.created(location).build();
@@ -52,9 +52,9 @@ public class CommentController {
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
         @Positive @PathVariable("comment-id") long commentId,
-        Authentication authentication) {
+        @LoginMember LogInMemberDto loginMember) {
         commentService.updateComment(mapper.patchDtoToComment(patch), commentId,
-            authentication.getName());
+            loginMember.getMemberId());
 
         return ResponseEntity.ok().build();
     }
@@ -69,8 +69,8 @@ public class CommentController {
 
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@Positive @PathVariable("comment-id") long commentId,
-        Authentication authentication) {
-        commentService.deleteComment(commentId, authentication.getName());
+        @LoginMember LogInMemberDto loginMember) {
+        commentService.deleteComment(commentId, loginMember.getMemberId());
 
         return ResponseEntity.noContent().build();
     }
