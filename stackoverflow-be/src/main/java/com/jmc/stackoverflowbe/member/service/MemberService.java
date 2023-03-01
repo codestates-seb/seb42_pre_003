@@ -26,4 +26,6 @@ public interface MemberService {
     Member findExistMemberByEmail(String email);
 
     void verifyResourceOwner(Long memberId, LogInMemberDto LoginMember);
+
+    Boolean isResourceOwner(Long memberId, LogInMemberDto loginMember);
 }
