@@ -15,6 +15,7 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     public static class Post {
+
         @NotBlank
         private String email;
         @NotBlank
@@ -32,6 +33,7 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     public static class Patch {
+
         @Pattern(regexp = "^[0-9A-Za-z가-힣]{2,30}$",
             message = "숫자, 영어, 한글이 포함된 최대 30글자 이름만 사용 가능합니다.")
         private String name;
@@ -52,10 +54,11 @@ public class MemberDto {
     @Setter
     @NoArgsConstructor
     public static class MeResponse {
+
         private Long memberId;
         private String email;
         private String name;
-        private  String picture;
+        private String picture;
 
         @Builder
         public MeResponse(Long memberId, String email, String name, String picture) {
@@ -70,10 +73,13 @@ public class MemberDto {
     @Setter
     @NoArgsConstructor
     public static class Response extends Auditable {
+
         private Long memberId;
         private String email;
         private String name;
         private Boolean isMine;
+
+        private String picture;
         private String location;
         private String about;
         private MemberState state;
@@ -82,13 +88,14 @@ public class MemberDto {
         private LocalDateTime lastLoginTime;
 
         @Builder
-        public Response(Long memberId, String email, String name, Boolean isMine, String location,
-            String about, MemberState state, LocalDateTime createdAt, LocalDateTime modifiedAt,
-            LocalDateTime lastLoginTime) {
+        public Response(Long memberId, String email, String name, Boolean isMine, String picture,
+            String location, String about, MemberState state, LocalDateTime createdAt,
+            LocalDateTime modifiedAt, LocalDateTime lastLoginTime) {
             this.memberId = memberId;
             this.email = email;
             this.name = name;
             this.isMine = isMine;
+            this.picture = picture;
             this.location = location;
             this.about = about;
             this.state = state;
