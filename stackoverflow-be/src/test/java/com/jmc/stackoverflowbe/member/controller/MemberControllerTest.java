@@ -171,7 +171,7 @@ public class MemberControllerTest {
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{member-id}", member.getMemberId())
                 .with(csrf())
-                .header("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sImVtYWlsIjoic2pkazA4MDVAZ21haWwuY29tIiwibWVtYmVySWQiOjEsInN1YiI6InNqZGswODA1QGdtYWlsLmNvbSIsImlhdCI6MTY3NzYzODAyMCwiZXhwIjoxNjc3NjM5ODIwfQ.gDYUNS06SLPiHXjcR1B8K3lsDVFJ8RhyLfEtnB3vmYwJ0v4nCH1S3oYzZ3aPuDRslO21gKGmNti_hlYrzfJb6g")
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
