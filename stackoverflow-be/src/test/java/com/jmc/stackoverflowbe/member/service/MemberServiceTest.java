@@ -3,10 +3,8 @@ package com.jmc.stackoverflowbe.member.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
-import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
@@ -20,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
@@ -33,6 +30,11 @@ public class MemberServiceTest {
 
     @Mock
     MemberMapper mapper;
+
+    LogInMemberDto loginMember = LogInMemberDto.builder()
+        .memberId(1L)
+        .email("kcs@gmail.com")
+        .build();
 
     MemberDto.Post post = MemberDto.Post.builder()
         .email("kcs@gmail.com")
