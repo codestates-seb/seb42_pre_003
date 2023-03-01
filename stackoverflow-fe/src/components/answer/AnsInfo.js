@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
-import { useBoxStore } from '../../store/askStore';
 
 const BREAK_POINT_MO = 576;
 
@@ -57,30 +56,25 @@ const InfoAva = styled.div`
 
 function AnsInfo({ data }) {
 	const { handlePage } = useAnsStore();
-	const { setEditData } = useBoxStore();
+	const { edTitleBind, edBodyBind, edModeBind, edIdBind } = useAnsStore();
 
 	const addItemData = (e) => {
 		e.preventDefault();
 
-		let obj;
 		if (data.answerId) {
 			const { answerId, answerContent } = data;
-			obj = {
-				name: 'answer',
-				id: answerId,
-				title: '',
-				body: answerContent,
-			};
+
+			edBodyBind(answerContent);
+			edIdBind(answerId);
+			edModeBind('answer');
 		} else {
 			const { questionId, questionTitle, questionContent } = data;
-			obj = {
-				name: 'question',
-				id: questionId,
-				title: questionTitle,
-				body: questionContent,
-			};
+
+			edTitleBind(questionTitle);
+			edBodyBind(questionContent);
+			edIdBind(questionId);
+			edModeBind('question');
 		}
-		setEditData(obj);
 		handlePage('edit');
 	};
 

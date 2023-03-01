@@ -2,9 +2,6 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 
-const raw = JSON.parse(localStorage.getItem('ask-storage'));
-const data = raw.state.editData[0];
-
 const useAnsStore = create(
 	devtools((set) => ({
 		vote: 0,
@@ -26,9 +23,13 @@ const useAnsStore = create(
 		comment: '',
 		comBind: (item) => set({ comment: item }),
 		comReset: () => set({ comment: '' }),
-		edTitle: `${data.title}`,
+		edMode: '',
+		edModeBind: (item) => set({ edMode: item }),
+		edId: '',
+		edIdBind: (item) => set({ edId: item }),
+		edTitle: '',
 		edTitleBind: (item) => set({ edTitle: item }),
-		edBody: `${data.body}`,
+		edBody: '',
 		edBodyBind: (item) => set({ edBody: item }),
 		edTag: '',
 		edTagBind: (item) => set({ edTag: item }),

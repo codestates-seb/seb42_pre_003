@@ -85,8 +85,6 @@ function Answer() {
 		);
 	}, [getCom, id]);
 
-	console.log(ansDownList.data);
-
 	return (
 		<>
 			{ansItem.data && (

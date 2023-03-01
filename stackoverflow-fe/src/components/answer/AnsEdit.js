@@ -2,9 +2,17 @@ import AnsInput from './AnsInput';
 import AnsEditor from './AnsEditor';
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
-import { useBoxStore } from '../../store/askStore';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
+const EditTitle = styled.h3`
+	margin-bottom: 0.8rem;
+	padding-bottom: 1rem;
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: #3b4045;
+	border-bottom: 1px solid #e3e6e8;
+`;
 
 const InputBtnBox = styled.div`
 	display: flex;
@@ -41,10 +49,9 @@ const ConTitle = styled.h4`
 
 function AnsEdit() {
 	let { id } = useParams();
-	const { editData } = useBoxStore();
 	const { edTitleBind, edBodyBind, edTagBind } = useAnsStore();
 	const { editAnswer, delAnswer, editDown, delDown } = useAnsStore();
-	const { edTitle, edBody } = useAnsStore();
+	const { edTitle, edBody, edMode, edId } = useAnsStore();
 	const { handlePage } = useAnsStore();
 	const navigate = useNavigate();
 
@@ -62,22 +69,6 @@ function AnsEdit() {
 		}, 300);
 	};
 
-	const handleEditDown = (e) => {
-		e.preventDefault();
-
-		const item = {
-			answerContent: edBody,
-		};
-
-		editDown(
-			`${process.env.REACT_APP_API_URL}/answers/${editData[0].id}`,
-			item,
-		);
-		setTimeout(() => {
-			window.location.reload();
-		}, 300);
-	};
-
 	const handleDel = (e) => {
 		e.preventDefault();
 
@@ -87,10 +78,23 @@ function AnsEdit() {
 		}, 300);
 	};
 
+	const handleEditDown = (e) => {
+		e.preventDefault();
+
+		const item = {
+			answerContent: edBody,
+		};
+
+		editDown(`${process.env.REACT_APP_API_URL}/answers/${edId}`, item);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
+	};
+
 	const handleDelDown = (e) => {
 		e.preventDefault();
 
-		delDown(`${process.env.REACT_APP_API_URL}/answers/${editData[0].id}`);
+		delDown(`${process.env.REACT_APP_API_URL}/answers/${edId}`);
 		setTimeout(() => {
 			window.location.reload();
 		}, 300);
@@ -104,27 +108,33 @@ function AnsEdit() {
 
 	return (
 		<>
-			<ConTitle>Title</ConTitle>
-			<AnsInput value={edTitle} func={edTitleBind} />
-			<ConTitle>Body</ConTitle>
-			<AnsEditor value={edBody} func={edBodyBind} />
-			<ConTitle>Tags</ConTitle>
-			<AnsInput func={edTagBind} />
-			<InputBtnBox>
-				<InputButton
-					onClick={
-						editData[0].name === 'question' ? handleEdit : handleEditDown
-					}
-				>
-					Save Edits
-				</InputButton>
-				<button
-					onClick={editData[0].name === 'question' ? handleDel : handleDelDown}
-				>
-					Delete
-				</button>
-				<button onClick={handleClose}>Close</button>
-			</InputBtnBox>
+			{edMode === 'question' ? (
+				<>
+					<EditTitle>Question Edit</EditTitle>
+					<ConTitle>Title</ConTitle>
+					<AnsInput value={edTitle} func={edTitleBind} />
+					<ConTitle>Body</ConTitle>
+					<AnsEditor value={edBody} func={edBodyBind} />
+					<ConTitle>Tags</ConTitle>
+					<AnsInput func={edTagBind} />
+					<InputBtnBox>
+						<InputButton onClick={handleEdit}>Save Edits</InputButton>
+						<button onClick={handleDel}>Delete</button>
+						<button onClick={handleClose}>Close</button>
+					</InputBtnBox>
+				</>
+			) : (
+				<>
+					<EditTitle>Answer Edit</EditTitle>
+					<ConTitle>Body</ConTitle>
+					<AnsEditor value={edBody} func={edBodyBind} />
+					<InputBtnBox>
+						<InputButton onClick={handleEditDown}>Save Edits</InputButton>
+						<button onClick={handleDelDown}>Delete</button>
+						<button onClick={handleClose}>Close</button>
+					</InputBtnBox>
+				</>
+			)}
 		</>
 	);
 }

@@ -43,13 +43,6 @@ export const useBoxStore = create(
 					body: '',
 				},
 			],
-			editData: [
-				{
-					name: '',
-					title: '',
-					body: '',
-				},
-			],
 			setAbleData: (select) => {
 				set((state) => ({ ...state, ableData: [select] }));
 			},
