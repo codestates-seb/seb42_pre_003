@@ -1,11 +1,10 @@
 package com.jmc.stackoverflowbe.member.service;
 
-import com.jmc.stackoverflowbe.member.dto.MemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 //@Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public Member updateMember(Member member) {
+    public Member updateMember(Member memeber) {
         return null;
     }
 
@@ -60,5 +59,10 @@ public class MemberServiceStub implements MemberService {
     @Override
     public Member findExistMemberByEmail(String email) {
         return null;
+    }
+
+    @Override
+    public void verifyResourceOwner(Long memberId, LogInMemberDto LoginMember) {
+
     }
 }

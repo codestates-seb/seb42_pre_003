@@ -34,7 +34,7 @@ public class Member extends Auditable {
     private String name;
 
     @Column
-    private  String picture;
+    private String picture;
 
     @Column(length = 210)
     private String location;
