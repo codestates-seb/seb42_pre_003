@@ -83,16 +83,10 @@ function AnsComment({ data, QaCom }) {
 	const [ed, setEd] = useState(
 		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [],
 	);
-	const [comId, setComId] = useState('');
 	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
 
 	const handleActive = () => {
 		setCom(!com);
-		if (data.answerId) {
-			setComId(data.answerId);
-		} else {
-			setComId(data.questionId);
-		}
 	};
 
 	const handleEd = (num) => {
@@ -128,24 +122,20 @@ function AnsComment({ data, QaCom }) {
 		}, 300);
 	};
 
-	const handleEdit = (e) => {
-		e.preventDefault();
-
+	const handleEdit = (id) => {
 		const item = {
 			commentContent: comment,
 		};
 
-		editCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`, item);
+		editCom(`${process.env.REACT_APP_API_URL}/comments/${id}`, item);
 		comReset();
 		setTimeout(() => {
 			window.location.reload();
 		}, 300);
 	};
 
-	const handleDel = (e) => {
-		e.preventDefault();
-
-		delCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`);
+	const handleDel = (id) => {
+		delCom(`${process.env.REACT_APP_API_URL}/comments/${id}`);
 		setTimeout(() => {
 			window.location.reload();
 		}, 300);
@@ -161,8 +151,8 @@ function AnsComment({ data, QaCom }) {
 							<span>{el.memberName}</span>
 							<em>{el.createdAt || 'Feb 16 at 13:45'}</em>
 							<CommentEdit>
-								<li onClick={() => handleEd(idx)}>Edit</li>
-								<li onClick={handleDel}>Delete</li>
+								<li onClick={() => handleEd(el.commentId)}>Edit</li>
+								<li onClick={() => handleDel(el.commentId)}>Delete</li>
 							</CommentEdit>
 							{ed[idx] ? (
 								<Comment>
