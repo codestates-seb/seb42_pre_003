@@ -158,8 +158,7 @@ public class AnswerControllerTest {
                     attributes(key("title")
                         .value("Headers for user revision")),
                     headerWithName("Authorization")
-                        .attributes(key("constraints").value("Berrer {accessToken}"))
-                        .optional()
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
                         .description("액세스 토큰")
                 ),
                 requestFields(
@@ -171,10 +170,9 @@ public class AnswerControllerTest {
                     fieldWithPath("answerContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
-                        .description("답변 내용")),
-                responseHeaders(
-                    headerWithName(HttpHeaders.LOCATION)
-                        .description("Header Location, 리소스의 URL"))));
+                        .description("답변 내용")
+                ))
+            );
     }
 
     @DisplayName("답변 수정")
@@ -209,8 +207,7 @@ public class AnswerControllerTest {
                     attributes(key("title")
                         .value("Headers for user revision")),
                     headerWithName("Authorization")
-                        .attributes(key("constraints").value("Berrer {accessToken}"))
-                        .optional()
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
                         .description("액세스 토큰")
                 ),
                 requestFields(
@@ -306,8 +303,7 @@ public class AnswerControllerTest {
                     attributes(key("title")
                         .value("Headers for user revision")),
                     headerWithName("Authorization")
-                        .attributes(key("constraints").value("Berrer {accessToken}"))
-                        .optional()
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
                         .description("액세스 토큰")
                 ))
             );
