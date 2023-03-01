@@ -1,5 +1,6 @@
 package com.jmc.stackoverflowbe.member.service;
 
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,6 @@ public interface MemberService {
     Member findExistMemberById(Long memberId);
 
     Member findExistMemberByEmail(String email);
+
+    void verifyResourceOwner(Long memberId, LogInMemberDto LoginMember);
 }
