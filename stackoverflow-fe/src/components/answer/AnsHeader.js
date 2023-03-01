@@ -14,6 +14,12 @@ const HeaderWrap = styled.div`
 		font-size: 1.2rem;
 		font-weight: 600;
 		color: #3b4045;
+		@media only screen and (max-width: ${BREAK_POINT_MO}px) {
+			flex-direction: column;
+			section {
+				margin-top: 0.6rem;
+			}
+		}
 	}
 `;
 
@@ -40,27 +46,31 @@ const HeaderInfo = styled.ul`
 
 function AnsHeader({ data }) {
 	return (
-		<HeaderWrap>
-			<h3>
-				{data.questionTitle || 'How to handle mongoose errors globaly'}
-				<AskButton />
-			</h3>
+		<>
+			{data && (
+				<HeaderWrap>
+					<h3>
+						{data.questionTitle || 'How to handle mongoose errors globaly'}
+						<AskButton />
+					</h3>
 
-			<HeaderInfo>
-				<li>
-					<strong>Asked</strong>
-					<span>9 days ago</span>
-				</li>
-				<li>
-					<strong>Modified</strong>
-					<span>today</span>
-				</li>
-				<li>
-					<strong>Viewed</strong>
-					<span>{`${data.views || '141'} times`}</span>
-				</li>
-			</HeaderInfo>
-		</HeaderWrap>
+					<HeaderInfo>
+						<li>
+							<strong>Asked</strong>
+							<span>{data.createdAt || '9 days ago'}</span>
+						</li>
+						<li>
+							<strong>Modified</strong>
+							<span>{data.modifiedAt || 'today'}</span>
+						</li>
+						<li>
+							<strong>Viewed</strong>
+							<span>{`${data.views || '141'} times`}</span>
+						</li>
+					</HeaderInfo>
+				</HeaderWrap>
+			)}
+		</>
 	);
 }
 

@@ -2,16 +2,18 @@ import styled from 'styled-components';
 import AnsHeader from '../components/answer/AnsHeader';
 import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
-import AnsInput from '../components/answer/AnsInput';
 import useAnsStore from '../store/ansStore';
 import RightMenu from '../components/list/RightMenu';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import AnsEdit from '../components/answer/AnsEdit';
+
+const BREAK_POINT_PC = 1100;
 
 const AnsWrap = styled.div`
 	max-width: 830px;
 	width: 100%;
-	padding: 3rem 1.66rem;
+	padding: 3rem 1.33rem;
 `;
 
 const ConTitle = styled.h4`
@@ -31,56 +33,48 @@ const InputButton = styled.button`
 	cursor: ${(props) => (props.disabled ? 'not-allowed' : 'cursor')};
 `;
 
+const SideWrap = styled.div`
+	margin-top: 3rem;
+	@media only screen and (max-width: ${BREAK_POINT_PC}px) {
+		display: none;
+	}
+`;
+
 function Answer() {
-	const {
-		page,
-		answer,
-		answerBind,
-		answerReset,
-		edTitle,
-		edBody,
-		edTag,
-		edTitleBind,
-		edBodyBind,
-		edTagBind,
-		ansItem,
-		getAnswerItem,
-		ansDownList,
-		getAnsDown,
-		getCom,
-		comList,
-	} = useAnsStore();
+	let { id } = useParams();
+	const { page, answer } = useAnsStore();
+	const { answerBind, answerReset } = useAnsStore();
+	const { ansItem, ansDownList, comList } = useAnsStore();
+	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
+
+	useEffect(() => {
+		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
+	}, [getAnswerItem, id]);
 
 	const handleAnswer = (e) => {
 		e.preventDefault();
 
-		console.log(answer);
-		answerReset();
-	};
-
-	const handleEdit = (e) => {
-		e.preventDefault();
-
 		const item = {
-			title: edTitle,
-			body: edBody,
-			tag: edTag,
+			questionId: ansDownList.length + 1,
+			answerContent: answer,
 		};
 
-		console.log(item);
+		addDown(`${process.env.REACT_APP_API_URL}/answers`, item);
+
+		answerReset(ansDownList);
 	};
 
-	let { id } = useParams();
+	useEffect(() => {
+		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
+	}, [getAnsDown, id]);
 
 	useEffect(() => {
-		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
-		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
 		getCom(
 			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
 		);
-	}, [getAnswerItem, getAnsDown, getCom, id]);
+	}, [getCom, id]);
 
-	// console.log(comList.data);
+	console.log(ansItem.data);
 
 	return (
 		<>
@@ -110,19 +104,13 @@ function Answer() {
 							</>
 						) : (
 							<>
-								<ConTitle>Title</ConTitle>
-								<AnsInput func={edTitleBind} />
-								<ConTitle>Body</ConTitle>
-								<AnsEditor func={edBodyBind} />
-								<ConTitle>Tags</ConTitle>
-								<AnsInput func={edTagBind} />
-								<InputButton onClick={handleEdit}>Save Edits</InputButton>
+								<AnsEdit data={ansItem.data} />
 							</>
 						)}
 					</AnsWrap>
-					<div style={{ marginTop: '3rem' }}>
+					<SideWrap>
 						<RightMenu />
-					</div>
+					</SideWrap>
 				</>
 			)}
 		</>

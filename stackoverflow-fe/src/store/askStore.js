@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
-import axios from 'axios';
 
 export const useBoxStore = create(
 	persist(
@@ -72,7 +71,7 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
-			body: true,
+			body: false,
 		},
 		initialAsk: {
 			title: '',

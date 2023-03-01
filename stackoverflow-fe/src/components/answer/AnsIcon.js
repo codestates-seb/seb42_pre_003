@@ -61,25 +61,3 @@ export function BookFullIcon({ ...values }) {
 		</button>
 	);
 }
-
-export function WillbeDelete() {
-	return (
-		<p>
-			As for now, I'm using mongoose middleware to handle Mongoose specific
-			errors (validation, cast, ....). I'm using the following code in all of my
-			schemas: As for now, I'm using mongoose middleware to handle Mongoose
-			specific errors (validation, cast, ....). I'm using the following code in
-			all of my schemas: As for now, I'm using mongoose middleware to handle
-			Mongoose specific errors (validation, cast, ....). I'm using the following
-			code in all of my schemas: As for now, I'm using mongoose middleware to
-			handle Mongoose specific errors (validation, cast, ....). I'm using the
-			following code in all of my schemas: As for now, I'm using mongoose
-			middleware to handle Mongoose specific errors (validation, cast, ....).
-			I'm using the following code in all of my schemas: As for now, I'm using
-			mongoose middleware to handle Mongoose specific errors (validation, cast,
-			....). I'm using the following code in all of my schemas: As for now, I'm
-			using mongoose middleware to handle Mongoose specific errors (validation,
-			cast, ....). I'm using the following code in all of my schemas:
-		</p>
-	);
-}

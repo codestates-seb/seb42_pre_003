@@ -71,8 +71,6 @@ const AnsTag = styled.div`
 function AnsCon({ type, data, QaCom }) {
 	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
 
-	// console.log(data);
-
 	return (
 		<>
 			{data && (

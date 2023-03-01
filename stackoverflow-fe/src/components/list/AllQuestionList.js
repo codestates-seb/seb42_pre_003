@@ -5,33 +5,36 @@ import { Link } from 'react-router-dom';
 const ListContents = styled.div`
 	width: auto;
 
-	.qlist-wrapper {
-		display: flex;
-		border-top: 1px solid #bebdbd;
-		padding: 16px;
+	.qlist {
+		&-wrapper {
+			display: flex;
+			border-top: 1px solid #bebdbd;
+			border-bottom: 1px solid #bebdbd;
+			padding: 16px;
+		}
+
+		&-stats {
+			font-size: 13px;
+			display: flex;
+			align-items: flex-end;
+			flex-direction: column;
+			width: 105px;
+			margin-right: 17px;
+		}
 	}
 
 	.qlist-stats {
-		font-size: 13px;
-		display: flex;
-		align-items: flex-end;
-		flex-direction: column;
-		width: 105px;
-		margin-right: 17px;
-	}
-
-	.qlist-stats li {
-		margin-bottom: 12px;
-		color: #999;
-	}
-
-	.qlist-stats .vote {
-		color: #333;
-	}
-
-	.qlist-stats .number {
-		margin-right: 3px;
-		font-weight: bold;
+		li {
+			margin-bottom: 12px;
+			color: #999;
+		}
+		.vote {
+			color: #333;
+		}
+		.number {
+			margin-right: 3px;
+			font-weight: bold;
+		}
 	}
 
 	.qlist-contents {
@@ -41,6 +44,11 @@ const ListContents = styled.div`
 	.contents-title {
 		font-size: 17px;
 		color: #0074cc;
+		margin-bottom: 5px;
+	}
+
+	.contents-excerpt {
+		font-size: 13px;
 		margin-bottom: 15px;
 	}
 
@@ -96,7 +104,7 @@ const ListContents = styled.div`
 	}
 `;
 
-function QuestionList({ listData }) {
+function AllQuestionList({ listData }) {
 	return (
 		<ListContents>
 			<div className='qlist-wrapper'>
@@ -119,6 +127,12 @@ function QuestionList({ listData }) {
 						<Link to={`/answer/${listData.questionId}`}>
 							{listData.questionTitle}
 						</Link>
+					</li>
+					<li className='contents-excerpt'>
+						In our application we have screen with multiple header titles
+						(.tasktable__header.tasktable__header--title) and i want to verify
+						these titles. The code i had didn't do the job, because it allways
+						...
 					</li>
 					<ul className='tags'>
 						<li>
@@ -147,7 +161,7 @@ function QuestionList({ listData }) {
 							</a>
 						</li>
 						<li className='user-name'>
-							<a href='/'>{listData.memberId}</a>
+							<a href='/'>nickname</a>
 						</li>
 						<li className='user-awards'>2,345</li>
 						<li className='time'>
@@ -160,4 +174,4 @@ function QuestionList({ listData }) {
 	);
 }
 
-export default QuestionList;
+export default AllQuestionList;

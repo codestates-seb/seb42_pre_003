@@ -45,7 +45,8 @@ const DelButton = styled.button`
 `;
 
 function AskQuestion() {
-	const { setAbleData, setAskData, setActData, setBtnData } = useBoxStore();
+	const { setAbleData, setAskData, setActData, setBtnData, askData } =
+		useBoxStore();
 	const { page, initialAble, initialAsk } = useAskStore();
 	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
@@ -68,16 +69,12 @@ function AskQuestion() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		//askData 전송(api 부분)
 		const item = {
 			questionTitle: title,
-			questionContent: body,
+			questionContent: body === '' ? askData[0].body : body,
 		};
 		console.log(item);
-		addAnswer(
-			`${process.env.REACT_APP_API_URL}/questions?_csrf=4481c2c3-9322-4c5f-8849-4630291fb6e6`,
-			item,
-		);
+		addAnswer(`${process.env.REACT_APP_API_URL}/questions`, item);
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
