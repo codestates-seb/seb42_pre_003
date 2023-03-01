@@ -1,6 +1,6 @@
 package com.jmc.stackoverflowbe.global.security.auth.filter;
 
-import com.jmc.stackoverflowbe.global.security.auth.dto.Oauth2MemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.global.security.auth.jwt.JwtTokenizer;
 import com.jmc.stackoverflowbe.global.security.auth.utils.CustomAuthorityUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,7 +57,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // (1)
         Long memberId = Long.valueOf((Integer) claims.get("memberId"));
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));  // (4-2)
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-            Oauth2MemberDto.builder()
+            LogInMemberDto.builder()
                 .memberId(memberId)
                 .email(email)
                 .build()
