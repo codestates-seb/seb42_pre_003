@@ -3,8 +3,8 @@ package com.jmc.stackoverflowbe.comment.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
-import com.jmc.stackoverflowbe.answer.service.AnswerService;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
 import com.jmc.stackoverflowbe.comment.repository.CommentRepository;
@@ -13,7 +13,6 @@ import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.member.service.MemberService;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
-import com.jmc.stackoverflowbe.question.service.QuestionService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,12 +69,6 @@ public class CommentServiceTest {
     @Mock
     private MemberService memberService;
 
-    @Mock
-    private QuestionService questionService;
-
-    @Mock
-    private AnswerService answerService;
-
     @Spy
     @InjectMocks
     private CommentServiceImpl commentService;
@@ -83,15 +76,13 @@ public class CommentServiceTest {
     @DisplayName("Service단 댓글 생성 로직")
     @Test
     public void createCommentTest() {
-//        given(memberService.findExistMemberById(Mockito.anyLong()))
-//            .willReturn(new Member());
-//        given(questionService.findExistQuestionById(Mockito.anyLong()))
-//            .willReturn(new Question());
-//        ReflectionTestUtils.invokeMethod(commentService, "verifyExistQAIdByEntity", comment);
+        given(memberService.findExistMemberById(Mockito.anyLong()))
+            .willReturn(new Member());
+        doNothing().when(commentService).verifyExistQAIdByEntity(comment);
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(comment);
 
-        Executable executable = () -> commentService.createComment(comment);
+        Executable executable = () -> commentService.createComment(comment, member.getMemberId());
 
         assertDoesNotThrow(executable);
     }
@@ -100,11 +91,14 @@ public class CommentServiceTest {
     @Test
     public void updateCommentTest() {
         given(commentRepository.findById(Mockito.anyLong()))
-            .willReturn(Optional.of(comment));
+            .willReturn(Optional.of(new Comment()));
+        doNothing().when(commentService)
+            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyLong());
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(comment);
 
-        Executable executable = () -> commentService.updateComment(comment, comment.getCommentId());
+        Executable executable = () ->
+            commentService.updateComment(comment, comment.getCommentId(), member.getMemberId());
 
         assertDoesNotThrow(executable);
     }
@@ -126,10 +120,13 @@ public class CommentServiceTest {
     public void deleteCommentTest() {
         given(commentRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(new Comment()));
+        doNothing().when(commentService)
+            .verifyAuthorizedMemberForComment(Mockito.any(Comment.class), Mockito.anyLong());
         given(commentRepository.save(Mockito.any(Comment.class)))
             .willReturn(deletedComment);
 
-        Executable executable = () -> commentService.deleteComment(comment.getCommentId());
+        Executable executable = () -> commentService.deleteComment(comment.getCommentId(),
+            member.getMemberId());
 
         assertEquals(deletedComment.getCommentState(), CommentState.DELETED);
         assertDoesNotThrow(executable);

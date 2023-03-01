@@ -33,15 +33,15 @@ public class Comment extends Auditable {
     @Column
     private CommentState commentState;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "ANSWER_ID")
     private Answer answer;
 

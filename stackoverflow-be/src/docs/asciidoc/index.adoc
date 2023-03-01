@@ -219,6 +219,9 @@ include::{snippets}/Post-Comment/curl-request.adoc[]
 .http-request
 include::{snippets}/Post-Comment/http-request.adoc[]
 
+.request-header
+include::{snippets}/Post-Comment/request-headers.adoc[]
+
 .request-fields
 include::{snippets}/Post-Comment/request-fields.adoc[]
 
@@ -237,6 +240,9 @@ include::{snippets}/Patch-Comment/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Comment/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Patch-Comment/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Comment/request-fields.adoc[]
@@ -269,6 +275,9 @@ include::{snippets}/Delete-Comment/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Delete-Comment/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Delete-Comment/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Delete-Comment/http-response.adoc[]
