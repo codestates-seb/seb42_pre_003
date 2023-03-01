@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 
+const token = JSON.parse(sessionStorage.getItem('accessToken'));
+
 const useAnsStore = create(
 	devtools((set) => ({
 		vote: 0,
@@ -43,6 +45,7 @@ const useAnsStore = create(
 		addAnswer: async (URL, item) => {
 			const response = await axios.post(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -51,6 +54,7 @@ const useAnsStore = create(
 		editAnswer: async (URL, item) => {
 			const response = await axios.patch(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -67,6 +71,7 @@ const useAnsStore = create(
 		},
 		delAnswer: async (URL) => {
 			const response = await axios.delete(URL, {
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -94,6 +99,7 @@ const useAnsStore = create(
 		addDown: async (URL, item) => {
 			const response = await axios.post(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -105,6 +111,7 @@ const useAnsStore = create(
 		editDown: async (URL, item) => {
 			const response = await axios.patch(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -121,6 +128,7 @@ const useAnsStore = create(
 		},
 		delDown: async (URL) => {
 			const response = await axios.delete(URL, {
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -141,6 +149,7 @@ const useAnsStore = create(
 		addCom: async (URL, item) => {
 			const response = await axios.post(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -152,6 +161,7 @@ const useAnsStore = create(
 		editCom: async (URL, item) => {
 			const response = await axios.patch(URL, item, {
 				'Content-Type': 'application/json;charset=UTF-8',
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
@@ -168,6 +178,7 @@ const useAnsStore = create(
 		},
 		delCom: async (URL) => {
 			const response = await axios.delete(URL, {
+				Authorization: `Bearer ${token}`,
 				Accept: 'application / json',
 			});
 			const data = await response.data;
