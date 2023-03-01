@@ -2,10 +2,9 @@ package com.jmc.stackoverflowbe.member.service;
 
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
-import com.jmc.stackoverflowbe.member.dto.MemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
-import com.jmc.stackoverflowbe.member.mapper.MemberMapper;
 import com.jmc.stackoverflowbe.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -111,5 +110,14 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
         return obtainedMember;
+    }
+
+    @Override
+    public void verifyResourceOwner(Long memberId, LogInMemberDto loginMember) {
+//        if(loginMember == null)
+//            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_UNAUTHORIZED);
+
+        if(memberId != loginMember.getMemberId())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
 }
