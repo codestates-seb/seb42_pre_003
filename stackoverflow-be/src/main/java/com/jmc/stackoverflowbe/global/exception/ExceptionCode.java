@@ -11,7 +11,8 @@ public enum ExceptionCode {
     QUESTION_NOT_FOUND(404, "Question Not Found"),
     QUESTION_EXISTS(409, "Question exists"),
     ANSWER_NOT_FOUND(404, "Answer Not Found"),
-    COMMENT_NOT_FOUND(404, "Comment Not Found");
+    COMMENT_NOT_FOUND(404, "Comment Not Found"),
+    VOTE_NOT_FOUND(404, "Vote Not Found");
 
     @Getter
     private int status;
