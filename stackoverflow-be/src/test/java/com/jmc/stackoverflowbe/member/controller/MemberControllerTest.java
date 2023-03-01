@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.jmc.stackoverflowbe.global.WithMockCustomMember;
 import com.jmc.stackoverflowbe.member.dto.MemberDto;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
@@ -80,6 +81,7 @@ public class MemberControllerTest {
         .name(member.getName())
         .state(member.getState())
         .isMine(false)
+        .picture("https://lh3.googleusercontent.com/a/AGNmyxYZlOMhTobPqQ0YS4-IPQqfkaVkjEwWYC2fLUw=s96-c")
         .about("안녕하세요")
         .location("서울")
         .build();
@@ -151,6 +153,7 @@ public class MemberControllerTest {
 
     @DisplayName("회원 수정")
     @Test
+    @WithMockCustomMember
     void patchMember() throws Exception {
         String content = gson.toJson(patch);
 
@@ -158,6 +161,7 @@ public class MemberControllerTest {
         member.setName(patch.getName());
         member.setLocation(patch.getLocation());
 
+        given(mapper.patchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
         // patch를 Member객체로 매핑
         given(mapper.patchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
         // memberService.updateMember()가 member를 반환.
@@ -167,6 +171,7 @@ public class MemberControllerTest {
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{member-id}", member.getMemberId())
                 .with(csrf())
+                .header("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sImVtYWlsIjoic2pkazA4MDVAZ21haWwuY29tIiwibWVtYmVySWQiOjEsInN1YiI6InNqZGswODA1QGdtYWlsLmNvbSIsImlhdCI6MTY3NzYzODAyMCwiZXhwIjoxNjc3NjM5ODIwfQ.gDYUNS06SLPiHXjcR1B8K3lsDVFJ8RhyLfEtnB3vmYwJ0v4nCH1S3oYzZ3aPuDRslO21gKGmNti_hlYrzfJb6g")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -256,6 +261,9 @@ public class MemberControllerTest {
                     fieldWithPath("data.name")
                         .type(JsonFieldType.STRING)
                         .description("회원 이름"),
+                    fieldWithPath("data.picture")
+                        .type(JsonFieldType.STRING)
+                        .description("회원 사진"),
                     fieldWithPath("data.location")
                         .type(JsonFieldType.STRING)
                         .description("회원 활동 지역"),
