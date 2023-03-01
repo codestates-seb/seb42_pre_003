@@ -5,6 +5,7 @@ import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,13 +72,16 @@ public class MemberDto {
 
     @Getter
     @Setter
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Response extends Auditable {
 
         private Long memberId;
         private String email;
         private String name;
-        private Boolean isMine;
+        @Builder.Default
+        private Boolean isMine = false;
 
         private String picture;
         private String location;
@@ -88,13 +92,12 @@ public class MemberDto {
         private LocalDateTime lastLoginTime;
 
         @Builder
-        public Response(Long memberId, String email, String name, Boolean isMine, String picture,
+        public Response(Long memberId, String email, String name, String picture,
             String location, String about, MemberState state, LocalDateTime createdAt,
             LocalDateTime modifiedAt, LocalDateTime lastLoginTime) {
             this.memberId = memberId;
             this.email = email;
             this.name = name;
-            this.isMine = isMine;
             this.picture = picture;
             this.location = location;
             this.about = about;

@@ -113,11 +113,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void verifyResourceOwner(Long memberId, LogInMemberDto loginMember) {
+    public Boolean verifyResourceOwner(Long memberId, LogInMemberDto loginMember) {
 //        if(loginMember == null)
 //            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_UNAUTHORIZED);
 
         if(memberId != loginMember.getMemberId())
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+            return false;
+        return true;
     }
 }
