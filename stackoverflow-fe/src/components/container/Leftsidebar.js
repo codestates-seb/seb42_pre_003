@@ -60,7 +60,9 @@ const Leftsidebar = () => {
 						<a
 							href='/'
 							className={
-								location === '/' || location === '/answer'
+								location === '/' ||
+								(location.includes('/answer/') &&
+									!location.includes('/allQuestion/'))
 									? 'homeActive'
 									: 'homeMenu'
 							}
@@ -73,7 +75,7 @@ const Leftsidebar = () => {
 							href='/allQuestion'
 							className={
 								location === '/allQuestion' ||
-								location === '/allQuestion/answer'
+								location.includes('/allQuestion/answer/')
 									? 'active'
 									: null
 							}
