@@ -114,10 +114,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void verifyResourceOwner(Long memberId, LogInMemberDto loginMember) {
+        // 리소스의 소유자와 요청한 사용자가 일치하지 않으면 예외를 발생
+        if(!isResourceOwner(memberId, loginMember))
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+    }
+
+    @Override
+    public Boolean isResourceOwner(Long memberId, LogInMemberDto loginMember) {
 //        if(loginMember == null)
 //            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_UNAUTHORIZED);
 
+        // 리소스의 소유자와 요청한 사용자가 일치하면 true, 아니면 false 반환.
         if(memberId != loginMember.getMemberId())
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+            return false;
+        return true;
     }
 }

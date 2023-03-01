@@ -29,6 +29,9 @@ include::{snippets}/Patch-Member/curl-request.adoc[]
 .http-request
 include::{snippets}/Patch-Member/http-request.adoc[]
 
+.request-headers
+include::{snippets}/Patch-Member/request-headers.adoc[]
+
 .request-path-parameters
 include::{snippets}/Patch-Member/path-parameters.adoc[]
 
@@ -48,6 +51,9 @@ include::{snippets}/Get-Member/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Get-Member/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/Get-Member/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Get-Member/http-response.adoc[]

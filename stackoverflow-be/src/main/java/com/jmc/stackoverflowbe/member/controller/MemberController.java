@@ -1,6 +1,8 @@
 package com.jmc.stackoverflowbe.member.controller;
 
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
+import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
+import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
 import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
 import com.jmc.stackoverflowbe.global.security.auth.resolver.LoginMember;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
@@ -65,15 +67,26 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") long memberId) {
+    public ResponseEntity getMember(
+        @LoginMember LogInMemberDto loginMember,
+        @PathVariable("member-id") long memberId) {
+
         Member member = memberService.getMember(memberId);
+        MemberDto.Response response = mapper.memberToResponseDto(member);
+        if(loginMember != null && memberService.isResourceOwner(member.getMemberId(), loginMember))
+            response.setIsMine(true);
+
         return new ResponseEntity(
-            new SingleResponseDto<>(mapper.memberToResponseDto(member)),
+            new SingleResponseDto<>(response),
             HttpStatus.OK);
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") long memberId) {
+    public ResponseEntity deleteMember(
+        @LoginMember LogInMemberDto loginMember,
+        @PathVariable("member-id") long memberId) {
+        memberService.verifyResourceOwner(memberId, loginMember);
+
         memberService.deleteMember(memberId);
         return ResponseEntity.noContent().build();
     }

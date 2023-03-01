@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 //@Service
 @RequiredArgsConstructor
 public class MemberServiceStub implements MemberService {
+
     private final MemberMapper mapper;
 
     @Override
@@ -29,11 +30,11 @@ public class MemberServiceStub implements MemberService {
     @Override
     public Member getMember(Long memberId) {
         return Member.builder()
-                .memberId(memberId)
-                .email("hgd@gmail.com")
-                .name("홍길동")
-                .state(MemberState.ACTIVE)
-                .build();
+            .memberId(memberId)
+            .email("hgd@gmail.com")
+            .name("홍길동")
+            .state(MemberState.ACTIVE)
+            .build();
     }
 
     @Override
@@ -63,6 +64,10 @@ public class MemberServiceStub implements MemberService {
 
     @Override
     public void verifyResourceOwner(Long memberId, LogInMemberDto LoginMember) {
+    }
 
+    @Override
+    public Boolean isResourceOwner(Long memberId, LogInMemberDto loginMember) {
+        return false;
     }
 }
