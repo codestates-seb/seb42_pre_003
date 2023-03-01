@@ -4,11 +4,13 @@ import com.jmc.stackoverflowbe.global.common.MultiResponseDto;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
+import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.mapper.QuestionMapper;
 import com.jmc.stackoverflowbe.question.service.QuestionService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/questions")
 @RequiredArgsConstructor
@@ -34,9 +35,10 @@ public class QuestionController {
     private final QuestionMapper mapper;
 
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post post) {
-        questionService.createQuestion(mapper.postDtoToQuestion(post));
-        URI location = UriCreator.createURI("/questions", 1L);
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post) {
+
+        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post));
+        URI location = UriCreator.createURI("/questions", question.getQuestionId());
         return ResponseEntity.created(location).build();
     }
 
@@ -44,15 +46,18 @@ public class QuestionController {
     public ResponseEntity patchQuestion(
             @PathVariable("question-id") long questionId,
             @RequestBody QuestionDto.Patch patch) {
-        questionService.updateQuestion(mapper.patchDtoToQuestion(patch));
+        Question question = mapper.patchDtoToQuestion(patch);
+        question.setQuestionId(questionId);
+        questionService.updateQuestion(question);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") long questionId) {
         Question question = questionService.getQuestion(questionId);
+        QuestionDto.Response response = mapper.questionToResponseDto(question);
         return new ResponseEntity(new SingleResponseDto<>(
-                mapper.questionToResponseDto(question)),
+                response),
                 HttpStatus.OK);
     }
 

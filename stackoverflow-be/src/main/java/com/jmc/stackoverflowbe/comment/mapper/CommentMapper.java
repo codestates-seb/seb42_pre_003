@@ -16,7 +16,7 @@ public interface CommentMapper {
     Comment patchDtoToComment(CommentDto.Patch patch);
 
     @Mapping(source = "member.memberId", target = "memberId")
-    @Mapping(source = "member.memberName", target = "memberName")
+    @Mapping(source = "member.name", target = "memberName")
     @Mapping(source = "question.questionId", target = "questionId")
     @Mapping(source = "answer.answerId", target = "answerId")
     List<CommentDto.Response> commentsToResponseDtos(List<Comment> comments);

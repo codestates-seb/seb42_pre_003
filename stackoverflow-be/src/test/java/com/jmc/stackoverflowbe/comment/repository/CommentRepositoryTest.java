@@ -34,6 +34,9 @@ public class CommentRepositoryTest {
     @Autowired
     AnswerRepository answerRepository;
 
+    @Autowired
+    CommentRepository commentRepository;
+
     Member member = Member.builder()
         .memberId(1L)
         .email("hgd@gmail.com")
@@ -44,7 +47,7 @@ public class CommentRepositoryTest {
     Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -73,9 +76,6 @@ public class CommentRepositoryTest {
         .commentContent("Sample comment 2.")
         .member(member)
         .commentState(CommentState.ACTIVE);
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     @BeforeAll
     public void init() {

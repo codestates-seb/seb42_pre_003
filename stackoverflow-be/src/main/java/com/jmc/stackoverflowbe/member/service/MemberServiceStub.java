@@ -13,26 +13,33 @@ public class MemberServiceStub implements MemberService {
     private final MemberMapper mapper;
 
     @Override
-    public Member createMember(MemberDto.Post post) {
+    public Member createMember(Member member) {
         return null;
     }
 
     @Override
-    public Member updateMember(MemberDto.Patch patch, long memberId) {
+    public Member createMemberByOauth2(Member member) {
         return null;
     }
 
     @Override
-    public MemberDto.Response getMember(Long memberId) {
-        Member.builder()
-            .memberId(memberId)
-            .email("hgd@gmail.com")
-            .name("홍길동")
-            .state(MemberState.ACTIVE)
-            .build();
-        return mapper.memberToResponseDto(findExistMemberById(memberId));
+    public Member updateMember(Member member) {
+        return null;
+    }
 
+    @Override
+    public Member getMember(Long memberId) {
+        return Member.builder()
+                .memberId(memberId)
+                .email("hgd@gmail.com")
+                .name("홍길동")
+                .state(MemberState.ACTIVE)
+                .build();
+    }
 
+    @Override
+    public Member getMember(String email) {
+        return null;
     }
 
     @Override
@@ -47,6 +54,11 @@ public class MemberServiceStub implements MemberService {
 
     @Override
     public Member findExistMemberById(Long memberId) {
+        return null;
+    }
+
+    @Override
+    public Member findExistMemberByEmail(String email) {
         return null;
     }
 }
