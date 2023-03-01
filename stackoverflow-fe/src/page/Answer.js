@@ -3,7 +3,6 @@ import AnsHeader from '../components/answer/AnsHeader';
 import AnsCon from '../components/answer/AnsCon';
 import AnsEditor from '../components/answer/AnsEditor';
 import useAnsStore from '../store/ansStore';
-import { useBoxStore } from '../store/askStore';
 import RightMenu from '../components/list/RightMenu';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -43,22 +42,13 @@ const SideWrap = styled.div`
 
 function Answer() {
 	let { id } = useParams();
-	const { setEditData } = useBoxStore();
-	const { page, answer } = useAnsStore();
-	const { answerBind, answerReset } = useAnsStore();
+	const { page, answer, answerBind, answerReset } = useAnsStore();
 	const { ansItem, ansDownList, comList } = useAnsStore();
 	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
 
 	useEffect(() => {
 		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
 	}, [getAnswerItem, id]);
-
-	useEffect(() => {
-		setEditData({
-			title: '',
-			body: '',
-		});
-	}, [setEditData, ansItem]);
 
 	const handleAnswer = (e) => {
 		e.preventDefault();

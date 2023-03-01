@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AnsInput from './AnsInput';
 import useAnsStore from '../../store/ansStore';
-import { useParams } from 'react-router-dom';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -79,16 +78,22 @@ const CommentEdit = styled.ul`
 	}
 `;
 
-function AnsComment({ QaCom }) {
-	let { id } = useParams();
+function AnsComment({ data, QaCom }) {
 	const [com, setCom] = useState(false);
 	const [ed, setEd] = useState(
-		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [false, false],
+		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [],
 	);
+	const [comId, setComId] = useState('');
 	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
 
 	const handleActive = () => {
 		setCom(!com);
+		if (data.answerId) {
+			setComId(data.answerId);
+		} else {
+			setComId(data.questionId);
+		}
+		console.log(data);
 	};
 
 	const handleEd = (num) => {
@@ -110,8 +115,8 @@ function AnsComment({ QaCom }) {
 
 		const item = {
 			commentContent: comment,
-			questionId: id,
-			answerId: 1,
+			questionId: data.questionId,
+			answerId: data.answerId ? data.answerId : null,
 		};
 
 		addCom(`${process.env.REACT_APP_API_URL}/comments`, item);
@@ -126,7 +131,7 @@ function AnsComment({ QaCom }) {
 			commentContent: comment,
 		};
 
-		editCom(`${process.env.REACT_APP_API_URL}/comments/1`, item);
+		editCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`, item);
 		console.log(comment);
 		comReset();
 	};
@@ -134,7 +139,7 @@ function AnsComment({ QaCom }) {
 	const handleDel = (e) => {
 		e.preventDefault();
 
-		delCom(`${process.env.REACT_APP_API_URL}/comments/1`);
+		delCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`);
 	};
 
 	return (

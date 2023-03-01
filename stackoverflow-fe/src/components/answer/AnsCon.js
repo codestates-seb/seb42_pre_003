@@ -47,6 +47,34 @@ const AnsBox = styled.div`
 		font-weight: 500;
 		line-height: 1.5;
 		white-space: pre-line;
+		h1,
+		.ql-size-huge {
+			font-size: 1.4rem;
+		}
+		h2,
+		.ql-size-large {
+			font-size: 1.2rem;
+		}
+		h3 {
+			font-size: 1rem;
+		}
+		em {
+			font-style: italic;
+		}
+		ol {
+			list-style-type: decimal;
+		}
+		ul {
+			list-style: circle;
+		}
+		li {
+			margin: initial;
+			padding: initial;
+		}
+	}
+	.con * {
+		margin: revert;
+		padding: revert;
 	}
 `;
 
@@ -112,7 +140,7 @@ function AnsCon({ type, data, QaCom }) {
 							</AnsTag>
 						) : null}
 						<AnsInfo data={data} />
-						<AnsComment QaCom={QaCom} />
+						<AnsComment data={data} QaCom={QaCom} />
 					</AnsBox>
 				</ConWrap>
 			)}

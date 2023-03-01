@@ -158,7 +158,7 @@ const useAnsStore = create(
 			set((state) => ({
 				...state,
 				comList: state.comList.map((el) => {
-					if (el.answerId === data.answerId) {
+					if (el.questionId === data.questionId) {
 						return data;
 					} else {
 						return el;
@@ -173,7 +173,9 @@ const useAnsStore = create(
 			const data = await response.data;
 			set((state) => ({
 				...state,
-				comList: state.comList.filter((el) => el.answerId !== data.answerId),
+				comList: state.comList.filter(
+					(el) => el.questionId !== data.questionId,
+				),
 			}));
 		},
 	})),
