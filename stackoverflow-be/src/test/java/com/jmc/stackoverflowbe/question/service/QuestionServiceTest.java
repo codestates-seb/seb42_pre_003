@@ -3,9 +3,11 @@ package com.jmc.stackoverflowbe.question.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
+import com.jmc.stackoverflowbe.member.service.MemberService;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.entity.Question;
 import com.jmc.stackoverflowbe.question.entity.Question.StateGroup;
@@ -31,6 +33,9 @@ public class QuestionServiceTest {
 
     @Mock
     private QuestionMapper mapper;
+
+    @Mock
+    private MemberService memberService;
 
     @InjectMocks
     private QuestionServiceImpl questionService;
@@ -104,10 +109,14 @@ public class QuestionServiceTest {
     @DisplayName("질문 생성 service test")
     @Test
     public void createQuestionTest() {
+        given(memberService.findExistMemberById(Mockito.anyLong()))
+            .willReturn(new Member());
         given(questionRepository.save(Mockito.any(Question.class)))
             .willReturn(question);
 
-        Executable executable = () -> questionService.createQuestion(question);
+        Executable executable =
+            () -> questionService.createQuestion(question, member.getMemberId());
+
         assertDoesNotThrow(executable);
     }
 
@@ -120,7 +129,7 @@ public class QuestionServiceTest {
             .willReturn(question2);
 
         Executable executable =
-            () -> questionService.updateQuestion(question2);
+            () -> questionService.updateQuestion(question2,member.getMemberId());
 
         assertDoesNotThrow(executable);
     }
@@ -131,7 +140,8 @@ public class QuestionServiceTest {
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
 
-        Executable executable = () -> questionService.getQuestion(question.getQuestionId());
+        Executable executable =
+            () -> questionService.getQuestion(question.getQuestionId());
 
         assertDoesNotThrow(executable);
     }
@@ -142,7 +152,9 @@ public class QuestionServiceTest {
         given(questionRepository.findAll())
             .willReturn(List.of(question, question2));
 
-        Executable executable = () -> questionService.getQuestions(0, "questionId");
+        Executable executable =
+            () -> questionService.getQuestions(0, "questionId");
+
         assertDoesNotThrow(executable);
     }
 
@@ -151,7 +163,9 @@ public class QuestionServiceTest {
     public void deleteQuestionTest() {
         given(questionRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(question));
-        Executable executable = () -> questionService.deleteQuestion(question.getQuestionId());
+
+        Executable executable =
+            () -> questionService.deleteQuestion(question.getQuestionId(), member.getMemberId());
 
         assertDoesNotThrow(executable);
     }

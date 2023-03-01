@@ -2,6 +2,8 @@ package com.jmc.stackoverflowbe.question.controller;
 
 import com.jmc.stackoverflowbe.global.common.MultiResponseDto;
 import com.jmc.stackoverflowbe.global.common.SingleResponseDto;
+import com.jmc.stackoverflowbe.global.security.auth.dto.LogInMemberDto;
+import com.jmc.stackoverflowbe.global.security.auth.resolver.LoginMember;
 import com.jmc.stackoverflowbe.global.utils.UriCreator;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
@@ -35,9 +37,10 @@ public class QuestionController {
     private final QuestionMapper mapper;
 
     @PostMapping
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post) {
-
-        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post));
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post post,
+        @LoginMember LogInMemberDto logInMemberDto) {
+        Question question = questionService.createQuestion(mapper.postDtoToQuestion(post),
+            logInMemberDto.getMemberId());
         URI location = UriCreator.createURI("/questions", question.getQuestionId());
         return ResponseEntity.created(location).build();
     }
@@ -45,10 +48,11 @@ public class QuestionController {
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(
             @PathVariable("question-id") long questionId,
-            @RequestBody QuestionDto.Patch patch) {
+            @RequestBody QuestionDto.Patch patch,
+        @LoginMember LogInMemberDto logInMemberDto) {
         Question question = mapper.patchDtoToQuestion(patch);
         question.setQuestionId(questionId);
-        questionService.updateQuestion(question);
+        questionService.updateQuestion(question, logInMemberDto.getMemberId());
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +66,8 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity getQuestions(@RequestParam String sort, @Positive @RequestParam int page) {
+    public ResponseEntity getQuestions(
+        @RequestParam String sort, @Positive @RequestParam int page) {
         Page<Question> questionPage = questionService.getQuestions(page - 1, sort);
         List<Question> questionList = questionPage.getContent();
         return new ResponseEntity<>(
@@ -73,8 +78,9 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId) {
-        questionService.deleteQuestion(questionId);
+    public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId,
+        @LoginMember LogInMemberDto logInMemberDto) {
+        questionService.deleteQuestion(questionId, logInMemberDto.getMemberId());
         return ResponseEntity.noContent().build();
     }
 

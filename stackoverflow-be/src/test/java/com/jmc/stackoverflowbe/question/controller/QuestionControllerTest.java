@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.jmc.stackoverflowbe.global.WithMockCustomMember;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
@@ -130,6 +132,7 @@ public class QuestionControllerTest {
 
     @DisplayName("질문 생성")
     @Test
+    @WithMockCustomMember
     void postQuestionTest() throws Exception {
         QuestionDto.Post post = QuestionDto.Post.builder()
             .questionTitle("Title for post")
@@ -139,12 +142,13 @@ public class QuestionControllerTest {
         String content = gson.toJson(post);
         given(mapper.postDtoToQuestion(Mockito.any(QuestionDto.Post.class)))
             .willReturn(question);
-        given(questionService.createQuestion(Mockito.any(Question.class)))
+        given(questionService.createQuestion(Mockito.any(Question.class),Mockito.anyLong()))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
                 .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -155,6 +159,13 @@ public class QuestionControllerTest {
             .andDo(document("Post-Question",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title")
                         .value("Fields for question creation")),
@@ -175,6 +186,7 @@ public class QuestionControllerTest {
 
     @DisplayName("질문 수정")
     @Test
+    @WithMockCustomMember
     void patchQuestionTest() throws Exception {
         QuestionDto.Patch patch = QuestionDto.Patch.builder()
             .questionTitle("title for patch")
@@ -184,12 +196,13 @@ public class QuestionControllerTest {
         String content = gson.toJson(patch);
         given(mapper.patchDtoToQuestion(Mockito.any(QuestionDto.Patch.class)))
             .willReturn(new Question());
-        given(questionService.updateQuestion(Mockito.any(Question.class)))
+        given(questionService.updateQuestion(Mockito.any(Question.class),Mockito.anyLong()))
             .willReturn(question);
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{question-id}", 0L)
                 .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -202,6 +215,13 @@ public class QuestionControllerTest {
                 pathParameters(
                     parameterWithName("question-id")
                         .description("질문 식별자")),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title")
                         .value("Fields for Question revision")),
@@ -389,21 +409,32 @@ public class QuestionControllerTest {
 
     @DisplayName("질문 삭제")
     @Test
+    @WithMockCustomMember
     void deleteQuestionTest() throws Exception {
-        doNothing().when(questionService).deleteQuestion(question.getQuestionId());
+        doNothing().when(questionService).deleteQuestion(question.getQuestionId(),member.getMemberId());
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{question-id}", question.getQuestionId())
                 .with(csrf())
+                .header("Authorization", "")
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
             .andExpect(status().isNoContent())
             .andExpect(jsonPath("$.data").doesNotExist())
             .andDo(document("Delete-Question",
+                preprocessRequest(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 pathParameters(
                     parameterWithName("question-id")
-                        .description("질문 식별자"))));
+                        .description("질문 식별자"))
+                ));
     }
 
 }

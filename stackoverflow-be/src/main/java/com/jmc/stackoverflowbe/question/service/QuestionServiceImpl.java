@@ -2,6 +2,9 @@ package com.jmc.stackoverflowbe.question.service;
 
 import com.jmc.stackoverflowbe.global.exception.BusinessLogicException;
 import com.jmc.stackoverflowbe.global.exception.ExceptionCode;
+import com.jmc.stackoverflowbe.member.entity.Member;
+import com.jmc.stackoverflowbe.member.repository.MemberRepository;
+import com.jmc.stackoverflowbe.member.service.MemberService;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto;
 import com.jmc.stackoverflowbe.question.dto.QuestionDto.Response;
 import com.jmc.stackoverflowbe.question.entity.Question;
@@ -25,14 +28,16 @@ import org.springframework.stereotype.Service;
 public class QuestionServiceImpl implements QuestionService{
 
     private final QuestionRepository questionRepository;
+    private final MemberService memberService;
+
 
     //질문 생성
     @Override
-    public Question createQuestion(Question question){
-        //질문 식별자로 검증이 필요할시 추가
-        //verifyExistQuestion(question.getQuestionId());
-        //포스트 객체 엔티티로 매핑
-        //Question question = mapper.postDtoToQuestion(post);
+    public Question createQuestion(Question question, Long memberId){
+        // 질문을 등록하려는 멤버가 존재하는지 확인
+        Member obtainedMember = memberService.findExistMemberById(memberId);
+        // 질문에 멤버 설정
+        question.setMember(obtainedMember);
         //state 상태설정
         question.setState(StateGroup.ACTIVE);
         //질문 db에 저장
@@ -40,9 +45,11 @@ public class QuestionServiceImpl implements QuestionService{
     }
     //질문 수정
     @Override
-    public Question updateQuestion(Question question){
+    public Question updateQuestion(Question question, Long memberId){
         //db에 저장된 질문인지 확인
         Question obtainedQuestion = findExistQuestionById(question.getQuestionId());
+        //질문 소유자인지 확인
+        verifyQuestionOwner(question,memberId);
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
             .ifPresent(title -> obtainedQuestion.setQuestionTitle(title));
@@ -76,9 +83,11 @@ public class QuestionServiceImpl implements QuestionService{
     }
     //질문 삭제
     @Override
-    public void deleteQuestion(Long questionId){
+    public void deleteQuestion(Long questionId, Long memberId){
         //db에 존재하는 질문인지 확인
         Question question = findExistQuestionById(questionId);
+        //질문 소유자인지 확인
+        verifyQuestionOwner(question,memberId);
         //있으면 삭제
         question.setState(StateGroup.DELETED);
         questionRepository.save(question);
@@ -100,6 +109,13 @@ public class QuestionServiceImpl implements QuestionService{
         //존재하면 해당 질문 반환
         return obtainedQuestion;
     }
+
+    @Override
+    public void verifyQuestionOwner(Question question, Long memberId){
+        if(memberId != question.getMember().getMemberId()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
+        }
+    };
 }
 // 질문 식별자로 존재하는지 확인하는 로직 필요할시 만들어 씀
 //    private void verifyExistQuestion(long questionId){

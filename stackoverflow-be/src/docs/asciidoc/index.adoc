@@ -82,6 +82,9 @@ include::{snippets}/Post-Question/curl-request.adoc[]
 .http-request
 include::{snippets}/Post-Question/http-request.adoc[]
 
+.request-header
+include::{snippets}/Post-Question/request-headers.adoc[]
+
 .request-fields
 include::{snippets}/Post-Question/request-fields.adoc[]
 
@@ -100,6 +103,9 @@ include::{snippets}/Patch-Question/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Question/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Patch-Question/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Question/request-fields.adoc[]
@@ -145,6 +151,9 @@ include::{snippets}/Delete-Question/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Delete-Question/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Delete-Question/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Delete-Question/http-response.adoc[]
