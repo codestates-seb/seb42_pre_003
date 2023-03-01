@@ -25,13 +25,13 @@ const Contents = styled.div`
 `;
 
 function App() {
-	// const { setIsLogin } = useIsLoginStore((state) => state);
+	const { setIsLogin } = useIsLoginStore((state) => state);
 
-	// useEffect(() => {
-	// 	if (sessionStorage.getItem('accesstoken')) {
-	// 		return setIsLogin(true);
-	// 	}
-	// }, []);
+	useEffect(() => {
+		if (sessionStorage.getItem('accesstoken')) {
+			return setIsLogin(true);
+		}
+	}, [setIsLogin]);
 
 	return (
 		<>

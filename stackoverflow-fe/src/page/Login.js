@@ -5,6 +5,7 @@ import axios from 'axios';
 import logo from '../img/logo.png';
 import google from '../img/google.png';
 import { useErrorMessageStore, useIsLoginStore } from '../store/loginstore';
+import Header from '../components/container/Header';
 
 const Background = styled.div`
 	background-color: #f6f6f6;
@@ -177,7 +178,7 @@ const Login = () => {
 				sessionStorage.setItem('accesstoken', accessToken);
 				sessionStorage.setItem(
 					'userInfoStorage',
-					JSON.stringify(response.data),
+					JSON.stringify(response.data.data),
 				);
 				setIsLogin(true);
 				navigate('/');
@@ -193,6 +194,7 @@ const Login = () => {
 
 	return (
 		<>
+			<Header />
 			<Background>
 				<Container>
 					<Logoimg
