@@ -49,6 +49,23 @@ public class SecurityConfiguration {
             .apply(new CustomFilterConfigurer())  // 추가
             .and()
             .authorizeHttpRequests(authorize -> authorize // url authorization 전체 추가
+                .antMatchers(HttpMethod.POST, "/members/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/members").permitAll()
+                .antMatchers(HttpMethod.GET, "/members/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/questions/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/questions/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/questions/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/questions/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/tags/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/tags/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/tags/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/tags/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/answers/**").hasAnyRole("USER")
+                .antMatchers(HttpMethod.GET, "/answers/**").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/answers/**").hasAnyRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/answers/**").hasAnyRole("USER")
                 .anyRequest().permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
