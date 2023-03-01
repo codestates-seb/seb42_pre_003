@@ -73,7 +73,7 @@ public class MemberController {
 
         Member member = memberService.getMember(memberId);
         MemberDto.Response response = mapper.memberToResponseDto(member);
-        if(loginMember != null && memberService.verifyResourceOwner(member.getMemberId(), loginMember))
+        if(loginMember != null && memberService.isResourceOwner(member.getMemberId(), loginMember))
             response.setIsMine(true);
 
         return new ResponseEntity(

@@ -63,7 +63,11 @@ public class MemberServiceStub implements MemberService {
     }
 
     @Override
-    public Boolean verifyResourceOwner(Long memberId, LogInMemberDto LoginMember) {
+    public void verifyResourceOwner(Long memberId, LogInMemberDto LoginMember) {
+    }
+
+    @Override
+    public Boolean isResourceOwner(Long memberId, LogInMemberDto loginMember) {
         return false;
     }
 }
