@@ -93,7 +93,6 @@ function AnsComment({ data, QaCom }) {
 		} else {
 			setComId(data.questionId);
 		}
-		console.log(data);
 	};
 
 	const handleEd = (num) => {
@@ -108,6 +107,9 @@ function AnsComment({ data, QaCom }) {
 				}
 			}),
 		);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	const handleComment = (e) => {
@@ -120,8 +122,10 @@ function AnsComment({ data, QaCom }) {
 		};
 
 		addCom(`${process.env.REACT_APP_API_URL}/comments`, item);
-		console.log(comment);
 		comReset();
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	const handleEdit = (e) => {
@@ -132,14 +136,19 @@ function AnsComment({ data, QaCom }) {
 		};
 
 		editCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`, item);
-		console.log(comment);
 		comReset();
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	const handleDel = (e) => {
 		e.preventDefault();
 
 		delCom(`${process.env.REACT_APP_API_URL}/comments/${comId}`);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	return (
