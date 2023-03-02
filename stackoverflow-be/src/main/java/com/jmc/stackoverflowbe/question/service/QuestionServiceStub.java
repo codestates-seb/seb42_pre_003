@@ -15,7 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 //@Service
-public class QuestionServiceStub implements QuestionService {
+public class QuestionServiceStub {
     private Question stubQuestion1;
     private Question stubQuestion2;
     @PostConstruct
