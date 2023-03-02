@@ -77,7 +77,7 @@ public class MemberRepositoryTest {
     @DisplayName("식별자로 회원 조회")
     @Test
     void findMemberById() {
-        Member obtainedMember = memberRepository.findById(2L).get();
+        Member obtainedMember = memberRepository.findByMemberIdAndStateIs(2L, MemberState.ACTIVE).get();
 
         assertNotNull(
             obtainedMember);                                          // obtainedMember가 null이면 안 됨.
@@ -90,7 +90,7 @@ public class MemberRepositoryTest {
     @DisplayName("이메일로 회원 조회")
     @Test
     void findMemberByEmail() {
-        Member obtainedMember = memberRepository.findByEmail("bde@gmail.com").get();
+        Member obtainedMember = memberRepository.findByEmailAndStateIs("bde@gmail.com", MemberState.ACTIVE).get();
 
         assertNotNull(
             obtainedMember);                                          // obtainedMember가 null이면 안 됨.
