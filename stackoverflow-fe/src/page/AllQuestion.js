@@ -117,7 +117,7 @@ const Question = () => {
 				</div>
 				<div className='listfilter'>
 					<div className='Total'>
-						<span>{null !== listData.pageInfo && listData.pageInfo.size}</span>
+						<span>{listData.pageInfo.size}</span>
 						questions
 					</div>
 					<button onClick={toggleState}>
