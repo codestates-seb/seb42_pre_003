@@ -116,19 +116,17 @@ public class CommentServiceImpl implements CommentService {
     List<Comment> findExistCommentsByQAId(String qaType, Long qaId) {
         // 연관 관계 매핑 이후 Question.questionId 혹은
         // Answer.answerId로 연결되므로 query를 아래와 같이 생성.
+        // State가 ACTIVE인 것만 검색.
         List<Comment> comments;
         if (qaType.equals("Question")) {
-            comments = commentRepository.findAllByQuestionQuestionId(qaId);
+            comments = commentRepository.findAllByQuestionQuestionIdAndCommentStateIs(qaId,
+                CommentState.ACTIVE);
         } else {
-            comments = commentRepository.findAllByAnswerAnswerId(qaId);
+            comments = commentRepository.findAllByAnswerAnswerIdAndCommentStateIs(qaId,
+                CommentState.ACTIVE);
         }
 
-        // Java stream으로 CommentState가 ACTIVE인 것만 분리.
-        List<Comment> sortedComments = comments.stream()
-            .filter(comment -> comment.getCommentState() == CommentState.ACTIVE)
-            .collect(Collectors.toList());
-
-        return sortedComments;
+        return comments;
     }
 
     void verifyAuthorizedMemberForComment(Comment comment, Long memberId) {
