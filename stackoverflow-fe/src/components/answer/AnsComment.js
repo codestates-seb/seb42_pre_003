@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AnsInput from './AnsInput';
 import useAnsStore from '../../store/ansStore';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -78,12 +80,26 @@ const CommentEdit = styled.ul`
 	}
 `;
 
-function AnsComment({ data, QaCom }) {
+function AnsComment({ data, type }) {
+	let { id } = useParams();
+	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
+	const { getCom, comList } = useAnsStore();
+
+	const anCom = comList.data && comList.data.filter((el) => el.answerId);
+	const quCom = comList.data && comList.data.filter((el) => !el.answerId);
+
+	const comArr = type === 'question' ? quCom : anCom;
+
+	useEffect(() => {
+		getCom(
+			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
+		);
+	}, [getCom, id]);
+
 	const [com, setCom] = useState(false);
 	const [ed, setEd] = useState(
-		QaCom ? Array.from({ length: QaCom.length }).fill(false) : [],
+		comList.data ? Array.from({ length: comList.data.length }).fill(false) : [],
 	);
-	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
 
 	const handleActive = () => {
 		setCom(!com);
@@ -101,9 +117,6 @@ function AnsComment({ data, QaCom }) {
 				}
 			}),
 		);
-		setTimeout(() => {
-			window.location.reload();
-		}, 300);
 	};
 
 	const handleComment = (e) => {
@@ -122,20 +135,20 @@ function AnsComment({ data, QaCom }) {
 		}, 300);
 	};
 
-	const handleEdit = (id) => {
+	const handleEdit = (commentId) => {
 		const item = {
 			commentContent: comment,
 		};
 
-		editCom(`${process.env.REACT_APP_API_URL}/comments/${id}`, item);
+		editCom(`${process.env.REACT_APP_API_URL}/comments/${commentId}`, item);
 		comReset();
 		setTimeout(() => {
 			window.location.reload();
 		}, 300);
 	};
 
-	const handleDel = (id) => {
-		delCom(`${process.env.REACT_APP_API_URL}/comments/${id}`);
+	const handleDel = (commentId) => {
+		delCom(`${process.env.REACT_APP_API_URL}/comments/${commentId}`);
 		setTimeout(() => {
 			window.location.reload();
 		}, 300);
@@ -144,20 +157,22 @@ function AnsComment({ data, QaCom }) {
 	return (
 		<CommentWrap>
 			<CommentBox>
-				{QaCom &&
-					QaCom.map((el, idx) => (
-						<CommentItem key={QaCom.questionId || idx}>
+				{comArr &&
+					comArr.map((el, idx) => (
+						<CommentItem key={comList.data.questionId || idx}>
 							{el.commentContent}
 							<span>{el.memberName}</span>
-							<em>{el.createdAt || 'Feb 16 at 13:45'}</em>
+							<em>{el.createdAt}</em>
 							<CommentEdit>
-								<li onClick={() => handleEd(el.commentId)}>Edit</li>
+								<li onClick={() => handleEd(idx)}>Edit</li>
 								<li onClick={() => handleDel(el.commentId)}>Delete</li>
 							</CommentEdit>
 							{ed[idx] ? (
 								<Comment>
 									<AnsInput func={comBind} />
-									<AddButton onClick={handleEdit}>Enter</AddButton>
+									<AddButton onClick={() => handleEdit(el.commentId)}>
+										Enter
+									</AddButton>
 								</Comment>
 							) : null}
 						</CommentItem>

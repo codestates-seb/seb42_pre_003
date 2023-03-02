@@ -43,8 +43,8 @@ const SideWrap = styled.div`
 function Answer() {
 	let { id } = useParams();
 	const { page, answer, answerBind, answerReset } = useAnsStore();
-	const { ansItem, ansDownList, comList } = useAnsStore();
-	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
+	const { ansItem, ansDownList } = useAnsStore();
+	const { getAnswerItem, getAnsDown, addDown } = useAnsStore();
 
 	useEffect(() => {
 		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
@@ -69,12 +69,6 @@ function Answer() {
 		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
 	}, [getAnsDown, id]);
 
-	useEffect(() => {
-		getCom(
-			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
-		);
-	}, [getCom, id]);
-
 	return (
 		<>
 			{ansItem.data && (
@@ -83,11 +77,7 @@ function Answer() {
 						{page === 'read' ? (
 							<>
 								<AnsHeader data={ansItem.data} />
-								<AnsCon
-									type={'question'}
-									data={ansItem.data}
-									QaCom={comList.data}
-								/>
+								<AnsCon type={'question'} data={ansItem.data} />
 								<ConTitle>{`${ansItem.data.answers || 0} Answers`}</ConTitle>
 								{ansDownList.data &&
 									ansDownList.data.map((el, idx) => (

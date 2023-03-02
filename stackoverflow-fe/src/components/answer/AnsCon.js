@@ -97,7 +97,7 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon({ type, data, QaCom }) {
+function AnsCon({ type, data }) {
 	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
 
 	return (
@@ -140,7 +140,7 @@ function AnsCon({ type, data, QaCom }) {
 							</AnsTag>
 						) : null}
 						<AnsInfo data={data} />
-						<AnsComment data={data} QaCom={QaCom} />
+						<AnsComment data={data} type={type} />
 					</AnsBox>
 				</ConWrap>
 			)}
