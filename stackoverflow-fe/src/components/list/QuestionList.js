@@ -102,15 +102,15 @@ function QuestionList({ listData }) {
 			<div className='qlist-wrapper'>
 				<ul className='qlist-stats'>
 					<li className='vote'>
-						<span className='number'>{listData.votes}</span>
+						<span className='number'>{null ? listData.votes : 0}</span>
 						<span className='unit'>votes</span>
 					</li>
 					<li className='answer'>
-						<span className='number'>{listData.answers}</span>
+						<span className='number'>{null ? listData.answers : 0}</span>
 						<span className='unit'>answers</span>
 					</li>
 					<li className='view'>
-						<span className='number'>{listData.views}</span>
+						<span className='number'>{null ? 0 : listData.views}</span>
 						<span className='unit'>views</span>
 					</li>
 				</ul>
@@ -151,7 +151,7 @@ function QuestionList({ listData }) {
 						</li>
 						<li className='user-awards'>2,345</li>
 						<li className='time'>
-							<a href='/'>asked 2 mins ago</a>
+							<a href='/'>{listData.createdAt}</a>
 						</li>
 					</ul>
 				</ul>

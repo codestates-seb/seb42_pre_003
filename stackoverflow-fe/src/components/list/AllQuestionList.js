@@ -9,7 +9,6 @@ const ListContents = styled.div`
 		&-wrapper {
 			display: flex;
 			border-top: 1px solid #bebdbd;
-			border-bottom: 1px solid #bebdbd;
 			padding: 16px;
 		}
 
@@ -110,15 +109,15 @@ function AllQuestionList({ listData }) {
 			<div className='qlist-wrapper'>
 				<ul className='qlist-stats'>
 					<li className='vote'>
-						<span className='number'>{listData.votes}</span>
+						<span className='number'>{null ? listData.votes : 0}</span>
 						<span className='unit'>votes</span>
 					</li>
 					<li className='answer'>
-						<span className='number'>{listData.answers}</span>
+						<span className='number'>{null ? listData.answers : 0}</span>
 						<span className='unit'>answers</span>
 					</li>
 					<li className='view'>
-						<span className='number'>{listData.views}</span>
+						<span className='number'>{null ? 0 : listData.views}</span>
 						<span className='unit'>views</span>
 					</li>
 				</ul>
@@ -128,12 +127,7 @@ function AllQuestionList({ listData }) {
 							{listData.questionTitle}
 						</Link>
 					</li>
-					<li className='contents-excerpt'>
-						In our application we have screen with multiple header titles
-						(.tasktable__header.tasktable__header--title) and i want to verify
-						these titles. The code i had didn't do the job, because it allways
-						...
-					</li>
+					<li className='contents-excerpt'>{listData.questionContent}</li>
 					<ul className='tags'>
 						<li>
 							<span>
@@ -161,7 +155,7 @@ function AllQuestionList({ listData }) {
 							</a>
 						</li>
 						<li className='user-name'>
-							<a href='/'>nickname</a>
+							<a href='/'>{listData.memberId}</a>
 						</li>
 						<li className='user-awards'>2,345</li>
 						<li className='time'>

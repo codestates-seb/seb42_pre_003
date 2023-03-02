@@ -60,13 +60,13 @@ const Questions = styled.div`
 	.filterinfo {
 		margin-bottom: 15px;
 		height: 0;
-		opacity: 0;
-		transition: opacity 0.3s ease-in-out, height 0.3s 0.3s ease-in-out;
+		visibility: hidden;
+		transition: opacity 0.2s ease-in-out, height 0.1s 0.1s ease-in-out;
 	}
 
 	.animated {
-		opacity: 1;
-		transition: height 0.3s ease-in-out, opacity 0.3s 0.3s ease-in-out;
+		visibility: visible;
+		transition: height 0.1s ease-in-out, opacity 0.2s 0.1s ease-in-out;
 	}
 `;
 
@@ -117,7 +117,8 @@ const Question = () => {
 				</div>
 				<div className='listfilter'>
 					<div className='Total'>
-						<span>{listData.data && listData.data.pageInfo.size}</span>questions
+						<span>{null !== listData.pageInfo && listData.pageInfo.size}</span>
+						questions
 					</div>
 					<button onClick={toggleState}>
 						<FilterImg src={Filtericon}></FilterImg>
