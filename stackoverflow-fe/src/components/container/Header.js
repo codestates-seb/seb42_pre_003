@@ -145,7 +145,6 @@ const UserInfo = styled.img`
 const Header = () => {
 	const navigate = useNavigate();
 	const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
-	// const [isLogin, setIsLogin] = useState(false);
 
 	// useEffect(() => {
 	// 	if (JSON.parse(sessionStorage.getItem('userInfoStorage'))) {
