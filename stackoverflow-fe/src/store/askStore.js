@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
-import axios from 'axios';
 
 export const useBoxStore = create(
 	persist(
@@ -56,6 +55,9 @@ export const useBoxStore = create(
 			setAskData: (select) => {
 				set((state) => ({ ...state, askData: [select] }));
 			},
+			setEditData: (select) => {
+				set((state) => ({ ...state, editData: [select] }));
+			},
 		}),
 		{ name: 'ask-storage' },
 	),
@@ -72,7 +74,7 @@ export const useAskStore = create(
 			try: false,
 			tag: false,
 			review: false,
-			body: true,
+			body: false,
 		},
 		initialAsk: {
 			title: '',

@@ -16,6 +16,8 @@ function AskPublic() {
 		obj[next] = true;
 		act[here] = false;
 		act[next] = true;
+		obj['body'] = true;
+		act['body'] = false;
 		btn[here] = false;
 		btn[next] = true;
 
@@ -35,7 +37,6 @@ function AskPublic() {
 			body: detail + expect,
 		};
 
-		console.log(item);
 		setAskData(item);
 		setActData(initialAble);
 		handlePage();

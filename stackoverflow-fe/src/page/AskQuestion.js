@@ -3,6 +3,7 @@ import AskReview from '../components/ask/AskReview';
 import AskPublic from '../components/ask/AskPublic';
 import { useBoxStore, useAskStore } from '../store/askStore';
 import useAnsStore from '../store/ansStore';
+import { useNavigate } from 'react-router-dom';
 
 const BREAK_POINT_PC = 1100;
 
@@ -45,14 +46,15 @@ const DelButton = styled.button`
 `;
 
 function AskQuestion() {
-	const { setAbleData, setAskData, setActData, setBtnData } = useBoxStore();
+	const { setAbleData, setAskData, setActData, setBtnData, askData } =
+		useBoxStore();
 	const { page, initialAble, initialAsk } = useAskStore();
 	const { title, body } = useAskStore();
 	const { titleReset, detailReset, expectReset, tagReset, bodyReset } =
 		useAskStore();
-	const { ansList, addAnswer } = useAnsStore();
+	const { addAnswer } = useAnsStore();
 
-	console.log(ansList);
+	const navigate = useNavigate();
 
 	const deleteCashe = (e) => {
 		e.preventDefault();
@@ -68,16 +70,12 @@ function AskQuestion() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		//askData 전송(api 부분)
 		const item = {
 			questionTitle: title,
-			questionContent: body,
+			questionContent: body === '' ? askData[0].body : body,
 		};
-		console.log(item);
-		addAnswer(
-			`${process.env.REACT_APP_API_URL}/questions?_csrf=4481c2c3-9322-4c5f-8849-4630291fb6e6`,
-			item,
-		);
+
+		addAnswer(`${process.env.REACT_APP_API_URL}/questions`, item);
 
 		setAbleData(initialAble);
 		setAskData(initialAsk);
@@ -90,7 +88,7 @@ function AskQuestion() {
 		tagReset();
 		bodyReset();
 
-		// window.location.reload();
+		navigate(`/`);
 	};
 
 	return (

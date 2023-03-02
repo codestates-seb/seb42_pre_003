@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import AnsInput from './AnsInput';
 import useAnsStore from '../../store/ansStore';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -68,46 +70,113 @@ const AddButton = styled.button`
 	box-shadow: inset 0 0.08rem 0 0 hsla(0, 0%, 100%, 0.4);
 `;
 
-function AnsComment({ QaCom }) {
+const CommentEdit = styled.ul`
+	display: flex;
+	gap: 0.3rem;
+	li {
+		font-size: 0.55rem;
+		color: #62666c;
+		cursor: pointer;
+	}
+`;
+
+function AnsComment({ data, type }) {
+	let { id } = useParams();
+	const { comment, comBind, comReset, addCom, editCom, delCom } = useAnsStore();
+	const { getCom, comList } = useAnsStore();
+
+	const anCom = comList.data && comList.data.filter((el) => el.answerId);
+	const quCom = comList.data && comList.data.filter((el) => !el.answerId);
+
+	const comArr = type === 'question' ? quCom : anCom;
+
+	useEffect(() => {
+		getCom(
+			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
+		);
+	}, [getCom, id]);
+
 	const [com, setCom] = useState(false);
-	const { comment, comBind, comReset } = useAnsStore();
+	const [ed, setEd] = useState(
+		comList.data ? Array.from({ length: comList.data.length }).fill(false) : [],
+	);
 
 	const handleActive = () => {
 		setCom(!com);
 	};
 
+	const handleEd = (num) => {
+		const array = [...ed];
+
+		setEd(
+			array.map((el, idx) => {
+				if (idx === num) {
+					return !el;
+				} else {
+					return el;
+				}
+			}),
+		);
+	};
+
 	const handleComment = (e) => {
 		e.preventDefault();
 
-		console.log(comment);
+		const item = {
+			commentContent: comment,
+			questionId: data.questionId,
+			answerId: data.answerId ? data.answerId : null,
+		};
+
+		addCom(`${process.env.REACT_APP_API_URL}/comments`, item);
 		comReset();
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
-	// console.log(QaCom);
+	const handleEdit = (commentId) => {
+		const item = {
+			commentContent: comment,
+		};
+
+		editCom(`${process.env.REACT_APP_API_URL}/comments/${commentId}`, item);
+		comReset();
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
+	};
+
+	const handleDel = (commentId) => {
+		delCom(`${process.env.REACT_APP_API_URL}/comments/${commentId}`);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
+	};
 
 	return (
 		<CommentWrap>
 			<CommentBox>
-				{QaCom &&
-					QaCom.map((el, idx) => (
-						<CommentItem key={QaCom.questionId || idx}>
+				{comArr &&
+					comArr.map((el, idx) => (
+						<CommentItem key={comList.data.questionId || idx}>
 							{el.commentContent}
 							<span>{el.memberName}</span>
-							<em>{el.createdAt || ''}</em>
+							<em>{el.createdAt}</em>
+							<CommentEdit>
+								<li onClick={() => handleEd(idx)}>Edit</li>
+								<li onClick={() => handleDel(el.commentId)}>Delete</li>
+							</CommentEdit>
+							{ed[idx] ? (
+								<Comment>
+									<AnsInput func={comBind} />
+									<AddButton onClick={() => handleEdit(el.commentId)}>
+										Enter
+									</AddButton>
+								</Comment>
+							) : null}
 						</CommentItem>
 					))}
-				{/* <CommentItem>
-					Could you please share one of your error handlers? Are these handlers
-					accept three parameters like error, doc, next?
-					<span>Mostafa Fakhraei</span>
-					<em>Feb 16 at 13:45</em>
-				</CommentItem>
-				<CommentItem own>
-					@MostafaFakhraei I edit my question to include the error handler
-					function. Indeed it uses the three arguments mentioned.
-					<span>Ayoub k</span>
-					<em>Feb 17 at 0:14</em>
-				</CommentItem> */}
 			</CommentBox>
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (

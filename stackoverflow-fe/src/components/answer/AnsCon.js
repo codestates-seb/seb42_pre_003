@@ -39,13 +39,42 @@ const AnsSide = styled.div`
 `;
 
 const AnsBox = styled.div`
+	overflow: hidden;
 	width: 100%;
-	p {
+	.con {
 		padding-bottom: 1rem;
 		font-size: 0.75rem;
 		font-weight: 500;
 		line-height: 1.5;
 		white-space: pre-line;
+		h1,
+		.ql-size-huge {
+			font-size: 1.4rem;
+		}
+		h2,
+		.ql-size-large {
+			font-size: 1.2rem;
+		}
+		h3 {
+			font-size: 1rem;
+		}
+		em {
+			font-style: italic;
+		}
+		ol {
+			list-style-type: decimal;
+		}
+		ul {
+			list-style: circle;
+		}
+		li {
+			margin: initial;
+			padding: initial;
+		}
+	}
+	.con * {
+		margin: revert;
+		padding: revert;
 	}
 `;
 
@@ -68,10 +97,8 @@ const AnsTag = styled.div`
 	}
 `;
 
-function AnsCon({ type, data, QaCom }) {
+function AnsCon({ type, data }) {
 	const { vote, plusVote, minusVote, book, handleBook } = useAnsStore();
-
-	// console.log(data);
 
 	return (
 		<>
@@ -88,7 +115,15 @@ function AnsCon({ type, data, QaCom }) {
 						)}
 					</AnsSide>
 					<AnsBox>
-						<p>{data.questionContent}</p>
+						<div
+							className='con'
+							dangerouslySetInnerHTML={{
+								__html:
+									type === 'question'
+										? data.questionContent
+										: data.answerContent,
+							}}
+						></div>
 						{type === 'question' ? (
 							<AnsTag>
 								<ul>
@@ -104,8 +139,8 @@ function AnsCon({ type, data, QaCom }) {
 								</ul>
 							</AnsTag>
 						) : null}
-						<AnsInfo />
-						<AnsComment QaCom={QaCom} />
+						<AnsInfo data={data} />
+						<AnsComment data={data} type={type} />
 					</AnsBox>
 				</ConWrap>
 			)}

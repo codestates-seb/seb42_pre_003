@@ -19,7 +19,6 @@ function AskEditor({ able, value, func, name }) {
 			['clean'],
 		],
 		clipboard: {
-			// toggle to add extra line breaks when pasting HTML:
 			matchVisual: false,
 		},
 	};
@@ -53,6 +52,9 @@ function AskEditor({ able, value, func, name }) {
 		setActData(obj);
 	};
 
+	const raw = JSON.parse(localStorage.getItem('ask-storage'));
+	const data = raw.state.askData[0];
+
 	return (
 		<div onClick={() => click(name)}>
 			<ReactQuill
@@ -60,12 +62,10 @@ function AskEditor({ able, value, func, name }) {
 				formats={formats}
 				theme='snow'
 				readOnly={!able}
-				value={value}
+				value={value === '' ? data.body : value}
 				onChange={(value) => func(value)}
 				className={value === '' ? null : 'active'}
 			/>
-
-			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>
 	);
 }
