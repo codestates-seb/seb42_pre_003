@@ -37,7 +37,6 @@ function AskPublic() {
 			body: detail + expect,
 		};
 
-		console.log(item);
 		setAskData(item);
 		setActData(initialAble);
 		handlePage();

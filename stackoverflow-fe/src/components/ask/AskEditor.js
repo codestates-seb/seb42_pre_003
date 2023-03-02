@@ -19,7 +19,6 @@ function AskEditor({ able, value, func, name }) {
 			['clean'],
 		],
 		clipboard: {
-			// toggle to add extra line breaks when pasting HTML:
 			matchVisual: false,
 		},
 	};
@@ -67,8 +66,6 @@ function AskEditor({ able, value, func, name }) {
 				onChange={(value) => func(value)}
 				className={value === '' ? null : 'active'}
 			/>
-
-			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>
 	);
 }

@@ -55,6 +55,9 @@ export const useBoxStore = create(
 			setAskData: (select) => {
 				set((state) => ({ ...state, askData: [select] }));
 			},
+			setEditData: (select) => {
+				set((state) => ({ ...state, editData: [select] }));
+			},
 		}),
 		{ name: 'ask-storage' },
 	),

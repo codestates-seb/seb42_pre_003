@@ -42,10 +42,9 @@ const SideWrap = styled.div`
 
 function Answer() {
 	let { id } = useParams();
-	const { page, answer } = useAnsStore();
-	const { answerBind, answerReset } = useAnsStore();
-	const { ansItem, ansDownList, comList } = useAnsStore();
-	const { getAnswerItem, getAnsDown, getCom, addDown } = useAnsStore();
+	const { page, answer, answerBind, answerReset } = useAnsStore();
+	const { ansItem, ansDownList } = useAnsStore();
+	const { getAnswerItem, getAnsDown, addDown } = useAnsStore();
 
 	useEffect(() => {
 		getAnswerItem(`${process.env.REACT_APP_API_URL}/questions/${id}`);
@@ -55,26 +54,20 @@ function Answer() {
 		e.preventDefault();
 
 		const item = {
-			questionId: ansDownList.length + 1,
+			questionId: id,
 			answerContent: answer,
 		};
 
 		addDown(`${process.env.REACT_APP_API_URL}/answers`, item);
-
 		answerReset(ansDownList);
+		setTimeout(() => {
+			window.location.reload();
+		}, 300);
 	};
 
 	useEffect(() => {
 		getAnsDown(`${process.env.REACT_APP_API_URL}/answers?questionId=${id}`);
 	}, [getAnsDown, id]);
-
-	useEffect(() => {
-		getCom(
-			`${process.env.REACT_APP_API_URL}/comments?qaType=Question&qaId=${id}`,
-		);
-	}, [getCom, id]);
-
-	console.log(ansItem.data);
 
 	return (
 		<>
@@ -84,19 +77,15 @@ function Answer() {
 						{page === 'read' ? (
 							<>
 								<AnsHeader data={ansItem.data} />
-								<AnsCon
-									type={'question'}
-									data={ansItem.data}
-									QaCom={comList.data}
-								/>
-								<ConTitle>{`${ansItem.data.answers} Answers`}</ConTitle>
+								<AnsCon type={'question'} data={ansItem.data} />
+								<ConTitle>{`${ansItem.data.answers || 0} Answers`}</ConTitle>
 								{ansDownList.data &&
 									ansDownList.data.map((el, idx) => (
-										<AnsCon key={ansDownList.data.answerId || idx} />
+										<AnsCon key={ansDownList.data.answerId || idx} data={el} />
 									))}
 								<>
 									<ConTitle>Your Answer</ConTitle>
-									<AnsEditor func={answerBind} />
+									<AnsEditor value={answer} func={answerBind} />
 									<InputButton onClick={handleAnswer}>
 										post your answer
 									</InputButton>
@@ -104,7 +93,7 @@ function Answer() {
 							</>
 						) : (
 							<>
-								<AnsEdit data={ansItem.data} />
+								<AnsEdit />
 							</>
 						)}
 					</AnsWrap>
