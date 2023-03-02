@@ -29,6 +29,9 @@ include::{snippets}/Patch-Member/curl-request.adoc[]
 .http-request
 include::{snippets}/Patch-Member/http-request.adoc[]
 
+.request-headers
+include::{snippets}/Patch-Member/request-headers.adoc[]
+
 .request-path-parameters
 include::{snippets}/Patch-Member/path-parameters.adoc[]
 
@@ -48,6 +51,9 @@ include::{snippets}/Get-Member/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Get-Member/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/Get-Member/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Get-Member/http-response.adoc[]
@@ -151,6 +157,9 @@ include::{snippets}/Post-Answer/curl-request.adoc[]
 .http-request
 include::{snippets}/Post-Answer/http-request.adoc[]
 
+.request-header
+include::{snippets}/Post-Answer/request-headers.adoc[]
+
 .request-fields
 include::{snippets}/Post-Answer/request-fields.adoc[]
 
@@ -169,6 +178,9 @@ include::{snippets}/Patch-Answer/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Answer/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Patch-Answer/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Answer/request-fields.adoc[]
@@ -202,6 +214,9 @@ include::{snippets}/Delete-Answer/http-request.adoc[]
 .request-path-parameters
 include::{snippets}/Delete-Answer/path-parameters.adoc[]
 
+.request-header
+include::{snippets}/Delete-Answer/request-headers.adoc[]
+
 .http-response
 include::{snippets}/Delete-Answer/http-response.adoc[]
 
@@ -212,6 +227,9 @@ include::{snippets}/Post-Comment/curl-request.adoc[]
 
 .http-request
 include::{snippets}/Post-Comment/http-request.adoc[]
+
+.request-header
+include::{snippets}/Post-Comment/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Post-Comment/request-fields.adoc[]
@@ -231,6 +249,9 @@ include::{snippets}/Patch-Comment/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Patch-Comment/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Patch-Comment/request-headers.adoc[]
 
 .request-fields
 include::{snippets}/Patch-Comment/request-fields.adoc[]
@@ -263,6 +284,9 @@ include::{snippets}/Delete-Comment/http-request.adoc[]
 
 .request-path-parameters
 include::{snippets}/Delete-Comment/path-parameters.adoc[]
+
+.request-header
+include::{snippets}/Delete-Comment/request-headers.adoc[]
 
 .http-response
 include::{snippets}/Delete-Comment/http-response.adoc[]

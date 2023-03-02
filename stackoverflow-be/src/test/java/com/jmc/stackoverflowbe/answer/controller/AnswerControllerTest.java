@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -33,6 +34,7 @@ import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.entity.Answer.StateGroup;
 import com.jmc.stackoverflowbe.answer.mapper.AnswerMapper;
 import com.jmc.stackoverflowbe.answer.service.AnswerService;
+import com.jmc.stackoverflowbe.global.WithMockCustomMember;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.entity.Question;
@@ -129,17 +131,19 @@ public class AnswerControllerTest {
 
     @DisplayName("답변 생성")
     @Test
+    @WithMockCustomMember
     void postAnswerTest() throws Exception {
         String content = gson.toJson(post);
 
         given(mapper.postDtoToAnswer(Mockito.any(AnswerDto.Post.class)))
             .willReturn(new Answer());
-        given(answerService.createAnswer(Mockito.any(Answer.class)))
+        given(answerService.createAnswer(Mockito.any(Answer.class), Mockito.anyLong()))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
                 .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -150,6 +154,13 @@ public class AnswerControllerTest {
             .andDo(document("Post-Answer",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for answer creation")),
                     fieldWithPath("questionId")
@@ -159,25 +170,27 @@ public class AnswerControllerTest {
                     fieldWithPath("answerContent")
                         .type(JsonFieldType.STRING)
                         .attributes(key("constraints").value("내용"))
-                        .description("답변 내용")),
-                responseHeaders(
-                    headerWithName(HttpHeaders.LOCATION)
-                        .description("Header Location, 리소스의 URL"))));
+                        .description("답변 내용")
+                ))
+            );
     }
 
     @DisplayName("답변 수정")
     @Test
+    @WithMockCustomMember
     void patchAnswerTest() throws Exception {
         String content = gson.toJson(patch);
 
         given(mapper.patchDtoToAnswer(Mockito.any(AnswerDto.Patch.class)))
             .willReturn(new Answer());
-        given(answerService.updateAnswer(Mockito.any(Answer.class), Mockito.anyLong()))
+        given(answerService.updateAnswer(Mockito.any(Answer.class), Mockito.anyLong(),
+            Mockito.anyLong()))
             .willReturn(answer);
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{answer-id}", answer.getAnswerId())
                 .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -190,6 +203,13 @@ public class AnswerControllerTest {
                 pathParameters(
                     parameterWithName("answer-id")
                         .description("답변 식별자")),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for answer revision")),
                     fieldWithPath("answerContent")
@@ -262,12 +282,14 @@ public class AnswerControllerTest {
 
     @DisplayName("답변 삭제")
     @Test
+    @WithMockCustomMember
     void deleteAnswerTest() throws Exception {
-        doNothing().when(answerService).deleteAnswer(answer.getAnswerId());
+        doNothing().when(answerService).deleteAnswer(answer.getAnswerId(), member.getMemberId());
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{answer-id}", answer.getAnswerId())
                 .with(csrf())
+                .header("Authorization", "")
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
@@ -275,6 +297,15 @@ public class AnswerControllerTest {
             .andExpect(jsonPath("$.data").doesNotExist())
             .andDo(document("Delete-Answer",
                 pathParameters(
-                    parameterWithName("answer-id").description("답변 아이디"))));
+                    parameterWithName("answer-id").description("답변 아이디")
+                ),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                ))
+            );
     }
 }

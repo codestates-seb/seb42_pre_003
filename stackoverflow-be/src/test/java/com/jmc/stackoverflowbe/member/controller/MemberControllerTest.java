@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -80,8 +81,8 @@ public class MemberControllerTest {
         .email(member.getEmail())
         .name(member.getName())
         .state(member.getState())
-        .isMine(false)
-        .picture("https://lh3.googleusercontent.com/a/AGNmyxYZlOMhTobPqQ0YS4-IPQqfkaVkjEwWYC2fLUw=s96-c")
+        .picture(
+            "https://lh3.googleusercontent.com/a/AGNmyxYZlOMhTobPqQ0YS4-IPQqfkaVkjEwWYC2fLUw=s96-c")
         .about("안녕하세요")
         .location("서울")
         .build();
@@ -192,6 +193,13 @@ public class MemberControllerTest {
             .andDo(document("Patch-Member",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 pathParameters( // path parameter
                     parameterWithName("member-id") // parameter 이름
                         .description("회원 아이디")), // parameter 설명
@@ -222,6 +230,7 @@ public class MemberControllerTest {
 
     @DisplayName("회원 조회")
     @Test
+    @WithMockCustomMember
     void getMember() throws Exception {
         // memberService.getMember()가 response를 반환
         given(memberService.getMember(Mockito.anyLong())).willReturn(member);
@@ -231,6 +240,7 @@ public class MemberControllerTest {
         // 조회하려는 memberId를 path parameter로 get 요청
         ResultActions actions = mockMvc.perform(
             get(BASE_URL + "/{member-id}", member.getMemberId())
+                .header("Authorization", "")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -245,6 +255,14 @@ public class MemberControllerTest {
             .andDo(document("Get-Member",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .optional()
+                        .description("액세스 토큰")
+                ),
                 pathParameters( // path parameter
                     parameterWithName("member-id") // parameter 이름
                         .description("회원 아이디")), // parameter 설명
@@ -289,6 +307,7 @@ public class MemberControllerTest {
 
     @DisplayName("회원 삭제")
     @Test
+    @WithMockCustomMember
     void deleteMember() throws Exception {
         // memberService.deleteMebmer()가 반환을 하지 않음.
         doNothing().when(memberService).deleteMember(member.getMemberId());
@@ -296,6 +315,7 @@ public class MemberControllerTest {
         // 삭제하려는 memberId를 path parameter로 delete 요청.
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{member-id}", member.getMemberId())
+                .header("Authorization", "")
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
 
@@ -304,6 +324,14 @@ public class MemberControllerTest {
             .andExpect(status().isNoContent())
             .andExpect(jsonPath("$.data").doesNotExist()) // json 응답이 없음.
             .andDo(document("Delete-Member",
+                preprocessRequest(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Berrer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 pathParameters( // path parameter
                     parameterWithName("member-id").description("회원 아이디") // parameter
                     // 설명
