@@ -49,7 +49,7 @@ public class QuestionServiceImpl implements QuestionService{
         //db에 저장된 질문인지 확인
         Question obtainedQuestion = findExistQuestionById(question.getQuestionId());
         //질문 소유자인지 확인
-        verifyQuestionOwner(question,memberId);
+        verifyQuestionOwner(obtainedQuestion,memberId);
         //수정할 내용이 있으면 수정 아니면 그대로
         Optional.ofNullable(question.getQuestionTitle())
             .ifPresent(title -> obtainedQuestion.setQuestionTitle(title));
