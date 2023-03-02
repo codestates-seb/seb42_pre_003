@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByMemberMemberId(Long memberId);
-
+    // 전달 받은 State의 Question 리스트만 조회
+    List<Question> findAllByStateIs(StateGroup State);
 }

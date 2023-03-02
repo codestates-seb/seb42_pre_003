@@ -74,13 +74,8 @@ public class QuestionServiceImpl implements QuestionService{
     //질문 전체 조회
     @Override
     public Page<Question> getQuestions(int page, String sort){
-        //모든 질문 리스트로 받기
-        List<Question> questions = questionRepository.findAll();
-        //활성된 질문만 리스트로
-        for(Question currentQuestion : questions){
-            if(currentQuestion.getState() != StateGroup.ACTIVE)
-                questions.remove(currentQuestion);
-        }
+        //ACTIVE 상태인 질문 리스트로 받기
+        List<Question> questions = questionRepository.findAllByStateIs(StateGroup.ACTIVE);
         //페이지네이션 적용 &반환
         return new PageImpl<>(questions,
             PageRequest.of(page, 15, Sort.by(sort).descending()), 2);
