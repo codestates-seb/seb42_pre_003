@@ -1,6 +1,7 @@
 package com.jmc.stackoverflowbe.global.security.auth.config;
 
 import com.jmc.stackoverflowbe.global.security.auth.filter.JwtVerificationFilter;
+import com.jmc.stackoverflowbe.global.security.auth.handler.Env;
 import com.jmc.stackoverflowbe.global.security.auth.handler.MemberAccessDeniedHandler;
 import com.jmc.stackoverflowbe.global.security.auth.handler.MemberAuthenticationEntryPoint;
 import com.jmc.stackoverflowbe.global.security.auth.handler.OAuth2MemberSuccessHandler;
@@ -30,6 +31,7 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
+    private final Env env;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -69,7 +71,7 @@ public class SecurityConfiguration {
                 .anyRequest().permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
-                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService))  // (1)
+                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService, env))  // (1)
             );
 
         return http.build();

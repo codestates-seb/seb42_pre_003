@@ -4,10 +4,13 @@ import com.jmc.stackoverflowbe.global.security.auth.jwt.JwtTokenizer;
 import com.jmc.stackoverflowbe.global.security.auth.utils.CustomAuthorityUtils;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.service.MemberService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,6 +30,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
+    private final Env env;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -34,7 +38,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String email = String.valueOf(oAuth2User.getAttributes().get("email")); // (3)
         String name = String.valueOf(oAuth2User.getAttributes().get("name")); // (3)
         String picture = (String) oAuth2User.getAttributes().get("picture");
-        
+
         List<String> authorities = authorityUtils.createRoles(email);           // (4)
 
         Member member = saveMember(email, name, picture);  // (5)
@@ -93,8 +97,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
             .newInstance()
             .scheme("http")
-            .host("localhost")
-            .port(3000)
+            .host(env.getHost())
+            .port(env.getPort())
             .path("/auth/google/callback")
             .queryParams(queryParams)
             .build()
