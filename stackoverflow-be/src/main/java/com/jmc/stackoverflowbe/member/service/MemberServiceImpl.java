@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
     public Member createMemberByOauth2(Member member) {
         // 동일한 이메일이 존재하는지 확인.
-        Optional<Member> optionalMember = memberRepository.findByEmail(member.getEmail());
+        Optional<Member> optionalMember = memberRepository.findByEmailAndStateIs(member.getEmail(), MemberState.ACTIVE);
 
         // Optional Member에 값이 존재하다면 예외 발생.
         if (optionalMember.isPresent())
@@ -75,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void verifyExistEmail(String email) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Optional<Member> optionalMember = memberRepository.findByEmailAndStateIs(email, MemberState.ACTIVE);
 
         // Optional Member에 값이 존재하다면 예외 발생.
         if (optionalMember.isPresent())
@@ -84,37 +84,28 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findExistMemberById(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Optional<Member> optionalMember = memberRepository.findByMemberIdAndStateIs(memberId, MemberState.ACTIVE);
 
         // Optional Member에 값이 존재하지 않다면 예외 발생.
         Member obtainedMember = optionalMember
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-        // 찾은 멤버가 탈퇴 상태라면 예외 발생.
-        if (obtainedMember.getState() == MemberState.DELETED) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        }
         return obtainedMember;
     }
 
     @Override
     public Member findExistMemberByEmail(String email) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Optional<Member> optionalMember = memberRepository.findByEmailAndStateIs(email, MemberState.ACTIVE);
 
         // Optional Member에 값이 존재하지 않다면 예외 발생.
         Member obtainedMember = optionalMember
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-        // 찾은 멤버가 탈퇴 상태라면 예외 발생.
-        if (obtainedMember.getState() == MemberState.DELETED) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        }
         return obtainedMember;
     }
 
     @Override
     public void verifyResourceOwner(Long memberId, LogInMemberDto loginMember) {
         // 리소스의 소유자와 요청한 사용자가 일치하지 않으면 예외를 발생
+        System.out.println(!isResourceOwner(memberId, loginMember));
         if(!isResourceOwner(memberId, loginMember))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
