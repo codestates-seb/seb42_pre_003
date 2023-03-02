@@ -17,6 +17,7 @@ const Content = styled.div`
 
 const Questions = styled.div`
 	.Listheader {
+		width: 792px;
 		display: flex;
 		justify-content: space-between;
 
@@ -68,7 +69,8 @@ const Contents = () => {
 					<h1>Top Questions</h1>
 					<AskButton></AskButton>
 				</div>
-				<QuestionList listData={listData} />
+				{listData.data &&
+					listData.data.map((el) => <QuestionList listData={el} />)}
 				<Pagination limit={6} total={total} />
 			</Questions>
 			<RightMenu></RightMenu>
