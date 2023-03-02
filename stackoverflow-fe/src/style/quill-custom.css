@@ -1,0 +1,10 @@
+.quill{overflow: hidden; border-radius: 0.188rem;}
+.ql-toolbar.ql-snow{border-bottom:0;border-top-left-radius: 0.188rem;border-top-right-radius: 0.188rem;}
+.ql-toolbar.ql-snow + .ql-container.ql-snow{min-height:8rem;border-bottom-left-radius: 0.188rem;border-bottom-right-radius: 0.188rem;}
+
+.quill.active{box-shadow: 0 0 0 4px #dceaf7;}
+.quill.active .ql-toolbar.ql-snow,
+.quill.active .ql-toolbar.ql-snow + .ql-container.ql-snow{border-color: #92c1e6;}
+
+.ql-snow em {font-style: italic;}
+.ql-snow strong{font-weight:bold;}

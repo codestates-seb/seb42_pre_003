@@ -1,9 +1,12 @@
 # FE
+.env
+
 
 # dependencies
 stackoverflow-fe/node_modules
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage
@@ -28,8 +31,11 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-stackoverflow-be/!**/src/main/**/build/
-stackoverflow-be/!**/src/test/**/build/
+generated/
+stackoverflow-be/src/main/**/build/
+stackoverflow-be/src/test/**/build/
+stackoverflow-be/src/main/resources/static/docs/
+
 
 ### STS ###
 .apt_generated
