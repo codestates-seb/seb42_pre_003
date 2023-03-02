@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import stacklogo from '../../img/stacklogo.png';
 import search from '../../img/search.png';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 import { useIsLoginStore } from '../../store/loginstore';
 import profile from '../../img/profile.png';
 
@@ -225,7 +224,7 @@ const Header = () => {
 										>
 											<img
 												src={
-													JSON.parse(sessionStorage.getItem('userInfoStorage'))
+													JSON.parse(sessionStorage.getItem('accesstoken'))
 														.image
 												}
 												width='24px'
