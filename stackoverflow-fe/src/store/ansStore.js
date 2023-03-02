@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import axios from 'axios';
 
-const token = JSON.parse(sessionStorage.getItem('accessToken'));
+const token = JSON.parse(sessionStorage.getItem('accesstoken'));
 
 const useAnsStore = create(
 	devtools((set) => ({
