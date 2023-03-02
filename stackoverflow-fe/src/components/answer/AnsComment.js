@@ -4,6 +4,7 @@ import AnsInput from './AnsInput';
 import useAnsStore from '../../store/ansStore';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 
 const CommentWrap = styled.div`
 	margin-top: 1.5rem;
@@ -158,25 +159,28 @@ function AnsComment({ data, type }) {
 		<CommentWrap>
 			<CommentBox>
 				{comArr &&
-					comArr.map((el, idx) => (
-						<CommentItem key={comList.data.questionId || idx}>
-							{el.commentContent}
-							<span>{el.memberName}</span>
-							<em>{el.createdAt}</em>
-							<CommentEdit>
-								<li onClick={() => handleEd(idx)}>Edit</li>
-								<li onClick={() => handleDel(el.commentId)}>Delete</li>
-							</CommentEdit>
-							{ed[idx] ? (
-								<Comment>
-									<AnsInput func={comBind} />
-									<AddButton onClick={() => handleEdit(el.commentId)}>
-										Enter
-									</AddButton>
-								</Comment>
-							) : null}
-						</CommentItem>
-					))}
+					comArr.map((el, idx) => {
+						const createTime = moment(el.createdAt).fromNow();
+						return (
+							<CommentItem key={comList.data.questionId || idx}>
+								{el.commentContent}
+								<span>{el.memberName}</span>
+								<em>{createTime}</em>
+								<CommentEdit>
+									<li onClick={() => handleEd(idx)}>Edit</li>
+									<li onClick={() => handleDel(el.commentId)}>Delete</li>
+								</CommentEdit>
+								{ed[idx] ? (
+									<Comment>
+										<AnsInput func={comBind} />
+										<AddButton onClick={() => handleEdit(el.commentId)}>
+											Enter
+										</AddButton>
+									</Comment>
+								) : null}
+							</CommentItem>
+						);
+					})}
 			</CommentBox>
 			<CommentButton onClick={handleActive}>Add a comment</CommentButton>
 			{com ? (

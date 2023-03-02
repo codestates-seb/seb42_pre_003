@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import AskButton from '../list/AskButton';
+import moment from 'moment';
 
 const BREAK_POINT_MO = 576;
 
@@ -45,27 +46,29 @@ const HeaderInfo = styled.ul`
 `;
 
 function AnsHeader({ data }) {
+	const createTime = moment(data.createdAt).fromNow();
+	const editTime = moment(data.modifiedAt).fromNow();
 	return (
 		<>
 			{data && (
 				<HeaderWrap>
 					<h3>
-						{data.questionTitle || 'How to handle mongoose errors globaly'}
+						{data.questionTitle || 'No Title'}
 						<AskButton />
 					</h3>
 
 					<HeaderInfo>
 						<li>
 							<strong>Asked</strong>
-							<span>{data.createdAt || '9 days ago'}</span>
+							<span>{createTime || 'today'}</span>
 						</li>
 						<li>
 							<strong>Modified</strong>
-							<span>{data.modifiedAt || 'today'}</span>
+							<span>{editTime || 'today'}</span>
 						</li>
 						<li>
 							<strong>Viewed</strong>
-							<span>{`${data.views || '141'} times`}</span>
+							<span>{`${data.views || '0'} times`}</span>
 						</li>
 					</HeaderInfo>
 				</HeaderWrap>

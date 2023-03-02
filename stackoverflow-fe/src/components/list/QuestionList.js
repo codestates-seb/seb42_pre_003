@@ -102,11 +102,15 @@ function QuestionList({ listData }) {
 			<div className='qlist-wrapper'>
 				<ul className='qlist-stats'>
 					<li className='vote'>
-						<span className='number'>{null ? listData.votes : 0}</span>
+						<span className='number'>
+							{null === listData.votes ? 0 : listData.votes}
+						</span>
 						<span className='unit'>votes</span>
 					</li>
 					<li className='answer'>
-						<span className='number'>{null ? listData.answers : 0}</span>
+						<span className='number'>
+							{null === listData.answers ? 0 : listData.answers}
+						</span>
 						<span className='unit'>answers</span>
 					</li>
 					<li className='view'>

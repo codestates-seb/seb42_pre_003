@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import useAnsStore from '../../store/ansStore';
+import moment from 'moment';
+import profile from '../../img/profile.png';
 
 const BREAK_POINT_MO = 576;
 
@@ -78,18 +80,18 @@ function AnsInfo({ data }) {
 		handlePage('edit');
 	};
 
+	const createTime = moment(data.createdAt).fromNow();
+	const editTime = moment(data.modifiedAt).fromNow();
+
 	return (
 		<InfoWrap>
 			<InfoButton onClick={addItemData}>Edit</InfoButton>
-			<span>edited Feb 17 at 0:13</span>
+			<span>{`edited ${createTime}`}</span>
 			<InfoUser>
-				<span>asked Feb 12 at 21:42</span>
+				<span>{`asked ${editTime}`}</span>
 				<InfoAva>
-					<img
-						src='https://lh3.googleusercontent.com/a/AATXAJx57pEL1MopWKG7KQUmxM6lwGKxtUd2EnXfPD0f=k-s64'
-						alt='아바타'
-					/>
-					<strong>Ayoub k</strong>
+					<img src={profile} alt='아바타' />
+					<strong>JMC</strong>
 				</InfoAva>
 			</InfoUser>
 		</InfoWrap>

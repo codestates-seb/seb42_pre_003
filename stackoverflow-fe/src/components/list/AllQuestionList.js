@@ -115,7 +115,9 @@ function AllQuestionList({ listData }) {
 						<span className='unit'>votes</span>
 					</li>
 					<li className='answer'>
-						<span className='number'>{null ? listData.answers : 0}</span>
+						<span className='number'>
+							{null === listData.answers ? 0 : listData.answers}
+						</span>
 						<span className='unit'>answers</span>
 					</li>
 					<li className='view'>
