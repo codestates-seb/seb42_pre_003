@@ -149,7 +149,7 @@ public class QuestionServiceTest {
     @DisplayName("질문 리스트 조회 service test")
     @Test
     public void getQuestionsTest() {
-        given(questionRepository.findAll())
+        given(questionRepository.findAllByStateIs(StateGroup.ACTIVE))
             .willReturn(List.of(question, question2));
 
         Executable executable =
