@@ -15,7 +15,17 @@ const Oauth = () => {
 		navigate('/', { replace: true });
 	});
 
-	return <div>구글 플로우</div>;
+	const userInfoStorage = () => {
+		const accessToken = sessionStorage.getItem('accesstoken');
+		const headers = {
+			AUTHORIZATION: `Bearer ${accessToken}`,
+		};
+		return axios.get(`${process.env.REACT_APP_API_URL}/members/me`, {
+			headers,
+		});
+	};
+
+	return userInfoStorage;
 };
 
 export default Oauth;

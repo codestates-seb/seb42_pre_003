@@ -98,7 +98,8 @@ public class MemberServiceTest {
     @Test
     void createMember() {
         // memberRepository.findByEmail()가 Optional null을 반환.
-        given(memberRepository.findByEmail(Mockito.anyString())).willReturn(
+        given(memberRepository.findByEmailAndStateIs
+            (Mockito.anyString(), Mockito.any())).willReturn(
             Optional.ofNullable(null));
 
         // memberRepository.save()가 savedmember를 반환.
@@ -112,7 +113,7 @@ public class MemberServiceTest {
     @Test
     void updateMember() {
         // memberRepository.findById()가 Optional savedmember를 반환
-        given(memberRepository.findById(Mockito.anyLong())).willReturn(
+        given(memberRepository.findByMemberIdAndStateIs(Mockito.anyLong(), Mockito.any())).willReturn(
             Optional.ofNullable(savedmember));
 
         // memberRepository.save()가 updatedMember를 반환.
@@ -126,7 +127,7 @@ public class MemberServiceTest {
     @Test
     void getMember() {
         // memberRepository.findById()가 Optional savedmember를 반환.
-        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(savedmember));
+        given(memberRepository.findByMemberIdAndStateIs(Mockito.anyLong(), Mockito.any())).willReturn(Optional.of(savedmember));
 
         // getMember()가 예외를 발생하지 않아야 함.
         assertDoesNotThrow(() -> memberService.getMember(1L));
@@ -136,7 +137,7 @@ public class MemberServiceTest {
     @Test
     void deleteMember() {
         // memberRepository.findById()가 Optioinal savedmember를 반환.
-        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(savedmember));
+        given(memberRepository.findByMemberIdAndStateIs(Mockito.anyLong(), Mockito.any())).willReturn(Optional.of(savedmember));
 
         // memberRepository.save()가 deletedmember를 반환.
         given(memberRepository.save(Mockito.any(Member.class))).willReturn(deletedmember);

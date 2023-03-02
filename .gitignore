@@ -1,6 +1,7 @@
 # FE
 .env
 
+
 # dependencies
 stackoverflow-fe/node_modules
 /.pnp

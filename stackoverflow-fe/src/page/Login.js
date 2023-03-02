@@ -5,6 +5,7 @@ import axios from 'axios';
 import logo from '../img/logo.png';
 import google from '../img/google.png';
 import { useErrorMessageStore, useIsLoginStore } from '../store/loginstore';
+import Header from '../components/container/Header';
 
 const Background = styled.div`
 	background-color: #f6f6f6;
@@ -166,9 +167,9 @@ const Login = () => {
 			setErrorMessage('');
 		}
 
-		return axios
+		axios
 			.post(
-				`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`,
+				`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`,
 				{ name, email },
 				{ headers },
 			)
@@ -177,7 +178,7 @@ const Login = () => {
 				sessionStorage.setItem('accesstoken', accessToken);
 				sessionStorage.setItem(
 					'userInfoStorage',
-					JSON.stringify(response.data),
+					JSON.stringify(response.data.data),
 				);
 				setIsLogin(true);
 				navigate('/');
@@ -193,6 +194,7 @@ const Login = () => {
 
 	return (
 		<>
+			<Header />
 			<Background>
 				<Container>
 					<Logoimg
@@ -204,7 +206,7 @@ const Login = () => {
 					/>
 					<SocialLoginContainer>
 						<GoogleLogin
-							href={`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`}
+							href={`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`}
 						>
 							<SocialLoginIcon src={google} />
 							<SocialLoginText>Login with Google</SocialLoginText>
