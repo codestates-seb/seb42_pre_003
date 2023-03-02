@@ -78,7 +78,7 @@ const FilterImg = styled.img`
 const Question = () => {
 	const [toggle, setToggle] = useState(false);
 	const [heightEl, setHeightEl] = useState();
-	const [listData, setListdata] = useState([]);
+	const [listData, setListdata] = useState({});
 
 	const refHeight = useRef();
 
@@ -117,7 +117,7 @@ const Question = () => {
 				</div>
 				<div className='listfilter'>
 					<div className='Total'>
-						<span>{null !== listData.pageInfo && listData.pageInfo.size}</span>
+						<span>0</span>
 						questions
 					</div>
 					<button onClick={toggleState}>

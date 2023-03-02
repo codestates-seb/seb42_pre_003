@@ -109,7 +109,9 @@ function AllQuestionList({ listData }) {
 			<div className='qlist-wrapper'>
 				<ul className='qlist-stats'>
 					<li className='vote'>
-						<span className='number'>{null ? listData.votes : 0}</span>
+						<span className='number'>
+							{null === listData.votes ? 0 : listData.votes}
+						</span>
 						<span className='unit'>votes</span>
 					</li>
 					<li className='answer'>
