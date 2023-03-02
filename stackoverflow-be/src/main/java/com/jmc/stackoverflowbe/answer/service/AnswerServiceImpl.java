@@ -104,14 +104,11 @@ public class AnswerServiceImpl implements AnswerService {
     // 질문 식별자를 통해 해당 식별자에 등록된 모든 댓글들을 반환하는 로직.
     List<Answer> findExistAnswersByQuestionId(Long questionId) {
         // 연관 관계 매핑 이후 Question.questionId로 연결되므로 query를 아래와 같이 생성.
-        List<Answer> answers = answerRepository.findAllByQuestionQuestionId(questionId);
+        // State가 ACTIVE인 것만 검색.
+        List<Answer> answers = answerRepository
+            .findAllByQuestionQuestionIdAndStateIs(questionId, StateGroup.ACTIVE);
 
-        // Java stream으로 StateGroup이 ACTIVE인 것만 분리.
-        List<Answer> sortedAnswers = answers.stream()
-            .filter(answer -> answer.getState() == StateGroup.ACTIVE)
-            .collect(Collectors.toList());
-
-        return sortedAnswers;
+        return answers;
     }
 
     void verifyAuthorizedMemberForAnswer(Answer answer, long memberId) {

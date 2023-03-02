@@ -79,7 +79,8 @@ public class AnswerRepositoryTest {
     public void findAllByQuestionQuestionIdTest() {
         List<Answer> answers = List.of(answer1, answer2);
 
-        List<Answer> obtainedAnswers = answerRepository.findAllByQuestionQuestionId(1L);
+        List<Answer> obtainedAnswers = answerRepository
+            .findAllByQuestionQuestionIdAndStateIs(1L, Answer.StateGroup.ACTIVE);
 
         assertEquals(obtainedAnswers.get(0).getQuestion().getQuestionId(),
             answers.get(0).getQuestion().getQuestionId());

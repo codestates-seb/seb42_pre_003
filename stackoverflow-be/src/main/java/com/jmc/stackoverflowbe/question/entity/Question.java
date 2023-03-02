@@ -5,6 +5,8 @@ import com.jmc.stackoverflowbe.member.entity.Member;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 @Entity
@@ -37,7 +40,9 @@ public class Question extends Auditable {
     private String questionContent;
 
     @Column
-    private StateGroup state;
+    @Builder.Default
+    @Enumerated(value = EnumType.STRING)
+    private StateGroup state = StateGroup.ACTIVE;
 
     @Column
     private Integer votes;
