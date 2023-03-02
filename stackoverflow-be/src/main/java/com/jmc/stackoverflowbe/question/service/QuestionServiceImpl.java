@@ -40,6 +40,8 @@ public class QuestionServiceImpl implements QuestionService{
         question.setMember(obtainedMember);
         //state 상태설정
         question.setState(StateGroup.ACTIVE);
+        //view 상태 설정
+        question.setViews(0L);
         //질문 db에 저장
         return questionRepository.save(question);
     }
@@ -63,8 +65,10 @@ public class QuestionServiceImpl implements QuestionService{
     public Question getQuestion(Long questionId){
         //질문 존재하는지 확인
         Question obtainedQuestion = findExistQuestionById(questionId);
-        //있으면 반환
-        return obtainedQuestion;
+        //상세 조회시 조회수 + 1
+        obtainedQuestion.setViews(obtainedQuestion.getViews() + 1);
+        //그리고 반환
+        return questionRepository.save(obtainedQuestion);
     }
 
     //질문 전체 조회
@@ -117,10 +121,5 @@ public class QuestionServiceImpl implements QuestionService{
         }
     };
 }
-// 질문 식별자로 존재하는지 확인하는 로직 필요할시 만들어 씀
-//    private void verifyExistQuestion(long questionId){
-//        Optional<Question> question = questionRepository.findById(questionId);
-//        if(question.isPresent())
-//            throw new BusinessLogicException(ExceptionCode.QUESTION_EXISTS);
 //    }
 
