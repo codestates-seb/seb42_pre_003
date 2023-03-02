@@ -3,6 +3,7 @@ package com.jmc.stackoverflowbe.answer.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import com.jmc.stackoverflowbe.answer.entity.Answer;
 import com.jmc.stackoverflowbe.answer.entity.Answer.StateGroup;
@@ -37,7 +38,7 @@ public class AnswerServiceTest {
     private final Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(Question.StateGroup.ACTIVE)
         .votes(0)
@@ -70,9 +71,6 @@ public class AnswerServiceTest {
     @Mock
     private MemberService memberService;
 
-    @Mock
-    private QuestionService questionService;
-
     @Spy
     @InjectMocks
     private AnswerServiceImpl answerService;
@@ -80,15 +78,13 @@ public class AnswerServiceTest {
     @DisplayName("Service단 답변 생성 로직")
     @Test
     public void createAnswerTest() {
-//        given(memberService.findExistMemberById(Mockito.anyLong()))
-//            .willReturn(new Member());
-//        given(questionService.findExistQuestionById(Mockito.anyLong()))
-//            .willReturn(new Question());
-//        ReflectionTestUtils.invokeMethod(answerService, "verifyExistQuestionIdByEntity", answer);
+        given(memberService.findExistMemberById(Mockito.anyLong()))
+            .willReturn(new Member());
+        doNothing().when(answerService).verifyExistQuestionIdByEntity(answer);
         given(answerRepository.save(Mockito.any(Answer.class)))
             .willReturn(answer);
 
-        Executable executable = () -> answerService.createAnswer(answer);
+        Executable executable = () -> answerService.createAnswer(answer, member.getMemberId());
 
         assertDoesNotThrow(executable);
     }
@@ -97,11 +93,14 @@ public class AnswerServiceTest {
     @Test
     public void updateAnswerTest() {
         given(answerRepository.findById(Mockito.anyLong()))
-            .willReturn(Optional.of(answer));
+            .willReturn(Optional.of(new Answer()));
+        doNothing().when(answerService)
+            .verifyAuthorizedMemberForAnswer(Mockito.any(Answer.class), Mockito.anyLong());
         given(answerRepository.save(Mockito.any(Answer.class)))
             .willReturn(answer);
 
-        Executable executable = () -> answerService.updateAnswer(answer, answer.getAnswerId());
+        Executable executable = () ->
+            answerService.updateAnswer(answer, answer.getAnswerId(), member.getMemberId());
 
         assertDoesNotThrow(executable);
     }
@@ -122,10 +121,13 @@ public class AnswerServiceTest {
     public void deleteAnswerTest() {
         given(answerRepository.findById(Mockito.anyLong()))
             .willReturn(Optional.of(new Answer()));
+        doNothing().when(answerService)
+            .verifyAuthorizedMemberForAnswer(Mockito.any(Answer.class), Mockito.anyLong());
         given(answerRepository.save(Mockito.any(Answer.class)))
             .willReturn(deletedAnswer);
 
-        Executable executable = () -> answerService.deleteAnswer(answer.getAnswerId());
+        Executable executable = () -> answerService.deleteAnswer(answer.getAnswerId(),
+            member.getMemberId());
 
         assertEquals(deletedAnswer.getState(), StateGroup.DELETED);
         assertDoesNotThrow(executable);

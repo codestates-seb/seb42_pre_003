@@ -54,12 +54,33 @@ const InfoAva = styled.div`
 	}
 `;
 
-function AnsInfo() {
+function AnsInfo({ data }) {
 	const { handlePage } = useAnsStore();
+	const { edTitleBind, edBodyBind, edModeBind, edIdBind } = useAnsStore();
+
+	const addItemData = (e) => {
+		e.preventDefault();
+
+		if (data.answerId) {
+			const { answerId, answerContent } = data;
+
+			edBodyBind(answerContent);
+			edIdBind(answerId);
+			edModeBind('answer');
+		} else {
+			const { questionId, questionTitle, questionContent } = data;
+
+			edTitleBind(questionTitle);
+			edBodyBind(questionContent);
+			edIdBind(questionId);
+			edModeBind('question');
+		}
+		handlePage('edit');
+	};
 
 	return (
 		<InfoWrap>
-			<InfoButton onClick={handlePage}>Edit</InfoButton>
+			<InfoButton onClick={addItemData}>Edit</InfoButton>
 			<span>edited Feb 17 at 0:13</span>
 			<InfoUser>
 				<span>asked Feb 12 at 21:42</span>

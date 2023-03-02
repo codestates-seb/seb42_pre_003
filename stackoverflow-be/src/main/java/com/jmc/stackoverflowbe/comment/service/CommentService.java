@@ -1,18 +1,18 @@
 package com.jmc.stackoverflowbe.comment.service;
 
-import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import java.util.List;
+import org.springframework.security.core.Authentication;
 
 public interface CommentService {
 
-    Comment createComment(CommentDto.Post post);
+    Comment createComment(Comment comment, Long memberId);
 
-    Comment updateComment(CommentDto.Patch patch, Long commentId);
+    Comment updateComment(Comment comment, Long commentId, Long memberId);
 
-    List<CommentDto.Response> getComments(String qaType, Long qaId);
+    List<Comment> getComments(String qaType, Long qaId);
 
-    void deleteComment(Long commentId);
+    void deleteComment(Long commentId, Long memberId);
 
     Comment findExistCommentById(Long commentId);
 }

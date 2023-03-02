@@ -18,7 +18,6 @@ function AnsEditor({ value, func }) {
 			['clean'],
 		],
 		clipboard: {
-			// toggle to add extra line breaks when pasting HTML:
 			matchVisual: false,
 		},
 	};
@@ -45,11 +44,9 @@ function AnsEditor({ value, func }) {
 				modules={modules}
 				formats={formats}
 				theme='snow'
-				value={value}
+				value={value === '' ? '' : value}
 				onChange={(value) => func(value)}
 			/>
-
-			{/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
 		</div>
 	);
 }

@@ -34,6 +34,9 @@ public class CommentRepositoryTest {
     @Autowired
     AnswerRepository answerRepository;
 
+    @Autowired
+    CommentRepository commentRepository;
+
     Member member = Member.builder()
         .memberId(1L)
         .email("hgd@gmail.com")
@@ -44,7 +47,7 @@ public class CommentRepositoryTest {
     Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -74,9 +77,6 @@ public class CommentRepositoryTest {
         .member(member)
         .commentState(CommentState.ACTIVE);
 
-    @Autowired
-    private CommentRepository commentRepository;
-
     @BeforeAll
     public void init() {
         memberRepository.save(member);
@@ -94,7 +94,8 @@ public class CommentRepositoryTest {
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
-        List<Comment> obtainedComments = commentRepository.findAllByQuestionQuestionId(1L);
+        List<Comment> obtainedComments = commentRepository.findAllByQuestionQuestionIdAndCommentStateIs(
+            1L, CommentState.ACTIVE);
 
         assertEquals(obtainedComments.get(0).getCommentContent(),
             comments.get(0).getCommentContent());
@@ -120,7 +121,8 @@ public class CommentRepositoryTest {
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
-        List<Comment> obtainedComments = commentRepository.findAllByAnswerAnswerId(1L);
+        List<Comment> obtainedComments = commentRepository.findAllByAnswerAnswerIdAndCommentStateIs(
+            1L, CommentState.ACTIVE);
 
         assertEquals(obtainedComments.get(0).getCommentContent(),
             comments.get(0).getCommentContent());

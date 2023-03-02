@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -22,6 +23,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +32,9 @@ import com.google.gson.Gson;
 import com.jmc.stackoverflowbe.comment.dto.CommentDto;
 import com.jmc.stackoverflowbe.comment.entity.Comment;
 import com.jmc.stackoverflowbe.comment.entity.Comment.CommentState;
+import com.jmc.stackoverflowbe.comment.mapper.CommentMapper;
 import com.jmc.stackoverflowbe.comment.service.CommentService;
+import com.jmc.stackoverflowbe.global.WithMockCustomMember;
 import com.jmc.stackoverflowbe.member.entity.Member;
 import com.jmc.stackoverflowbe.member.entity.Member.MemberState;
 import com.jmc.stackoverflowbe.question.entity.Question;
@@ -48,6 +52,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
@@ -56,21 +61,22 @@ import org.springframework.util.MultiValueMap;
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
+@WithMockUser(username = "kimcoding@gmail.com", roles = {"USER"})
 public class CommentControllerTest {
 
     String BASE_URL = "/comments";
 
-    Member member = Member.builder()
+    private final Member member = Member.builder()
         .memberId(1L)
         .email("hgd@gmail.com")
         .name("홍길동")
         .state(MemberState.ACTIVE)
         .build();
 
-    Question question = Question.builder()
+    private final Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -123,19 +129,27 @@ public class CommentControllerTest {
     @MockBean
     CommentService commentService;
 
+    @MockBean
+    CommentMapper mapper;
+
     @Autowired
     Gson gson;
 
     @DisplayName("댓글 생성")
     @Test
+    @WithMockCustomMember
     void postCommentTest() throws Exception {
         String content = gson.toJson(post);
 
-        given(commentService.createComment(Mockito.any(CommentDto.Post.class)))
+        given(mapper.postDtoToComment(Mockito.any(CommentDto.Post.class)))
+            .willReturn(new Comment());
+        given(commentService.createComment(Mockito.any(Comment.class), Mockito.anyLong()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
             post(BASE_URL)
+                .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -155,6 +169,13 @@ public class CommentControllerTest {
             .andDo(document("Post-Comment",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for comment creation")),
                     fieldWithPath("commentContent")
@@ -170,24 +191,27 @@ public class CommentControllerTest {
                         .type(JsonFieldType.NUMBER)
                         .attributes(key("constraints").value(answerIdDescriptions))
                         .description("답변 식별자")
-                        .optional()),
-                responseHeaders(
-                    headerWithName(HttpHeaders.LOCATION)
-                        .description("Header Location, 리소스의 URL")
-                ))
+                        .optional())
+                )
             );
     }
 
     @DisplayName("댓글 수정")
     @Test
+    @WithMockCustomMember
     void patchCommentTest() throws Exception {
         String content = gson.toJson(patch);
 
-        given(commentService.updateComment(Mockito.any(CommentDto.Patch.class), Mockito.anyLong()))
+        given(mapper.patchDtoToComment(Mockito.any(CommentDto.Patch.class)))
+            .willReturn(new Comment());
+        given(commentService.updateComment(Mockito.any(Comment.class), Mockito.anyLong(),
+            Mockito.anyLong()))
             .willReturn(comment);
 
         ResultActions actions = mockMvc.perform(
             patch(BASE_URL + "/{comment-id}", comment.getCommentId())
+                .with(csrf())
+                .header("Authorization", "")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content));
@@ -205,6 +229,13 @@ public class CommentControllerTest {
                 pathParameters(
                     parameterWithName("comment-id").description("댓글 식별자")
                 ),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                ),
                 requestFields(
                     attributes(key("title").value("Fields for comment revision")),
                     fieldWithPath("commentContent")
@@ -219,6 +250,8 @@ public class CommentControllerTest {
     @Test
     void getCommentsTest() throws Exception {
         given(commentService.getComments(Mockito.anyString(), Mockito.anyLong()))
+            .willReturn(List.of(new Comment(), new Comment()));
+        given(mapper.commentsToResponseDtos(Mockito.anyList()))
             .willReturn(List.of(response1, response2));
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
@@ -290,11 +323,15 @@ public class CommentControllerTest {
 
     @DisplayName("댓글 삭제")
     @Test
+    @WithMockCustomMember
     void deleteCommentTest() throws Exception {
-        doNothing().when(commentService).deleteComment(comment.getCommentId());
+        doNothing().when(commentService)
+            .deleteComment(comment.getCommentId(), member.getMemberId());
 
         ResultActions actions = mockMvc.perform(
             delete(BASE_URL + "/{comment-id}", comment.getCommentId())
+                .with(csrf())
+                .header("Authorization", "")
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
@@ -303,7 +340,14 @@ public class CommentControllerTest {
             .andDo(document("Delete-Comment",
                 pathParameters(
                     parameterWithName("comment-id").description("댓글 식별자")
-                ))
-            );
+                ),
+                requestHeaders(
+                    attributes(key("title")
+                        .value("Headers for user revision")),
+                    headerWithName("Authorization")
+                        .attributes(key("constraints").value("Bearer {accessToken}"))
+                        .description("액세스 토큰")
+                )
+            ));
     }
 }

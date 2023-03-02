@@ -40,7 +40,7 @@ public class AnswerRepositoryTest {
     private final Question question = Question.builder()
         .questionId(1L)
         .questionTitle("Question title for stub")
-        .memberId(1L)
+        .member(member)
         .questionContent("Question contents for stub")
         .state(StateGroup.ACTIVE)
         .votes(0)
@@ -79,7 +79,8 @@ public class AnswerRepositoryTest {
     public void findAllByQuestionQuestionIdTest() {
         List<Answer> answers = List.of(answer1, answer2);
 
-        List<Answer> obtainedAnswers = answerRepository.findAllByQuestionQuestionId(1L);
+        List<Answer> obtainedAnswers = answerRepository
+            .findAllByQuestionQuestionIdAndStateIs(1L, Answer.StateGroup.ACTIVE);
 
         assertEquals(obtainedAnswers.get(0).getQuestion().getQuestionId(),
             answers.get(0).getQuestion().getQuestionId());
