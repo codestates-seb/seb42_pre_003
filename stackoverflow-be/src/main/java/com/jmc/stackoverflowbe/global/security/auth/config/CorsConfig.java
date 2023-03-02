@@ -14,10 +14,9 @@ public class CorsConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // config.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-        // "http://localhost:80", "http://localhost:8080"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://http://seb42-pre-003.s3-website.ap-northeast-2.amazonaws.com/"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
-        config.addAllowedOriginPattern("*");
+//        config.addAllowedOriginPattern(Arrays.asList("http://localhost:3000", "http://seb42-pre-003.s3-website.ap-northeast-2.amazonaws.com/"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("*"));

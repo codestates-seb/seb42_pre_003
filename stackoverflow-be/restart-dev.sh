@@ -15,4 +15,4 @@ echo "my-application Restart!"
 echo $1
 
 # nohup 명령어를 통해 백그라운드에서 DeployServer-0.0.1-SNAPSHOT.jar를 실행합니다.
-nohup java -jar build/libs/stackoverflow-be-0.0.1-SNAPSHOT.jar --spring.profiles.active=local > /dev/null 2>&1 &
+nohup java -jar build/libs/stackoverflow-be-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /dev/null 2>&1 &

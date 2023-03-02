@@ -39,5 +39,5 @@ jwt:
   access-token-expiration-minutes: 300
   refresh-token-expiration-minutes: 1800
 config:
-  host: localhost
-  port: 3000
+  host: seb42-pre-003.s3-website.ap-northeast-2.amazonaws.com
+  port: 80
