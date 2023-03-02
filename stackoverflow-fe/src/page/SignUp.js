@@ -341,13 +341,10 @@ const SignUp = () => {
 		} else {
 			try {
 				await axios
-					.post(
-						`http://ec2-52-78-27-218.ap-northeast-2.compute.amazonaws.com:8080/members`,
-						{
-							email: email,
-							username: name,
-						},
-					)
+					.post(`${process.env.REACT_APP_API_URL}/members`, {
+						email: email,
+						username: name,
+					})
 					.then(navigate('/login'));
 			} catch (error) {
 				alert(error);
