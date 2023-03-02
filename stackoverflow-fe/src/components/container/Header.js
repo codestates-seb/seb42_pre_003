@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import stacklogo from '../../img/stacklogo.png';
 import search from '../../img/search.png';
 import { Link } from 'react-router-dom';
+import { useIsLoginStore } from '../../store/loginstore';
+import profile from '../../img/profile.png';
+
 import { useNavigate } from 'react-router-dom';
 
 const HeaderWrap = styled.div`
@@ -21,6 +24,15 @@ const OrangeBg = styled.div`
 	height: 3px;
 	background-color: #32f1ff;
 `;
+const LoginHeader = styled.div`
+	width: 1264px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin-left: 70px;
+	margin-right: auto;
+`;
 
 const MenuHeader = styled.div`
 	width: 1264px;
@@ -36,10 +48,12 @@ const LogoImg = styled.img`
 	width: 150px;
 `;
 
-const Menu = styled.div`
-	color: #525960;
-	font-size: 14px;
-	margin-top: 4px;
+const LoginsearchWrap = styled.div`
+	position: relative;
+	width: 656px;
+	height: 32.5px;
+	margin-right: -30px;
+	margin-left: -50px;
 `;
 
 const SearchWrap = styled.div`
@@ -59,6 +73,22 @@ const SearchImg = styled.img`
 	width: 24px;
 	left: 5px;
 	top: 6px;
+`;
+
+const LogoutButton = styled.a`
+	width: 59.5px;
+	height: 33px;
+	color: #39739d;
+	background-color: #e1ecf4;
+	font-size: 13px;
+	border: 1px solid rgb(122, 167, 199);
+	border-radius: 3px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	margin-right: 70px;
+	margin-left: -75px;
 `;
 
 const LoginLogoutButton = styled.a`
@@ -90,25 +120,75 @@ const SignUpButton = styled.a`
 	right: 75px;
 `;
 
-const UserInfo = styled.div`
-	width: 26px;
-	height: 26px;
-	border-radius: 50%;
-	background-color: #d2d1d1;
+const UserInfo = styled.img`
+	width: 35px;
+	height: 35px;
+	margin-right: -15px;
+	margin-left: 55px;
+	cursor: pointer;
 `;
 
+// const ProfileButtonAria = styled.div`
+// 	align-items: center;
+// 	display: flex;
+// 	height: 47px;
+// 	justify-content: center;
+// 	width: 47px;
+// 	> button {
+// 		cursor: pointer;
+// 	}
+// 	&:hover {
+// 		background-color: rgb(228, 230, 232);
+// 	}
+// `;
+
 const Header = () => {
-	const [isLogin, setIsLogin] = useState(false);
-
 	const navigate = useNavigate();
+	const { isLogin, setIsLogin } = useIsLoginStore((state) => state);
 
-	// let username = '';
-	// let id = '';
+	// useEffect(() => {
+	// 	if (JSON.parse(sessionStorage.getItem('userInfoStorage'))) {
+	// 		setIsLogin(JSON.parse(sessionStorage.getItem('userInfoStorage')).signIn);
+	// 	} else {
+	// 		setIsLogin(false);
+	// 	}
+	// }, []);
+
+	// let members = '';
+	// let name = '';
 
 	// if (JSON.parse(sessionStorage.getItem('userInfoStorage'))) {
-	// 	username = JSON.parse(sessionStorage.getItem('userInfoStorage')).email;
-	// 	id = JSON.parse(sessionStorage.getItem('userInfoStorage')).memberId;
+	// 	members = JSON.parse(sessionStorage.getItem('userInfoStorage')).members;
+	// 	name = JSON.parse(sessionStorage.getItem('userInfoStorage')).name;
 	// }
+
+	// useEffect(() => {
+	// 	if (JSON.parse(sessionStorage.getItem('/members/me'))) {
+	// 		setIsLogin(JSON.parse(sessionStorage.getItem('/members/me')).value);
+	// 	} else {
+	// 		setIsLogin(false);
+	// 	}
+	// }, []);
+
+	// useEffect(() => {
+	// 	axios
+	// 		.post(
+	// 			`${process.env.REACT_APP_API_URL}/members/me`,
+	// 			{},
+	// 			{
+	// 				withCredentials: true,
+	// 			},
+	// 		)
+	// 		.then((res) => {
+	// 			console.log(res);
+	// 			const { accessToken } = res.data;
+	// 			console.log(accessToken);
+	// 			axios.defaults.headers.common[
+	// 				'Authorization'
+	// 			] = `Bearer ${accessToken}`;
+	// 			setIsLogin(true);
+	// 		});
+	// });
 
 	const logoutHandler = () => {
 		sessionStorage.clear();
@@ -116,37 +196,50 @@ const Header = () => {
 		window.location.reload();
 	};
 
-	// useEffect(() => {
-	// 	if (JSON.parse(window.localStorage.getItem('user'))) {
-	// 		setIsLogin(JSON.parse(window.localStorage.getItem('user')).signIn);
-	// 	} else {
-	// 		setIsLogin(false);
-	// 	}
-	// }, []);
-
-	// const logoutHandler = () => {
-	// 	window.location.replace('/');
-	// 	window.localStorage.removeItem('user');
-	// };
-
 	return (
 		<>
 			{isLogin ? (
 				<>
 					<HeaderWrap>
 						<OrangeBg />
-						<MenuHeader>
-							<LogoImg onClick={() => navigate('/')} src={stacklogo} />
-							<Menu>Products</Menu>
-							<SearchWrap>
-								<SearchBox placeholder='Search...' />
-								<SearchImg src={search} />
-							</SearchWrap>
-							<UserInfo />
-							<LoginLogoutButton onClick={logoutHandler}>
-								Log out
-							</LoginLogoutButton>
-						</MenuHeader>
+						<LoginHeader>
+							<MenuHeader>
+								<LogoImg onClick={() => navigate('/')} src={stacklogo} />
+								<LoginsearchWrap>
+									<SearchBox placeholder='Search...' />
+									<SearchImg src={search} />
+								</LoginsearchWrap>
+								<>
+									{/* <ProfileButtonAria>
+										<button
+											css={`
+												all: unset;
+												width: 24px;
+												height: 24px;
+											`}
+											onClick={() => {
+												navigate(`/myapge/profile`);
+											}}
+										>
+											<img
+												src={
+													JSON.parse(sessionStorage.getItem('accesstoken'))
+														.image
+												}
+												width='24px'
+												height='24px'
+												alt='user profile'
+											/>
+										</button>
+									</ProfileButtonAria> */}
+									<UserInfo
+										onClick={() => navigate('/mypage')}
+										src={profile}
+									></UserInfo>
+									<LogoutButton onClick={logoutHandler}>Log out</LogoutButton>
+								</>
+							</MenuHeader>
+						</LoginHeader>
 					</HeaderWrap>
 				</>
 			) : (
@@ -161,6 +254,7 @@ const Header = () => {
 								<SearchBox placeholder='Search...' />
 								<SearchImg src={search} />
 							</SearchWrap>
+
 							<Link to={'/login'}>
 								<LoginLogoutButton>Log in</LoginLogoutButton>
 							</Link>
